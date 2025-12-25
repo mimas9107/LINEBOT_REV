@@ -1,8 +1,22 @@
-flask
-line-bot-sdk
+# LINEBOT rev2 Dependencies
+# 更新日期: 2025-12-25
+
+# Web Framework
+Flask==3.0.3
 gunicorn
-google-generativeai
+
+# LINE Bot SDK
+line-bot-sdk
+
+# Google Gemini AI (新版統一 SDK)
+# 注意: google-generativeai 已棄用，改用 google-genai
 google-genai
+
+# 圖片處理
 pillow
+
+# HTTP 請求
 requests
+
+# 環境變數 (開發用)
 python-dotenv

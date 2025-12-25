@@ -1,17 +1,29 @@
-# LINEBOT rev1
+# LINEBOT rev2
 
-> 整合 Google Gemini 的 LINE 聊天機器人（重構版）
+> 整合 Google Gemini 的 LINE 聊天機器人（使用新版 google-genai SDK）
 
 ## 版本資訊
 
-- **版本**: rev1
-- **重構日期**: 2025-12-25
-- **基於**: 原始 LINEBOT 專案
+- **版本**: rev2
+- **更新日期**: 2025-12-25
+- **重大更新**: 改用 `google-genai` SDK (取代已棄用的 `google-generativeai`)
+
+## 更新紀錄
+
+### rev2 (2025-12-25)
+- ✅ 改用新版 `google-genai` SDK
+- ✅ 統一使用 `gemini-2.5-flash` 模型 (支援文字與圖片)
+- ✅ 使用 `genai.Client()` 取代 `genai.configure()`
+- ✅ 使用 `client.chats.create()` 支援多輪對話
+- ✅ 移除已棄用的 `google-generativeai` 套件
+
+### rev1 (2025-12-25)
+- 初始模組化重構版本
 
 ## 專案結構
 
 ```
-linebot-rev1/
+linebot-rev2/
 ├── app.py                    # Flask 應用程式入口
 ├── config.py                 # 統一設定管理
 ├── requirements.txt          # 相依套件
@@ -24,8 +36,8 @@ linebot-rev1/
 │
 ├── services/                 # 服務模組
 │   ├── __init__.py
-│   ├── ai_text.py            # Gemini 文字對話服務
-│   ├── ai_image.py           # Gemini 圖片辨識服務
+│   ├── ai_text.py            # Gemini 文字對話 (使用 google-genai)
+│   ├── ai_image.py           # Gemini 圖片辨識 (使用 google-genai)
 │   └── bookmark.py           # 書籤與歷史紀錄服務
 │
 ├── utils/                    # 工具模組
@@ -36,17 +48,61 @@ linebot-rev1/
 └── google_app_script/        # Google Apps Script 腳本
 ```
 
+## SDK 變更說明
+
+### 舊版 (已棄用)
+```python
+# ❌ 不要再使用
+import google.generativeai as genai
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-2.5-flash')
+response = model.generate_content(prompt)
+```
+
+### 新版 (本專案使用)
+```python
+# ✅ 正確用法
+from google import genai
+
+client = genai.Client(api_key=API_KEY)
+response = client.models.generate_content(
+    model='gemini-2.5-flash',
+    contents=prompt
+)
+```
+
 ## 功能說明
 
 ### 1. AI 文字對話 (`services/ai_text.py`)
 - 使用 `ai:` 前綴觸發
-- 整合 Google Gemini API
-- 支援歷史對話記憶（從 Google Sheet 取得）
+- 使用 `client.chats.create()` 支援歷史對話
+- 自動轉換 Google Sheet 歷史格式為 SDK Content 格式
+
+```python
+from services import chat_with_ai
+
+# 單次對話
+response = chat_with_ai("你好，請介紹台北美食")
+
+# 帶歷史對話
+history = [
+    {"userId": "U123", "messageText": "你好"},
+    {"userId": "bot", "messageText": "你好！有什麼可以幫你的？"}
+]
+response = chat_with_ai("推薦我小吃", history=history)
+```
 
 ### 2. AI 圖片辨識 (`services/ai_image.py`)
 - 使用者上傳圖片自動觸發
-- 使用 Gemini Vision 模型分析
-- 備用支援本地 LMStudio
+- 使用 `gemini-2.5-flash` 模型 (支援多模態)
+- 支援 PIL.Image 直接傳入或 bytes 方式
+
+```python
+from services import analyze_image
+
+result = analyze_image("path/to/image.jpg")
+result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物？")
+```
 
 ### 3. 書籤功能 (`services/bookmark.py`)
 - 與 Google Apps Script 互動
@@ -91,61 +147,24 @@ python app.py
 gunicorn app:app
 ```
 
-## 模組使用範例
-
-### AI 文字對話
-
-```python
-from services import chat_with_ai
-
-response = chat_with_ai("你好，請介紹台北的美食")
-print(response)
-```
-
-### AI 圖片辨識
-
-```python
-from services import analyze_image
-
-result = analyze_image("path/to/image.jpg")
-print(result)
-```
-
-### 書籤服務
-
-```python
-from services import get_chat_history, save_message
-
-# 取得歷史對話
-history = get_chat_history(user_id="U1234567890")
-
-# 儲存訊息
-save_message(
-    timestamp=1234567890,
-    user_id="U1234567890",
-    message_type="text",
-    message_text="Hello"
-)
-```
-
-## 與原版差異
-
-| 項目 | 原版 | rev1 |
-|------|------|------|
-| 程式碼結構 | 單一 app.py (~280 行) | 模組化拆分 |
-| 設定管理 | 散落各處 | 統一 config.py |
-| AI 文字 | 內嵌於主程式 | services/ai_text.py |
-| AI 圖片 | 內嵌於主程式 | services/ai_image.py |
-| 書籤功能 | 內嵌於主程式 | services/bookmark.py |
-| 保活任務 | 內嵌於主程式 | utils/keepalive.py |
-| 可測試性 | 較困難 | 模組化易於測試 |
-
 ## 注意事項
 
-1. **Gemini 模型版本**: 目前使用 `gemini-2.5-flash` (文字) 和 `gemini-2.0-flash-exp` (圖片)，可在 `config.py` 中調整
-2. **API 金鑰**: 請勿將 `.env` 推送到版本控制
-3. **Google Apps Script**: 需要另外部署 `google_app_script/` 目錄中的腳本
+1. **SDK 版本**: 本專案使用 `google-genai`，請確保不要同時安裝 `google-generativeai`
+2. **模型**: 統一使用 `gemini-2.5-flash`，此模型同時支援文字與圖片
+3. **API 金鑰**: 請勿將 `.env` 推送到版本控制
+4. **棄用警告**: `google-generativeai` 將於 2025/11/30 停止更新
+
+## 與 rev1 差異
+
+| 項目 | rev1 | rev2 |
+|------|------|------|
+| SDK | `google-generativeai` (舊版) | `google-genai` (新版) |
+| 初始化 | `genai.configure()` | `genai.Client()` |
+| 文字生成 | `model.generate_content()` | `client.models.generate_content()` |
+| 聊天 | `model.start_chat()` | `client.chats.create()` |
+| 文字模型 | `gemini-2.5-flash` | `gemini-2.5-flash` |
+| 圖片模型 | `gemini-2.0-flash-exp` | `gemini-2.5-flash` (統一) |
 
 ---
 
-重構完成日期：2025-12-25
+更新日期：2025-12-25

@@ -1,7 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev1
+版本: rev2
 統一管理所有環境變數與設定
+
+更新紀錄:
+- rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
 """
 
 import os
@@ -16,10 +19,9 @@ class Config:
     LINE_CHANNEL_ACCESS_TOKEN: str = ""
     LINE_CHANNEL_SECRET: str = ""
     
-    # Gemini AI 設定
+    # Gemini AI 設定 (使用新版 google-genai SDK)
     GEMINI_API_KEY: str = ""
-    GEMINI_TEXT_MODEL: str = "gemini-2.5-flash"
-    GEMINI_IMAGE_MODEL: str = "gemini-2.0-flash-exp"
+    GEMINI_MODEL: str = "gemini-2.5-flash"  # 統一使用此模型，支援文字與圖片
     
     # Google Apps Script 設定
     GOOGLE_APPS_SCRIPT_URL: str = ""

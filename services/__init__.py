@@ -1,7 +1,10 @@
 """
 Services Package
-版本: rev1
+版本: rev2
 提供各項服務功能
+
+更新紀錄:
+- rev2: AI 模組改用 google-genai SDK
 """
 
 from .ai_text import chat_with_ai, ai_text_service

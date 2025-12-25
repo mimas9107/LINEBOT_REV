@@ -1,7 +1,10 @@
 """
 LINE Handler Module
-版本: rev1
+版本: rev2
 處理 LINE Webhook 事件
+
+更新紀錄:
+- rev2: 配合 AI 模組更新
 """
 
 import os
