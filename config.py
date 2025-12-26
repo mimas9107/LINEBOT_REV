@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev3
+版本: rev3.1
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev3.1: 配合 restore 功能
 - rev3: 新增 SQLite 對話歷史記錄系統
 - rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
 """

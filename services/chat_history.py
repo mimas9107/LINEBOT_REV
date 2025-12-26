@@ -1,13 +1,11 @@
 """
 Chat History Service Module
-版本: rev3
+版本: rev3.1
 對話歷史記錄功能 (使用 SQLite)
 
-功能:
-- 儲存使用者訊息
-- 儲存 AI 回應
-- 查詢歷史對話
-- 匯出對話記錄
+更新紀錄:
+- rev3.1: 配合 maintenance mode
+- rev3: 初始版本
 """
 
 from datetime import datetime

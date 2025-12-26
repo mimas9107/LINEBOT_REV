@@ -1,14 +1,7 @@
 """
 AI Text Service Module
-版本: rev3
+版本: rev3.1
 處理 Gemini 文字對話功能
-
-更新紀錄:
-- rev3: 配合 SQLite 對話歷史系統
-- rev2: 改用 google-genai SDK (新版統一 SDK)
-      - 使用 genai.Client() 取代 genai.configure()
-      - 使用 client.models.generate_content() 取代 model.generate_content()
-      - 使用 client.chats.create() 支援多輪對話
 """
 
 from google import genai

@@ -1,14 +1,7 @@
 """
 AI Image Service Module
-版本: rev3
+版本: rev3.1
 處理 Gemini 圖片辨識功能
-
-更新紀錄:
-- rev3: 配合 SQLite 對話歷史系統
-- rev2: 改用 google-genai SDK (新版統一 SDK)
-      - 使用 genai.Client() 統一管理
-      - 使用 types.Part.from_bytes() 處理圖片
-      - 統一使用 gemini-2.5-flash 模型 (支援多模態)
 """
 
 import base64

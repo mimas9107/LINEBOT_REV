@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev3
+版本: rev3.1
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev3.1: 新增 maintenance mode 檢查，維護期間回覆維護訊息並捨棄
 - rev3: 改用 SQLite 記錄對話，同時記錄 user 訊息與 AI 回應
 - rev2: 配合 AI 模組更新
 """
@@ -25,12 +26,18 @@ from services import (
     chat_with_ai,
     analyze_image,
     save_to_sheet,
+    db_service,
+    DatabaseMaintenanceError,
 )
 from services.chat_history import (
     get_chat_history,
     save_user_message,
     save_model_response,
 )
+
+
+# 維護模式回覆訊息
+MAINTENANCE_MESSAGE = "🔧 系統維護中，請稍後再試。\nSystem is under maintenance, please try again later."
 
 
 class LineHandler:
@@ -70,6 +77,12 @@ class LineHandler:
         with ApiClient(self.configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             
+            # ===== 維護模式檢查 =====
+            if db_service.is_maintenance:
+                print(f"[LineHandler] Maintenance mode - discarding message")
+                self._reply_message(line_bot_api, event.reply_token, MAINTENANCE_MESSAGE)
+                return  # 直接返回，不處理訊息
+            
             # 取得使用者資訊
             user_id = self._get_user_id(event)
             timestamp = event.timestamp
@@ -78,13 +91,20 @@ class LineHandler:
             result = ""
             
             # 根據訊息類型處理
-            if message_type == 'text':
-                message_text = event.message.text
-                result = self._handle_text_message(event, user_id)
-                
-            elif message_type == 'image':
-                result = self._handle_image_message(event, user_id)
-                message_text = "[圖片]"
+            try:
+                if message_type == 'text':
+                    message_text = event.message.text
+                    result = self._handle_text_message(event, user_id)
+                    
+                elif message_type == 'image':
+                    result = self._handle_image_message(event, user_id)
+                    message_text = "[圖片]"
+                    
+            except DatabaseMaintenanceError:
+                # 處理過程中進入維護模式
+                print(f"[LineHandler] Entered maintenance mode during processing")
+                self._reply_message(line_bot_api, event.reply_token, MAINTENANCE_MESSAGE)
+                return
             
             # 回覆訊息（如果有結果）
             if result:
@@ -158,7 +178,7 @@ class LineHandler:
         elif text.lower().startswith("c:"):
             return text[2:].strip()
         
-        # 其他訊息不回覆，但可以記錄
+        # 其他訊息不回覆
         return ""
     
     def _format_chat_history(self, history: list[dict], current_user_id: str) -> str:
