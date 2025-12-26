@@ -46,7 +46,7 @@ class Config:
     
     # Keepalive 設定
     KEEPALIVE_INTERVAL: int = 780  # 13 分鐘
-    SELF_URL: str = "https://linebot-rev.onrender.com/about"
+    SELF_URL: str = "https://linebot-rev.onrender.com//about"
     
     def __post_init__(self):
         """從環境變數載入設定"""

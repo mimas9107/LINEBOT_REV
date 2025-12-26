@@ -282,11 +282,12 @@ class DatabaseService:
                     print(f"[Database] Creating backup: {backup_path}")
                     shutil.copy2(self.db_path, backup_path)
                 
-                # Step 5: 原子替換
+                # Step 5: 替換資料庫檔案（處理跨檔案系統情況）
                 print("[Database] Replacing database file...")
                 
-                # 使用 os.replace 進行原子替換
-                os.replace(uploaded_file_path, self.db_path)
+                # os.replace() 無法跨檔案系統，改用 shutil.move()
+                # shutil.move() 會自動處理跨檔案系統的情況（先複製再刪除）
+                shutil.move(uploaded_file_path, self.db_path)
                 
                 # Step 6: WAL checkpoint + VACUUM
                 print("[Database] Running WAL checkpoint and VACUUM...")
