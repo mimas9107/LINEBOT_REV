@@ -4,7 +4,7 @@ LINE Handler Module
 處理 LINE Webhook 事件
 
 更新紀錄:
-- rev3.1: 新增 maintenance mode 檢查，維護期間回覆維護訊息並捨棄
+- rev3.1: 新增 maintenance mode 檢查；Google Sheet 改為非同步寫入
 - rev3: 改用 SQLite 記錄對話，同時記錄 user 訊息與 AI 回應
 - rev2: 配合 AI 模組更新
 """
@@ -25,7 +25,7 @@ from config import config
 from services import (
     chat_with_ai,
     analyze_image,
-    save_to_sheet,
+    save_to_sheet_async,  # 改用非同步版本
     db_service,
     DatabaseMaintenanceError,
 )
@@ -111,8 +111,8 @@ class LineHandler:
                 self._reply_message(line_bot_api, event.reply_token, result)
                 print(f"{timestamp} msg from {event.source}: {getattr(event.message, 'text', '[image]')}")
             
-            # 儲存到 Google Sheet (保留原功能)
-            save_to_sheet(timestamp, user_id, message_type, message_text)
+            # 非同步儲存到 Google Sheet（不阻塞主請求）
+            save_to_sheet_async(timestamp, user_id, message_type, message_text)
     
     def _get_user_id(self, event: MessageEvent) -> str:
         """

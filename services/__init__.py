@@ -14,6 +14,7 @@ from .ai_image import analyze_image, ai_image_service
 from .bookmark import (
     get_chat_history as get_sheet_history,
     save_message as save_to_sheet,
+    save_message_async as save_to_sheet_async,  # 非同步版本
     log_keepalive,
     bookmark_service
 )
@@ -37,6 +38,7 @@ __all__ = [
     # 書籤服務 (Google Sheet)
     'get_sheet_history',
     'save_to_sheet',
+    'save_to_sheet_async',  # 非同步版本
     'log_keepalive',
     'bookmark_service',
     

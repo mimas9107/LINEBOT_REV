@@ -2,10 +2,14 @@
 Bookmark Service Module
 版本: rev3.1
 處理書籤功能與 Google Apps Script 互動
+
+更新紀錄:
+- rev3.1: 新增非同步寫入功能，避免阻塞主請求
 """
 
 import json
 import time
+import threading
 import requests
 from config import config
 
@@ -158,8 +162,26 @@ def get_chat_history(user_id: str, limit: int = None) -> list[dict]:
 
 
 def save_message(timestamp: int, user_id: str, message_type: str, message_text: str) -> bool:
-    """便捷函式：儲存訊息"""
+    """便捷函式：儲存訊息（同步，會阻塞）"""
     return bookmark_service.save_message(timestamp, user_id, message_type, message_text)
+
+
+def save_message_async(timestamp: int, user_id: str, message_type: str, message_text: str) -> None:
+    """
+    便捷函式：非同步儲存訊息（不阻塞主請求）
+    
+    使用背景執行緒發送請求到 Google Apps Script，
+    主請求不會等待完成，適合在 webhook 處理中使用。
+    """
+    def _save_in_background():
+        try:
+            bookmark_service.save_message(timestamp, user_id, message_type, message_text)
+        except Exception as e:
+            print(f"[BookmarkService] Async save error: {e}")
+    
+    thread = threading.Thread(target=_save_in_background, daemon=True)
+    thread.start()
+    print(f"[BookmarkService] Async save started for {message_type}")
 
 
 def log_keepalive(function_name: str, status: str = "OK", note: str = "") -> bool:

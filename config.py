@@ -54,7 +54,7 @@ class Config:
         self.LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "")
         self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
         self.GOOGLE_APPS_SCRIPT_URL = os.getenv("GOOGLE_APPS_SCRIPT_URL", "")
-        self.API_SECRET_KEY = os.getenv("API_SECRET_KEY", "")
+        self.API_SECRET_KEY = os.getenv("API_SECRET_KEY", "your-secret-key-change-me")
     
     def validate(self) -> list[str]:
         """驗證必要設定是否存在，回傳缺少的設定名稱列表"""
