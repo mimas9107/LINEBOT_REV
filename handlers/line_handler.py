@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev2
+版本: rev3
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev3: 改用 SQLite 記錄對話，同時記錄 user 訊息與 AI 回應
 - rev2: 配合 AI 模組更新
 """
 
@@ -20,7 +21,16 @@ from linebot.v3.messaging import (
 from linebot.v3.webhooks import MessageEvent
 
 from config import config
-from services import chat_with_ai, analyze_image, get_chat_history, save_message
+from services import (
+    chat_with_ai,
+    analyze_image,
+    save_to_sheet,
+)
+from services.chat_history import (
+    get_chat_history,
+    save_user_message,
+    save_model_response,
+)
 
 
 class LineHandler:
@@ -73,15 +83,16 @@ class LineHandler:
                 result = self._handle_text_message(event, user_id)
                 
             elif message_type == 'image':
-                result = self._handle_image_message(event)
+                result = self._handle_image_message(event, user_id)
+                message_text = "[圖片]"
             
             # 回覆訊息（如果有結果）
             if result:
                 self._reply_message(line_bot_api, event.reply_token, result)
                 print(f"{timestamp} msg from {event.source}: {getattr(event.message, 'text', '[image]')}")
             
-            # 儲存訊息到 Google Sheet
-            save_message(timestamp, user_id, message_type, message_text)
+            # 儲存到 Google Sheet (保留原功能)
+            save_to_sheet(timestamp, user_id, message_type, message_text)
     
     def _get_user_id(self, event: MessageEvent) -> str:
         """
@@ -120,27 +131,34 @@ class LineHandler:
         if text.lower().startswith("ai:"):
             prompt = text[3:].strip()
             
-            # 取得歷史對話
+            # 儲存使用者訊息到 SQLite
+            save_user_message(user_id, prompt, 'text')
+            
+            # 取得歷史對話 (從 SQLite)
             chat_history = get_chat_history(user_id)
-            print(f"[LineHandler] Chat history: {chat_history}")
+            print(f"[LineHandler] Chat history count: {len(chat_history)}")
             
             # 格式化歷史對話
             formatted_history = self._format_chat_history(chat_history, user_id)
             
             # 建立完整 prompt
             full_prompt = f"{formatted_history}User: {prompt}" if formatted_history else prompt
-            print(f"[LineHandler] Full prompt: {full_prompt}")
+            print(f"[LineHandler] Full prompt length: {len(full_prompt)}")
             
             # 呼叫 AI
             result = chat_with_ai(full_prompt)
-            print(f"[LineHandler] AI result: {result[:100]}...")
+            print(f"[LineHandler] AI result length: {len(result)}")
+            
+            # 儲存 AI 回應到 SQLite
+            save_model_response(user_id, result, 'text')
+            
             return result
         
         # 複製模式：以 "c:" 開頭
         elif text.lower().startswith("c:"):
             return text[2:].strip()
         
-        # 其他訊息不回覆
+        # 其他訊息不回覆，但可以記錄
         return ""
     
     def _format_chat_history(self, history: list[dict], current_user_id: str) -> str:
@@ -159,20 +177,23 @@ class LineHandler:
         
         formatted = ""
         for entry in history:
-            if entry.get('userId') == current_user_id:
-                formatted += f"User: {entry.get('messageText', '')}\n"
+            role = entry.get('role', 'user')
+            message = entry.get('messageText', '')
+            
+            if role == 'user':
+                formatted += f"User: {message}\n"
             else:
-                formatted += f"Bot: {entry.get('messageText', '')}\n"
+                formatted += f"Assistant: {message}\n"
         
-        print(f"[LineHandler] Formatted history: {formatted}")
         return formatted
     
-    def _handle_image_message(self, event: MessageEvent) -> str:
+    def _handle_image_message(self, event: MessageEvent, user_id: str) -> str:
         """
         處理圖片訊息
         
         Args:
             event: LINE 訊息事件
+            user_id: 使用者 ID
         
         Returns:
             AI 分析結果
@@ -180,15 +201,24 @@ class LineHandler:
         message_id = event.message.id
         print(f"[LineHandler] Received image message: {message_id}")
         
+        # 記錄使用者上傳圖片
+        save_user_message(user_id, "[上傳圖片]", 'image')
+        
         # 下載圖片
         image_path = self._download_image(message_id)
         if not image_path:
-            return "圖片下載失敗，請稍後再試。"
+            error_msg = "圖片下載失敗，請稍後再試。"
+            save_model_response(user_id, error_msg, 'text')
+            return error_msg
         
         print(f"[LineHandler] Image saved to: {image_path}")
         
         # 分析圖片
         result = analyze_image(image_path)
+        
+        # 記錄 AI 回應
+        save_model_response(user_id, result, 'text')
+        
         return result
     
     def _download_image(self, message_id: str) -> str:

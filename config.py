@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2
+版本: rev3
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev3: 新增 SQLite 對話歷史記錄系統
 - rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
 """
 
@@ -23,6 +24,12 @@ class Config:
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"  # 統一使用此模型，支援文字與圖片
     
+    # SQLite 資料庫設定
+    DATABASE_PATH: str = "data/chat_history.db"
+    
+    # API 安全設定 (用於下載資料庫的驗證)
+    API_SECRET_KEY: str = ""
+    
     # Google Apps Script 設定
     GOOGLE_APPS_SCRIPT_URL: str = ""
     
@@ -38,7 +45,7 @@ class Config:
     
     # Keepalive 設定
     KEEPALIVE_INTERVAL: int = 780  # 13 分鐘
-    SELF_URL: str = "https://linebot-bisb.onrender.com/about"
+    SELF_URL: str = "https://linebot-rev.onrender.com/about"
     
     def __post_init__(self):
         """從環境變數載入設定"""
@@ -46,6 +53,7 @@ class Config:
         self.LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "")
         self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
         self.GOOGLE_APPS_SCRIPT_URL = os.getenv("GOOGLE_APPS_SCRIPT_URL", "")
+        self.API_SECRET_KEY = os.getenv("API_SECRET_KEY", "")
     
     def validate(self) -> list[str]:
         """驗證必要設定是否存在，回傳缺少的設定名稱列表"""

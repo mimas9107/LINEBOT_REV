@@ -46,5 +46,14 @@ Thumbs.db
 pic/downloadimg.jpg
 devtunnel.exe
 
+# Database (保留 .gitkeep)
+data/*.db
+!data/.gitkeep
+
 # Logs
 *.log
+
+# Export files
+export.json
+export.csv
+*.txt

@@ -1,7 +1,10 @@
 """
 Bookmark Service Module
-版本: rev2
+版本: rev3
 處理書籤功能與 Google Apps Script 互動
+
+注意: 對話歷史記錄已移至 chat_history.py (使用 SQLite)
+本模組保留書籤功能與 Google Sheet 的整合
 """
 
 import json
