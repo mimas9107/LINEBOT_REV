@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev3.1
+版本: rev3.2
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev3.2: 更新 Gemini 模型為長效別名 gemini-flash-latest
 - rev3.1: 配合 restore 功能
 - rev3: 新增 SQLite 對話歷史記錄系統
 - rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
@@ -23,7 +24,7 @@ class Config:
     
     # Gemini AI 設定 (使用新版 google-genai SDK)
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-flash"  # 統一使用此模型，支援文字與圖片
+    GEMINI_MODEL: str = "gemini-flash-latest"  # 改用長效別名，由 Google 自動管理版本
     
     # SQLite 資料庫設定
     DATABASE_PATH: str = "data/chat_history.db"
