@@ -1,14 +1,18 @@
-# LINEBOT rev2
+# LINEBOT rev2.1
 
 > 整合 Google Gemini 的 LINE 聊天機器人（使用新版 google-genai SDK）
 
 ## 版本資訊
 
-- **版本**: rev2
-- **更新日期**: 2025-12-25
-- **重大更新**: 改用 `google-genai` SDK (取代已棄用的 `google-generativeai`)
+- **版本**: rev2.1
+- **更新日期**: 2026-04-17
+- **重大更新**: 更新 Gemini 模型為長效別名 `gemini-flash-latest` 以確保穩定服務
 
 ## 更新紀錄
+
+### rev2.1 (2026-04-17)
+- ✅ 更新 Gemini 模型為長效別名 `gemini-flash-latest`。
+- ✅ 確保模型退役時系統能自動過渡，無需手動修改。
 
 ### rev2 (2025-12-25)
 - ✅ 改用新版 `google-genai` SDK

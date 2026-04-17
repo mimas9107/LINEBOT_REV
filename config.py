@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2
+版本: rev2.1
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.1: 更新 Gemini 模型為長效別名 gemini-flash-latest，確保穩定服務
 - rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
 """
 
@@ -21,7 +22,7 @@ class Config:
     
     # Gemini AI 設定 (使用新版 google-genai SDK)
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-flash"  # 統一使用此模型，支援文字與圖片
+    GEMINI_MODEL: str = "gemini-flash-latest"  # 改用長效別名，由 Google 自動管理版本
     
     # Google Apps Script 設定
     GOOGLE_APPS_SCRIPT_URL: str = ""
