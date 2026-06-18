@@ -1,11 +1,21 @@
+---
+name:          "README.md"
+description:   "Main documentation for LINEBOT rev2.1"
+created_date:  "2026/06/18 10:00:00"
+modified_date: "2026/06/18 10:00:00"
+project_version: "2.1.0"
+document_version: "1.0.0"
+agent_sign: ['gemini cli/current_agent']
+---
+
 # LINEBOT rev2.1
 
 > 整合 Google Gemini 的 LINE 聊天機器人（使用新版 google-genai SDK）
 
 ## 版本資訊
 
-- **版本**: rev2.1
-- **更新日期**: 2026-04-17
+- **版本**: 2.1.0
+- **更新日期**: 2026-06-18
 - **重大更新**: 更新 Gemini 模型為長效別名 `gemini-flash-latest` 以確保穩定服務
 
 ## 更新紀錄
