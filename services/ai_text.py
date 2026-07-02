@@ -8,6 +8,7 @@ AI Text Service Module
       - 使用 genai.Client() 取代 genai.configure()
       - 使用 client.models.generate_content() 取代 model.generate_content()
       - 使用 client.chats.create() 支援多輪對話
+- rev2.1.1: 修正歷史對話角色判斷邏輯，userId="bot" 識別為 model 角色
 """
 
 from google import genai
@@ -112,7 +113,7 @@ class AITextService:
         
         Args:
             history: 歷史對話，格式為 [{"userId": "...", "messageText": "..."}]
-                     假設相同 userId 為 user，不同則為 model
+                     userId 為 "bot" 表示 AI 回覆，其他為使用者
         
         Returns:
             SDK Content 列表
@@ -122,16 +123,13 @@ class AITextService:
         
         contents = []
         
-        # 取得第一個 userId 作為 user 的基準
-        user_id = history[0].get('userId', '') if history else ''
-        
         for entry in history:
             message_text = entry.get('messageText', '')
             if not message_text:
                 continue
             
-            # 判斷角色：相同 userId 為 user，不同為 model
-            role = 'user' if entry.get('userId') == user_id else 'model'
+            # 判斷角色：userId 為 "bot" 為 model，其他為 user
+            role = 'model' if entry.get('userId') == 'bot' else 'user'
             
             contents.append(
                 types.Content(

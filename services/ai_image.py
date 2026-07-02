@@ -7,7 +7,7 @@ AI Image Service Module
 - rev2: 改用 google-genai SDK (新版統一 SDK)
       - 使用 genai.Client() 統一管理
       - 使用 types.Part.from_bytes() 處理圖片
-      - 統一使用 gemini-2.5-flash 模型 (支援多模態)
+      - 統一使用 gemini-flash-latest 模型 (長效別名，支援多模態)
 """
 
 import base64

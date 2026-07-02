@@ -2,10 +2,12 @@
 Bookmark Service Module
 版本: rev2
 處理書籤功能與 Google Apps Script 互動
+
+更新紀錄:
+- rev2.1.1: 移除 time.sleep(0.25)，save_message 改為非同步呼叫
 """
 
 import json
-import time
 import requests
 from config import config
 
@@ -89,9 +91,6 @@ class BookmarkService:
         headers = {'Content-Type': 'application/json'}
         
         try:
-            # 加入小延遲，防止訊息傳入太快 Google Apps Script 來不及寫入
-            time.sleep(0.25)
-            
             response = requests.post(
                 self.gas_url,
                 headers=headers,

@@ -5,7 +5,8 @@ LINEBOT Configuration Module
 
 更新紀錄:
 - rev2.1: 更新 Gemini 模型為長效別名 gemini-flash-latest，確保穩定服務
-- rev2: 更新為 google-genai SDK，統一使用 gemini-2.5-flash 模型
+- rev2: 更新為 google-genai SDK，統一使用 gemini-flash-latest 模型
+- rev2.1.1: 所有 save_message 改為非同步、圖片路徑改用 message_id、新增 bot 回覆儲存
 """
 
 import os
@@ -34,8 +35,8 @@ class Config:
     LMSTUDIO_URL: str = "https://c8jkzw1b-3030.asse.devtunnels.ms/v1/chat/completions"
     LMSTUDIO_MODEL: str = "llava-v1.5-7b"
     
-    # 圖片儲存路徑
-    DOWNLOAD_IMAGE_PATH: str = "pic/downloadimg.jpg"
+    # 圖片儲存目錄 (檔名由 message_id 動態產生)
+    DOWNLOAD_IMAGE_DIR: str = "pic"
     
     # Keepalive 設定
     KEEPALIVE_INTERVAL: int = 780  # 13 分鐘

@@ -2,9 +2,9 @@
 name:          "README.md"
 description:   "Main documentation for LINEBOT rev2.1"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/06/18 10:00:00"
+modified_date: "2026/07/02 10:00:00"
 project_version: "2.1.0"
-document_version: "1.0.0"
+document_version: "1.0.1"
 agent_sign: ['gemini cli/current_agent']
 ---
 
@@ -15,7 +15,7 @@ agent_sign: ['gemini cli/current_agent']
 ## 版本資訊
 
 - **版本**: 2.1.0
-- **更新日期**: 2026-06-18
+- **更新日期**: 2026-07-02
 - **重大更新**: 更新 Gemini 模型為長效別名 `gemini-flash-latest` 以確保穩定服務
 
 ## 更新紀錄
@@ -24,9 +24,17 @@ agent_sign: ['gemini cli/current_agent']
 - ✅ 更新 Gemini 模型為長效別名 `gemini-flash-latest`。
 - ✅ 確保模型退役時系統能自動過渡，無需手動修改。
 
+### rev2.1.1 (2026-07-02)
+- ✅ 所有 `save_message` 呼叫改為非同步（`threading.Thread`），不阻塞 webhook handler。
+- ✅ 修正 GAS catch 區塊 `error` 未定義 Bug（L79, L106）。
+- ✅ 修正歷史對話角色判斷：`userId === "bot"` 識別 model 角色，bot 回覆也寫入 Sheets。
+- ✅ 圖片路徑改用 `message_id` 防止並發覆蓋，分析後自動清理暫存檔。
+- ✅ 修正所有文件中 `gemini-2.5-flash` → `gemini-flash-latest`。
+- ✅ 新增完整部署指南 `DEPLOYMENT.md`。
+
 ### rev2 (2025-12-25)
 - ✅ 改用新版 `google-genai` SDK
-- ✅ 統一使用 `gemini-2.5-flash` 模型 (支援文字與圖片)
+- ✅ 統一使用 `gemini-flash-latest` 模型 (長效別名，支援文字與圖片)
 - ✅ 使用 `genai.Client()` 取代 `genai.configure()`
 - ✅ 使用 `client.chats.create()` 支援多輪對話
 - ✅ 移除已棄用的 `google-generativeai` 套件
@@ -59,6 +67,7 @@ linebot-rev2/
 │   └── keepalive.py          # 背景保活任務
 │
 ├── pic/                      # 圖片資源
+├── DEPLOYMENT.md             # 完整部署指南
 └── google_app_script/        # Google Apps Script 腳本
 ```
 
@@ -80,7 +89,7 @@ from google import genai
 
 client = genai.Client(api_key=API_KEY)
 response = client.models.generate_content(
-    model='gemini-2.5-flash',
+    model='gemini-flash-latest',  # 使用長效別名，Google 自動管理版本升級
     contents=prompt
 )
 ```
@@ -108,7 +117,7 @@ response = chat_with_ai("推薦我小吃", history=history)
 
 ### 2. AI 圖片辨識 (`services/ai_image.py`)
 - 使用者上傳圖片自動觸發
-- 使用 `gemini-2.5-flash` 模型 (支援多模態)
+- 使用 `gemini-flash-latest` 模型 (支援多模態，長效別名)
 - 支援 PIL.Image 直接傳入或 bytes 方式
 
 ```python
@@ -162,9 +171,9 @@ gunicorn app:app
 ```
 
 ## 注意事項
-
+ 
 1. **SDK 版本**: 本專案使用 `google-genai`，請確保不要同時安裝 `google-generativeai`
-2. **模型**: 統一使用 `gemini-2.5-flash`，此模型同時支援文字與圖片
+2. **模型**: 統一使用 `gemini-flash-latest` (長效別名，Google 自動管理版本升級)
 3. **API 金鑰**: 請勿將 `.env` 推送到版本控制
 4. **棄用警告**: `google-generativeai` 將於 2025/11/30 停止更新
 
@@ -176,9 +185,9 @@ gunicorn app:app
 | 初始化 | `genai.configure()` | `genai.Client()` |
 | 文字生成 | `model.generate_content()` | `client.models.generate_content()` |
 | 聊天 | `model.start_chat()` | `client.chats.create()` |
-| 文字模型 | `gemini-2.5-flash` | `gemini-2.5-flash` |
-| 圖片模型 | `gemini-2.0-flash-exp` | `gemini-2.5-flash` (統一) |
+| 文字模型 | `gemini-2.5-flash` | `gemini-flash-latest` (長效別名) |
+| 圖片模型 | `gemini-2.0-flash-exp` | `gemini-flash-latest` (統一，長效別名) |
 
 ---
 
-更新日期：2025-12-25
+更新日期：2026-07-02

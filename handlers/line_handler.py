@@ -5,10 +5,12 @@ LINE Handler Module
 
 更新紀錄:
 - rev2: 配合 AI 模組更新
+- rev2.1.1: save_message 改為非同步、新增 bot 回覆儲存、圖片路徑改用 message_id
 """
 
 import os
 import requests
+import threading
 from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
     Configuration,
@@ -70,7 +72,7 @@ class LineHandler:
             # 根據訊息類型處理
             if message_type == 'text':
                 message_text = event.message.text
-                result = self._handle_text_message(event, user_id)
+                result = self._handle_text_message(event, user_id, timestamp)
                 
             elif message_type == 'image':
                 result = self._handle_image_message(event)
@@ -80,8 +82,12 @@ class LineHandler:
                 self._reply_message(line_bot_api, event.reply_token, result)
                 print(f"{timestamp} msg from {event.source}: {getattr(event.message, 'text', '[image]')}")
             
-            # 儲存訊息到 Google Sheet
-            save_message(timestamp, user_id, message_type, message_text)
+            # 儲存訊息到 Google Sheet (非同步，不阻塞主線程)
+            threading.Thread(
+                target=save_message,
+                args=(timestamp, user_id, message_type, message_text),
+                daemon=True
+            ).start()
     
     def _get_user_id(self, event: MessageEvent) -> str:
         """
@@ -102,13 +108,14 @@ class LineHandler:
             return source.room_id
         return "unknown"
     
-    def _handle_text_message(self, event: MessageEvent, user_id: str) -> str:
+    def _handle_text_message(self, event: MessageEvent, user_id: str, timestamp: int) -> str:
         """
         處理文字訊息
         
         Args:
             event: LINE 訊息事件
             user_id: 使用者 ID
+            timestamp: 訊息時間戳記
         
         Returns:
             回覆內容
@@ -134,6 +141,14 @@ class LineHandler:
             # 呼叫 AI
             result = chat_with_ai(full_prompt)
             print(f"[LineHandler] AI result: {result[:100]}...")
+            
+            # 儲存 Bot 回覆到歷史記錄 (非同步，不阻塞主線程)
+            threading.Thread(
+                target=save_message,
+                args=(timestamp, "bot", "text", result),
+                daemon=True
+            ).start()
+            
             return result
         
         # 複製模式：以 "c:" 開頭
@@ -187,9 +202,17 @@ class LineHandler:
         
         print(f"[LineHandler] Image saved to: {image_path}")
         
-        # 分析圖片
-        result = analyze_image(image_path)
-        return result
+        try:
+            # 分析圖片
+            result = analyze_image(image_path)
+            return result
+        finally:
+            # 清理暫存圖片
+            try:
+                os.remove(image_path)
+                print(f"[LineHandler] Cleaned up temp image: {image_path}")
+            except Exception as e:
+                print(f"[LineHandler] Warning: Failed to cleanup temp image: {e}")
     
     def _download_image(self, message_id: str) -> str:
         """
@@ -208,7 +231,8 @@ class LineHandler:
             response = requests.get(url, headers=headers, stream=True)
             response.raise_for_status()
             
-            image_path = config.DOWNLOAD_IMAGE_PATH
+            # 使用 message_id 作為檔名，避免並發覆蓋
+            image_path = os.path.join(config.DOWNLOAD_IMAGE_DIR, f"{message_id}.jpg")
             
             # 確保目錄存在
             os.makedirs(os.path.dirname(image_path), exist_ok=True)

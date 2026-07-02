@@ -76,7 +76,7 @@ function doPost(e) {
     }catch(err){
       Logger.log("處理 Render.com LINEBOT訊息時發生錯誤 (僅記錄): "+err);
       return ContentService.createTextOutput(
-        JSON.stringify({"status": "error", "message": error.toString()})
+        JSON.stringify({"status": "error", "message": err.toString()})
         ).setMimeType(ContentService.MimeType.JSON);
     }
     return;
@@ -103,7 +103,7 @@ function doPost(e) {
     }catch(err){
       Logger.log("處理 Render.com LINEBOT訊息時發生錯誤 (含書籤判斷): "+err);
       return ContentService.createTextOutput(
-        JSON.stringify({"status": "error", "message": error.toString()})
+        JSON.stringify({"status": "error", "message": err.toString()})
         ).setMimeType(ContentService.MimeType.JSON);
     }
   }
