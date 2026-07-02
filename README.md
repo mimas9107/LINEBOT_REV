@@ -2,45 +2,23 @@
 name:          "README.md"
 description:   "Main documentation for LINEBOT rev2.1"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/02 10:00:00"
-project_version: "2.1.0"
-document_version: "1.0.1"
+modified_date: "2026/07/02 11:00:00"
+project_version: "2.1.1"
+document_version: "1.0.2"
 agent_sign: ['gemini cli/current_agent']
 ---
 
-# LINEBOT rev2.1
+# LINEBOT
 
 > 整合 Google Gemini 的 LINE 聊天機器人（使用新版 google-genai SDK）
 
 ## 版本資訊
 
-- **版本**: 2.1.0
+- **版本**: 2.1.1
 - **更新日期**: 2026-07-02
-- **重大更新**: 更新 Gemini 模型為長效別名 `gemini-flash-latest` 以確保穩定服務
+- **當前重點**: 使用 Gemini 長效別名 `gemini-flash-latest`，模型退役時自動過渡
 
-## 更新紀錄
-
-### rev2.1 (2026-04-17)
-- ✅ 更新 Gemini 模型為長效別名 `gemini-flash-latest`。
-- ✅ 確保模型退役時系統能自動過渡，無需手動修改。
-
-### rev2.1.1 (2026-07-02)
-- ✅ 所有 `save_message` 呼叫改為非同步（`threading.Thread`），不阻塞 webhook handler。
-- ✅ 修正 GAS catch 區塊 `error` 未定義 Bug（L79, L106）。
-- ✅ 修正歷史對話角色判斷：`userId === "bot"` 識別 model 角色，bot 回覆也寫入 Sheets。
-- ✅ 圖片路徑改用 `message_id` 防止並發覆蓋，分析後自動清理暫存檔。
-- ✅ 修正所有文件中 `gemini-2.5-flash` → `gemini-flash-latest`。
-- ✅ 新增完整部署指南 `DEPLOYMENT.md`。
-
-### rev2 (2025-12-25)
-- ✅ 改用新版 `google-genai` SDK
-- ✅ 統一使用 `gemini-flash-latest` 模型 (長效別名，支援文字與圖片)
-- ✅ 使用 `genai.Client()` 取代 `genai.configure()`
-- ✅ 使用 `client.chats.create()` 支援多輪對話
-- ✅ 移除已棄用的 `google-generativeai` 套件
-
-### rev1 (2025-12-25)
-- 初始模組化重構版本
+> 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 
 ## 專案結構
 
@@ -65,6 +43,9 @@ linebot-rev2/
 ├── utils/                    # 工具模組
 │   ├── __init__.py
 │   └── keepalive.py          # 背景保活任務
+│
+├── tools/                    # 開發輔助工具
+│   └── check_models.py       # 查詢目前 API Key 可用 Gemini 模型
 │
 ├── pic/                      # 圖片資源
 ├── DEPLOYMENT.md             # 完整部署指南
@@ -187,7 +168,3 @@ gunicorn app:app
 | 聊天 | `model.start_chat()` | `client.chats.create()` |
 | 文字模型 | `gemini-2.5-flash` | `gemini-flash-latest` (長效別名) |
 | 圖片模型 | `gemini-2.0-flash-exp` | `gemini-flash-latest` (統一，長效別名) |
-
----
-
-更新日期：2026-07-02
