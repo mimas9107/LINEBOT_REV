@@ -3,8 +3,8 @@ name:          "SPEC.md"
 description:   "Project specifications and requirements"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.0"
-document_version: "1.1.0"
+project_version: "2.2.1"
+document_version: "1.1.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
@@ -18,6 +18,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 - SQLite-backed conversation persistence.
 - Authenticated database read/download API.
 - Disabled database upload/restore endpoints for Render deployment safety.
+- Keepalive starts on the first incoming request, not on worker import.
 - Keep-alive mechanism to prevent service sleep.
 
 ## Tech Stack

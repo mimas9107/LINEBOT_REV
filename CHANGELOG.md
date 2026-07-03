@@ -3,12 +3,19 @@ name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.0"
-document_version: "1.1.0"
+project_version: "2.2.1"
+document_version: "1.1.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
 # Changelog
+
+## [2.2.1] - 2026-07-03
+### Fixed
+- Deferred `keepalive` startup until the first request so Gunicorn/Render boot no longer starts the background thread during worker import, while still preserving the heartbeat after the app starts serving traffic.
+
+### Notes
+- This is a patch release on `main` and follows the even-MAJOR versioning policy documented in `SPEC.md`.
 
 ## [2.2.0] - 2026-07-03
 ### Added

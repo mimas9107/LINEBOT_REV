@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.2
+版本: rev2.2.1
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.2.1: keepalive 只在直接執行時啟動，配合 patch release 說明同步
 - rev2.2: 新增 SQLite 資料庫設定、API 金鑰設定，並補齊所有 config 屬性的環境變數覆蓋與型別轉換
 - rev2.1: 更新 Gemini 模型為長效別名 gemini-flash-latest，確保穩定服務
 - rev2: 更新為 google-genai SDK，統一使用 gemini-flash-latest 模型

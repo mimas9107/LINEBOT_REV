@@ -3,8 +3,8 @@ name:          "MEMOIR.md"
 description:   "Project architectural memory and decisions"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.0"
-document_version: "1.1.0"
+project_version: "2.2.1"
+document_version: "1.1.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
@@ -21,4 +21,5 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 - **SQLite Persistence**: User prompts, image events, AI replies, and image-analysis results are persisted to `data/chat_history.db`.
 - **Database API Safety**: Read/download database APIs are authenticated by `API_SECRET_KEY`. Upload-based restore/validate endpoints are intentionally disabled on Render because the feature2 restore flow caused deployment instability.
 - **Config Completeness**: `config.py` loads every supported runtime setting from environment variables and validates integer overrides for chat-history length and keepalive interval.
+- **Keepalive Boot Safety**: `keepalive` now starts on the first incoming request; importing `app` under Gunicorn no longer starts the background thread during worker boot, while preserving runtime heartbeats after traffic begins.
 - **Deployment**: Complete deployment guide available in `DEPLOYMENT.md` covering Google Sheets/GAS setup, LINE Developer console, and Render.com.

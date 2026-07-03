@@ -1,14 +1,16 @@
 """
 LINEBOT Application
-版本: rev2.2
+版本: rev2.2.1
 Flask 應用程式入口點
 
 更新紀錄:
+- rev2.2.1: 延後 keepalive 到第一個請求才啟動，避免 worker import 階段搶資源
 - rev2.2: 新增 SQLite database 只讀/下載 API，明確停用上傳還原端點
 - rev2: AI 模組改用 google-genai SDK
 """
 
 import os
+import threading
 
 from flask import Flask, request, abort, jsonify, send_file
 
@@ -25,6 +27,8 @@ if missing_configs:
 
 # 建立 Flask 應用
 app = Flask(__name__)
+_keepalive_started = False
+_keepalive_lock = threading.Lock()
 
 
 # ===== 路由定義 =====
@@ -32,13 +36,13 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     """首頁"""
-    return 'Hello, World! LINEBOT rev2.2 is running.'
+    return 'Hello, World! LINEBOT rev2.2.1 is running.'
 
 
 @app.route('/about')
 def about():
     """關於頁面（也用於 keepalive ping）"""
-    return '<h1>LINEBOT rev2.2 - Python Flask LINE Bot (google-genai SDK + SQLite)</h1>'
+    return '<h1>LINEBOT rev2.2.1 - Python Flask LINE Bot (google-genai SDK + SQLite)</h1>'
 
 
 @app.route('/health')
@@ -46,7 +50,7 @@ def health():
     """健康檢查端點"""
     return {
         'status': 'healthy',
-        'version': 'rev2.2',
+        'version': 'rev2.2.1',
         'database': db_service.get_db_stats()
     }
 
@@ -193,10 +197,25 @@ def database_upload_disabled():
     }), 403
 
 
-# ===== 啟動應用 =====
+# ===== 啟動保活 =====
 
-# 啟動 keepalive 背景任務
-start_keepalive()
+@app.before_request
+def ensure_keepalive_started():
+    """延後到第一個請求才啟動 keepalive，避免 worker boot 階段搶資源。"""
+    global _keepalive_started
+
+    if _keepalive_started:
+        return None
+
+    with _keepalive_lock:
+        if not _keepalive_started:
+            start_keepalive()
+            _keepalive_started = True
+
+    return None
+
+
+# ===== 啟動應用 =====
 
 if __name__ == '__main__':
     app.run(debug=True)
