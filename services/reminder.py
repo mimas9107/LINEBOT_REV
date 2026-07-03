@@ -68,10 +68,11 @@ class ReminderService:
         except Exception as e:
             print(f"[Reminder] Push error for id={reminder['id']}: {e}")
 
+    # ponytail: SQLite datetime() 不認 isoformat 的 T 跟微秒，用 strftime 對齊格式
     def create(self, user_id, remind_at, message):
         return db_service.execute_insert(
             "INSERT INTO reminders (user_id, remind_at, message) VALUES (?, ?, ?)",
-            (user_id, remind_at.isoformat(), message)
+            (user_id, remind_at.strftime('%Y-%m-%d %H:%M:%S'), message)
         )
 
     def list_pending(self, user_id):
@@ -110,7 +111,8 @@ def parse_remind_time(text):
 
 
 def create_reminder(user_id, text):
-    m = re.search(r'(\d+\s*(分鐘|分|小時|天|秒)後)', text)
+    cleaned = re.sub(r'^ai:\s*', '', text, flags=re.IGNORECASE).strip()
+    m = re.search(r'(\d+\s*(分鐘|分|小時|天|秒)後)', cleaned)
     if not m:
         return False, "無法解析時間，目前支援：X分鐘後 / X小時後 / X天後"
 
@@ -122,7 +124,7 @@ def create_reminder(user_id, text):
         return False, f"⚠️ 待處理提醒已達上限 ({config.MAX_PENDING_REMINDERS} 筆)，請先取消或等待既有提醒執行"
 
     remind_at = parse_remind_time(m.group(1))
-    parts = text.split(m.group(1))
+    parts = cleaned.split(m.group(1))
     message = ''.join(parts).strip()
     message = re.sub(r'^(提醒我|remind me\s*(to\s+|in\s+|of\s+)?)', '', message, flags=re.IGNORECASE)
     message = re.sub(r'\s+', ' ', message).strip()
