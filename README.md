@@ -1,9 +1,9 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.2.1"
+description:   "Main documentation for LINEBOT rev2.3.0"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.1"
+project_version: "2.3.0"
 document_version: "1.1.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 
 ## 版本資訊
 
-- **版本**: 2.2.1
+- **版本**: 2.3.0
 - **更新日期**: 2026-07-03
-- **當前重點**: SQLite 對話歷史、只讀 database API、停用 database 上傳還原端點、第一個請求時啟動 keepalive
+- **當前重點**: 排程提醒系統 (APScheduler)、reminders table、LINE Push 到期通知
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 

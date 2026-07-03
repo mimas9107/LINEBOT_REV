@@ -1,10 +1,11 @@
 """
 LINEBOT Application
-版本: rev2.2.1
+版本: rev2.3.0
 Flask 應用程式入口點
 
 更新紀錄:
 - rev2.2.1: 延後 keepalive 到第一個請求才啟動，避免 worker import 階段搶資源
+- rev2.3.0: 新增 APScheduler 排程提醒系統 (reminders table + LINE Push)
 - rev2.2: 新增 SQLite database 只讀/下載 API，明確停用上傳還原端點
 - rev2: AI 模組改用 google-genai SDK
 """
@@ -16,7 +17,7 @@ from flask import Flask, request, abort, jsonify, send_file
 
 from config import config
 from handlers import line_handler
-from services import db_service
+from services import db_service, reminder_service
 from services.chat_history import chat_history_service
 from utils import start_keepalive
 
@@ -36,13 +37,13 @@ _keepalive_lock = threading.Lock()
 @app.route('/')
 def home():
     """首頁"""
-    return 'Hello, World! LINEBOT rev2.2.1 is running.'
+    return 'Hello, World! LINEBOT rev2.3.0 is running.'
 
 
 @app.route('/about')
 def about():
     """關於頁面（也用於 keepalive ping）"""
-    return '<h1>LINEBOT rev2.2.1 - Python Flask LINE Bot (google-genai SDK + SQLite)</h1>'
+    return '<h1>LINEBOT rev2.3.0 - Python Flask LINE Bot (google-genai SDK + SQLite + Reminder)</h1>'
 
 
 @app.route('/health')
@@ -50,7 +51,7 @@ def health():
     """健康檢查端點"""
     return {
         'status': 'healthy',
-        'version': 'rev2.2.1',
+        'version': 'rev2.3.0',
         'database': db_service.get_db_stats()
     }
 
@@ -210,6 +211,7 @@ def ensure_keepalive_started():
     with _keepalive_lock:
         if not _keepalive_started:
             start_keepalive()
+            reminder_service.start()
             _keepalive_started = True
 
     return None

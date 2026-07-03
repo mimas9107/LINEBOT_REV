@@ -20,3 +20,6 @@ requests
 
 # 環境變數 (開發用)
 python-dotenv
+
+# 排程 (提醒、定時任務)
+apscheduler>=3.10,<4

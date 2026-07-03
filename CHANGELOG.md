@@ -2,13 +2,22 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.1"
-document_version: "1.1.1"
+modified_date: "2026/07/03 12:11:00"
+project_version: "2.3.0"
+document_version: "1.2.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
 # Changelog
+
+## [2.3.0] - 2026-07-03
+### Added
+- Scheduled reminder system using APScheduler + SQLite:
+  - `services/reminder.py`: Background scheduler, SQLite `reminders` table, LINE Push API delivery.
+  - Natural language parsing: supports `提醒我 X分鐘後 ...` and `remind me to ... in X分鐘後`.
+  - `提醒列表` / `取消提醒 #[id]` for management.
+  - Per-user pending cap (`MAX_PENDING_REMINDERS`, default 20) and auto-cleanup of sent/cancelled rows after 7 days.
+  - First-request lazy startup of the scheduler alongside keepalive.
 
 ## [2.2.1] - 2026-07-03
 ### Fixed

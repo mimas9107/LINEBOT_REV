@@ -97,6 +97,25 @@ class DatabaseService:
                 ON chat_messages(user_id, created_at)
                 """
             )
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS reminders (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    remind_at TIMESTAMP NOT NULL,
+                    message TEXT NOT NULL,
+                    status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'sent', 'cancelled')),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    notified_at TIMESTAMP
+                )
+                """
+            )
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_reminders_due
+                ON reminders(status, remind_at)
+                """
+            )
             conn.commit()
             print(f"[Database] Initialized: {self.db_path}")
 

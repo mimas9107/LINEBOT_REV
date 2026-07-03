@@ -3,7 +3,7 @@ name:          "SPEC.md"
 description:   "Project specifications and requirements"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.1"
+project_version: "2.3.0"
 document_version: "1.1.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---

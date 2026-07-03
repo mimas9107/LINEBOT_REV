@@ -23,7 +23,7 @@ from linebot.v3.messaging import (
 from linebot.v3.webhooks import MessageEvent
 
 from config import config
-from services import chat_with_ai, analyze_image, get_chat_history, save_message
+from services import chat_with_ai, analyze_image, get_chat_history, save_message, handle_reminder_command
 from services.chat_history import (
     get_chat_history as get_db_chat_history,
     save_model_response,
@@ -129,7 +129,12 @@ class LineHandler:
         """
         text = event.message.text
         print(f"[LineHandler] Received text message: {event.message.id}")
-        
+
+        # 排程提醒：自然語言偵測
+        if '提醒' in text or text.lower().startswith('remind'):
+            result = handle_reminder_command(user_id, text)
+            return result
+
         # AI 對話模式：以 "ai:" 開頭
         if text.lower().startswith("ai:"):
             prompt = text[3:].strip()

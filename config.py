@@ -1,10 +1,11 @@
 """
 LINEBOT Configuration Module
-版本: rev2.2.1
+版本: rev2.3.0
 統一管理所有環境變數與設定
 
 更新紀錄:
 - rev2.2.1: keepalive 只在直接執行時啟動，配合 patch release 說明同步
+- rev2.3.0: 新增 REMINDER_CHECK_INTERVAL、MAX_PENDING_REMINDERS 設定
 - rev2.2: 新增 SQLite 資料庫設定、API 金鑰設定，並補齊所有 config 屬性的環境變數覆蓋與型別轉換
 - rev2.1: 更新 Gemini 模型為長效別名 gemini-flash-latest，確保穩定服務
 - rev2: 更新為 google-genai SDK，統一使用 gemini-flash-latest 模型
@@ -49,6 +50,10 @@ class Config:
     # Keepalive 設定
     KEEPALIVE_INTERVAL: int = 780  # 13 分鐘
     SELF_URL: str = "https://linebot-rev.onrender.com/about"
+
+    # 排程提醒設定
+    REMINDER_CHECK_INTERVAL: int = 30  # 秒
+    MAX_PENDING_REMINDERS: int = 20  # 每人最多待處理提醒數
     
     def __post_init__(self):
         """從環境變數載入設定"""
@@ -65,6 +70,8 @@ class Config:
         self.DOWNLOAD_IMAGE_DIR = os.getenv("DOWNLOAD_IMAGE_DIR", self.DOWNLOAD_IMAGE_DIR)
         self.KEEPALIVE_INTERVAL = self._get_int_env("KEEPALIVE_INTERVAL", self.KEEPALIVE_INTERVAL)
         self.SELF_URL = os.getenv("SELF_URL", self.SELF_URL)
+        self.REMINDER_CHECK_INTERVAL = self._get_int_env("REMINDER_CHECK_INTERVAL", self.REMINDER_CHECK_INTERVAL)
+        self.MAX_PENDING_REMINDERS = self._get_int_env("MAX_PENDING_REMINDERS", self.MAX_PENDING_REMINDERS)
 
     @staticmethod
     def _get_int_env(name: str, default: int) -> int:

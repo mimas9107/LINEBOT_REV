@@ -23,6 +23,7 @@ from .chat_history import (
     save_model_response,
     save_user_message,
 )
+from .reminder import reminder_service, handle_reminder_command
 
 __all__ = [
     # AI 文字服務
@@ -46,4 +47,8 @@ __all__ = [
     'get_db_chat_history',
     'save_model_response',
     'save_user_message',
+
+    # 排程提醒
+    'reminder_service',
+    'handle_reminder_command',
 ]
