@@ -46,5 +46,10 @@ Thumbs.db
 pic/downloadimg.jpg
 devtunnel.exe
 
+# SQLite database runtime files
+data/*.db
+data/*.db-*
+!data/.gitkeep
+
 # Logs
 *.log

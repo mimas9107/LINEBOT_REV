@@ -2,13 +2,37 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/02 11:00:00"
-project_version: "2.1.1"
-document_version: "1.0.2"
-agent_sign: ['gemini cli/current_agent']
+modified_date: "2026/07/03 10:21:24"
+project_version: "2.2.0"
+document_version: "1.1.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
 # Changelog
+
+## [2.2.0] - 2026-07-03
+### Added
+- Added SQLite-backed chat history storage via `services/database.py` and `services/chat_history.py`.
+- Added authenticated database read/download APIs:
+  - `GET /api/db/download`
+  - `GET /api/db/stats`
+  - `GET /api/db/export`
+  - `GET /api/db/messages`
+  - `GET /api/db/users`
+  - `GET /api/db/user/<user_id>/history`
+  - `GET /api/db/maintenance`
+- Added `DATABASE_PATH` and `API_SECRET_KEY` configuration.
+- Added `.env.example` entries for all supported runtime configuration values.
+
+### Changed
+- AI text and image interactions now persist user/model messages to SQLite.
+- AI prompt history now prefers SQLite and falls back to Google Sheets if SQLite history is unavailable.
+- Preserved non-blocking Google Sheet writes and message-id-based image temp paths from `2.1.1`.
+- `config.py` now supports environment-variable overrides for all used config fields, including integer parsing for `CHAT_HISTORY_LENGTH` and `KEEPALIVE_INTERVAL`.
+
+### Security
+- Database APIs require `API_SECRET_KEY`; if unset, database API requests return `503`.
+- Upload-based database endpoints `POST /api/db/restore` and `POST /api/db/validate` are explicitly disabled and return `403`.
 
 ## [2.1.1] - 2026-07-02
 ### Fixed

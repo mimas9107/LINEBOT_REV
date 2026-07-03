@@ -1,16 +1,16 @@
 ---
 name:          "DEPLOYMENT.md"
-description:   "Complete deployment guide for LINEBOT rev2.1"
+description:   "Complete deployment guide for LINEBOT rev2.2"
 created_date:  "2026/07/02"
-modified_date: "2026/07/02"
-project_version: "2.1.0"
-document_version: "1.0.0"
-agent_sign: ['gemini cli/current_agent']
+modified_date: "2026/07/03 10:21:24"
+project_version: "2.2.0"
+document_version: "1.1.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
-# LINEBOT rev2.1 完整部署指南
+# LINEBOT rev2.2 完整部署指南
 
-> 本文檔說明如何從零開始部署 LINEBOT rev2.1，包含 Google Sheets/GAS 設定與 Render.com 部署。
+> 本文檔說明如何從零開始部署 LINEBOT rev2.2，包含 Google Sheets/GAS、SQLite 對話歷史與 Render.com 部署。
 
 ---
 
@@ -214,12 +214,20 @@ LINE_CHANNEL_SECRET=你的LINE_Channel_Secret
 
 # Gemini AI 設定
 GEMINI_API_KEY=你的Gemini_API_Key
+GEMINI_MODEL=gemini-flash-latest
 
 # Google Apps Script 設定
 GOOGLE_APPS_SCRIPT_URL=你在步驟2.3取得的Web App URL
 
+# SQLite database
+DATABASE_PATH=data/chat_history.db
+
+# Database API 金鑰，請使用高強度隨機字串
+API_SECRET_KEY=請改成高強度隨機字串
+
 # 可選：自訂設定
 # CHAT_HISTORY_LENGTH=5          # 歷史對話保留筆數
+# DOWNLOAD_IMAGE_DIR=pic         # 圖片暫存目錄
 # KEEPALIVE_INTERVAL=780         # 保活間隔（秒）
 # SELF_URL=https://your-domain.onrender.com/about  # 你的部署域名
 ```
@@ -267,7 +275,7 @@ python app.py
 ```bash
 git init
 git add .
-git commit -m "Initial LINEBOT rev2.1 deployment"
+git commit -m "Initial LINEBOT rev2.2 deployment"
 git remote add origin <your-github-repo-url>
 git push -u origin main
 ```
@@ -299,9 +307,18 @@ git push -u origin main
 | LINE_CHANNEL_ACCESS_TOKEN | 你的 LINE Token |
 | LINE_CHANNEL_SECRET | 你的 LINE Secret |
 | GEMINI_API_KEY | 你的 Gemini API Key |
+| GEMINI_MODEL | gemini-flash-latest |
 | GOOGLE_APPS_SCRIPT_URL | 你的 GAS Web App URL |
+| DATABASE_PATH | data/chat_history.db |
+| API_SECRET_KEY | 高強度隨機字串 |
+| CHAT_HISTORY_LENGTH | 5 |
+| DOWNLOAD_IMAGE_DIR | pic |
+| KEEPALIVE_INTERVAL | 780 |
+| SELF_URL | https://你的-render-domain.onrender.com/about |
 
 > **重要**：不要將 `.env` 檔案提交到 Git，Render 使用環境變數而非 `.env` 檔案。
+
+> **Database API**：`/api/db/*` 讀取與下載端點需要 `API_SECRET_KEY`。`/api/db/restore` 與 `/api/db/validate` 目前固定停用，避免上傳還原流程造成 Render 實例不穩定。
 
 ### 步驟 5.4：設定自訂網域（可選）
 

@@ -1,11 +1,11 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.1"
+description:   "Main documentation for LINEBOT rev2.2"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/02 11:00:00"
-project_version: "2.1.1"
-document_version: "1.0.2"
-agent_sign: ['gemini cli/current_agent']
+modified_date: "2026/07/03 10:21:24"
+project_version: "2.2.0"
+document_version: "1.1.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 ---
 
 # LINEBOT
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent']
 
 ## 版本資訊
 
-- **版本**: 2.1.1
-- **更新日期**: 2026-07-02
-- **當前重點**: 使用 Gemini 長效別名 `gemini-flash-latest`，模型退役時自動過渡
+- **版本**: 2.2.0
+- **更新日期**: 2026-07-03
+- **當前重點**: SQLite 對話歷史、只讀 database API、停用 database 上傳還原端點
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 
@@ -38,7 +38,9 @@ linebot-rev2/
 │   ├── __init__.py
 │   ├── ai_text.py            # Gemini 文字對話 (使用 google-genai)
 │   ├── ai_image.py           # Gemini 圖片辨識 (使用 google-genai)
-│   └── bookmark.py           # 書籤與歷史紀錄服務
+│   ├── bookmark.py           # Google Sheet 書籤與備援歷史紀錄服務
+│   ├── database.py           # SQLite 連線、初始化與統計
+│   └── chat_history.py       # SQLite 對話歷史服務
 │
 ├── utils/                    # 工具模組
 │   ├── __init__.py
@@ -47,7 +49,8 @@ linebot-rev2/
 ├── tools/                    # 開發輔助工具
 │   └── check_models.py       # 查詢目前 API Key 可用 Gemini 模型
 │
-├── pic/                      # 圖片資源
+├── data/                     # SQLite runtime database 目錄 (.db 不進 Git)
+├── pic/                      # 圖片暫存資源
 ├── DEPLOYMENT.md             # 完整部署指南
 └── google_app_script/        # Google Apps Script 腳本
 ```
@@ -79,8 +82,8 @@ response = client.models.generate_content(
 
 ### 1. AI 文字對話 (`services/ai_text.py`)
 - 使用 `ai:` 前綴觸發
-- 使用 `client.chats.create()` 支援歷史對話
-- 自動轉換 Google Sheet 歷史格式為 SDK Content 格式
+- 使用 SQLite 對話歷史組合 prompt
+- SQLite 不可用時 fallback 到 Google Sheet 歷史
 
 ```python
 from services import chat_with_ai
@@ -111,9 +114,20 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 ### 3. 書籤功能 (`services/bookmark.py`)
 - 與 Google Apps Script 互動
 - 儲存訊息到 Google Sheet
-- 取得歷史對話記錄
+- 作為外部紀錄與 SQLite 歷史讀取失敗時的 fallback
 
-### 4. 保活機制 (`utils/keepalive.py`)
+### 4. SQLite 對話歷史 (`services/database.py`, `services/chat_history.py`)
+- 儲存使用者訊息與 AI 回覆
+- 支援依使用者查詢歷史
+- runtime database 預設位於 `data/chat_history.db`
+- `.gitignore` 已排除 `data/*.db` 與 WAL/SHM runtime 檔案
+
+### 5. Database API (`app.py`)
+- 需設定 `API_SECRET_KEY`
+- 支援下載、統計、匯出與查詢 SQLite 對話資料
+- `POST /api/db/restore` 與 `POST /api/db/validate` 已停用，避免 Render 實例因上傳還原流程當機
+
+### 6. 保活機制 (`utils/keepalive.py`)
 - 防止 Render.com 免費方案休眠
 - 每 13 分鐘隨機執行保活任務
 
@@ -125,7 +139,14 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 LINE_CHANNEL_ACCESS_TOKEN=你的_LINE_TOKEN
 LINE_CHANNEL_SECRET=你的_LINE_SECRET
 GEMINI_API_KEY=你的_GEMINI_KEY
+GEMINI_MODEL=gemini-flash-latest
 GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/XXXX/exec
+CHAT_HISTORY_LENGTH=5
+DOWNLOAD_IMAGE_DIR=pic
+KEEPALIVE_INTERVAL=780
+SELF_URL=https://your-render-domain.onrender.com/about
+DATABASE_PATH=data/chat_history.db
+API_SECRET_KEY=請改成高強度隨機字串
 ```
 
 ## 安裝與執行
@@ -156,7 +177,9 @@ gunicorn app:app
 1. **SDK 版本**: 本專案使用 `google-genai`，請確保不要同時安裝 `google-generativeai`
 2. **模型**: 統一使用 `gemini-flash-latest` (長效別名，Google 自動管理版本升級)
 3. **API 金鑰**: 請勿將 `.env` 推送到版本控制
-4. **棄用警告**: `google-generativeai` 將於 2025/11/30 停止更新
+4. **Database API**: Render 必須設定 `API_SECRET_KEY` 才能使用 `/api/db/*`
+5. **Database 上傳**: `/api/db/restore` 與 `/api/db/validate` 目前固定停用
+6. **棄用警告**: `google-generativeai` 將於 2025/11/30 停止更新
 
 ## 與 rev1 差異
 

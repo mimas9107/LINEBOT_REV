@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.1
+版本: rev2.2
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.2: 新增 SQLite 資料庫設定、API 金鑰設定，並補齊所有 config 屬性的環境變數覆蓋與型別轉換
 - rev2.1: 更新 Gemini 模型為長效別名 gemini-flash-latest，確保穩定服務
 - rev2: 更新為 google-genai SDK，統一使用 gemini-flash-latest 模型
 - rev2.1.1: 所有 save_message 改為非同步、圖片路徑改用 message_id、新增 bot 回覆儲存
@@ -24,6 +25,12 @@ class Config:
     # Gemini AI 設定 (使用新版 google-genai SDK)
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-flash-latest"  # 改用長效別名，由 Google 自動管理版本
+
+    # SQLite 資料庫設定
+    DATABASE_PATH: str = "data/chat_history.db"
+
+    # API 安全設定 (用於資料庫查詢/下載 API)
+    API_SECRET_KEY: str = ""
     
     # Google Apps Script 設定
     GOOGLE_APPS_SCRIPT_URL: str = ""
@@ -40,14 +47,35 @@ class Config:
     
     # Keepalive 設定
     KEEPALIVE_INTERVAL: int = 780  # 13 分鐘
-    SELF_URL: str = "https://linebot-bisb.onrender.com/about"
+    SELF_URL: str = "https://linebot-rev.onrender.com/about"
     
     def __post_init__(self):
         """從環境變數載入設定"""
-        self.LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "")
-        self.LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", "")
-        self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-        self.GOOGLE_APPS_SCRIPT_URL = os.getenv("GOOGLE_APPS_SCRIPT_URL", "")
+        self.LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", self.LINE_CHANNEL_ACCESS_TOKEN)
+        self.LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", self.LINE_CHANNEL_SECRET)
+        self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", self.GEMINI_API_KEY)
+        self.GEMINI_MODEL = os.getenv("GEMINI_MODEL", self.GEMINI_MODEL)
+        self.DATABASE_PATH = os.getenv("DATABASE_PATH", self.DATABASE_PATH)
+        self.API_SECRET_KEY = os.getenv("API_SECRET_KEY", self.API_SECRET_KEY)
+        self.GOOGLE_APPS_SCRIPT_URL = os.getenv("GOOGLE_APPS_SCRIPT_URL", self.GOOGLE_APPS_SCRIPT_URL)
+        self.CHAT_HISTORY_LENGTH = self._get_int_env("CHAT_HISTORY_LENGTH", self.CHAT_HISTORY_LENGTH)
+        self.LMSTUDIO_URL = os.getenv("LMSTUDIO_URL", self.LMSTUDIO_URL)
+        self.LMSTUDIO_MODEL = os.getenv("LMSTUDIO_MODEL", self.LMSTUDIO_MODEL)
+        self.DOWNLOAD_IMAGE_DIR = os.getenv("DOWNLOAD_IMAGE_DIR", self.DOWNLOAD_IMAGE_DIR)
+        self.KEEPALIVE_INTERVAL = self._get_int_env("KEEPALIVE_INTERVAL", self.KEEPALIVE_INTERVAL)
+        self.SELF_URL = os.getenv("SELF_URL", self.SELF_URL)
+
+    @staticmethod
+    def _get_int_env(name: str, default: int) -> int:
+        """讀取整數環境變數，無效時保留預設值。"""
+        raw_value = os.getenv(name)
+        if raw_value is None or raw_value == "":
+            return default
+        try:
+            return int(raw_value)
+        except ValueError:
+            print(f"[WARNING] Invalid integer for {name}: {raw_value}. Using default: {default}")
+            return default
     
     def validate(self) -> list[str]:
         """驗證必要設定是否存在，回傳缺少的設定名稱列表"""

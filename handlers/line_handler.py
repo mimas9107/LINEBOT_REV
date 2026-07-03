@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev2
+版本: rev2.2
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev2.2: AI 對話與圖片分析寫入 SQLite，保留 Google Sheet 非同步記錄與 message_id 圖片路徑
 - rev2: 配合 AI 模組更新
 - rev2.1.1: save_message 改為非同步、新增 bot 回覆儲存、圖片路徑改用 message_id
 """
@@ -23,6 +24,11 @@ from linebot.v3.webhooks import MessageEvent
 
 from config import config
 from services import chat_with_ai, analyze_image, get_chat_history, save_message
+from services.chat_history import (
+    get_chat_history as get_db_chat_history,
+    save_model_response,
+    save_user_message,
+)
 
 
 class LineHandler:
@@ -75,7 +81,8 @@ class LineHandler:
                 result = self._handle_text_message(event, user_id, timestamp)
                 
             elif message_type == 'image':
-                result = self._handle_image_message(event)
+                message_text = "[圖片]"
+                result = self._handle_image_message(event, user_id)
             
             # 回覆訊息（如果有結果）
             if result:
@@ -127,20 +134,26 @@ class LineHandler:
         if text.lower().startswith("ai:"):
             prompt = text[3:].strip()
             
-            # 取得歷史對話
-            chat_history = get_chat_history(user_id)
-            print(f"[LineHandler] Chat history: {chat_history}")
+            # 先讀取既有 SQLite 歷史，避免把本次 prompt 重複塞進完整 prompt。
+            chat_history = self._get_db_history_with_fallback(user_id)
+            print(f"[LineHandler] DB chat history count: {len(chat_history)}")
             
             # 格式化歷史對話
             formatted_history = self._format_chat_history(chat_history, user_id)
             
             # 建立完整 prompt
             full_prompt = f"{formatted_history}User: {prompt}" if formatted_history else prompt
-            print(f"[LineHandler] Full prompt: {full_prompt}")
+            print(f"[LineHandler] Full prompt length: {len(full_prompt)}")
+
+            # 儲存使用者訊息到 SQLite；失敗不阻斷回覆。
+            self._save_db_user_message(user_id, prompt, 'text')
             
             # 呼叫 AI
             result = chat_with_ai(full_prompt)
             print(f"[LineHandler] AI result: {result[:100]}...")
+
+            # 儲存 Bot 回覆到 SQLite；失敗不阻斷 LINE 回覆。
+            self._save_db_model_response(user_id, result, 'text')
             
             # 儲存 Bot 回覆到歷史記錄 (非同步，不阻塞主線程)
             threading.Thread(
@@ -174,37 +187,44 @@ class LineHandler:
         
         formatted = ""
         for entry in history:
-            if entry.get('userId') == current_user_id:
+            role = entry.get('role')
+            if role == 'user' or entry.get('userId') == current_user_id:
                 formatted += f"User: {entry.get('messageText', '')}\n"
             else:
-                formatted += f"Bot: {entry.get('messageText', '')}\n"
+                formatted += f"Assistant: {entry.get('messageText', '')}\n"
         
         print(f"[LineHandler] Formatted history: {formatted}")
         return formatted
     
-    def _handle_image_message(self, event: MessageEvent) -> str:
+    def _handle_image_message(self, event: MessageEvent, user_id: str) -> str:
         """
         處理圖片訊息
         
         Args:
             event: LINE 訊息事件
+            user_id: 使用者 ID
         
         Returns:
             AI 分析結果
         """
         message_id = event.message.id
         print(f"[LineHandler] Received image message: {message_id}")
+
+        self._save_db_user_message(user_id, "[上傳圖片]", 'image')
         
         # 下載圖片
         image_path = self._download_image(message_id)
         if not image_path:
-            return "圖片下載失敗，請稍後再試。"
+            error_msg = "圖片下載失敗，請稍後再試。"
+            self._save_db_model_response(user_id, error_msg, 'text')
+            return error_msg
         
         print(f"[LineHandler] Image saved to: {image_path}")
         
         try:
             # 分析圖片
             result = analyze_image(image_path)
+            self._save_db_model_response(user_id, result, 'text')
             return result
         finally:
             # 清理暫存圖片
@@ -246,6 +266,38 @@ class LineHandler:
         except Exception as e:
             print(f"[LineHandler] Error downloading image: {e}")
             return ""
+
+    def _get_db_history_with_fallback(self, user_id: str) -> list[dict]:
+        """優先讀 SQLite 歷史；失敗時 fallback 到既有 Google Sheet history。"""
+        try:
+            return get_db_chat_history(user_id)
+        except Exception as e:
+            print(f"[LineHandler] DB history unavailable, fallback to sheet: {e}")
+            return get_chat_history(user_id)
+
+    def _save_db_user_message(
+        self,
+        user_id: str,
+        message_text: str,
+        message_type: str,
+    ) -> None:
+        """安全寫入使用者訊息到 SQLite。"""
+        try:
+            save_user_message(user_id, message_text, message_type)
+        except Exception as e:
+            print(f"[LineHandler] Failed to save user message to DB: {e}")
+
+    def _save_db_model_response(
+        self,
+        user_id: str,
+        message_text: str,
+        message_type: str,
+    ) -> None:
+        """安全寫入模型回覆到 SQLite。"""
+        try:
+            save_model_response(user_id, message_text, message_type)
+        except Exception as e:
+            print(f"[LineHandler] Failed to save model response to DB: {e}")
     
     def _reply_message(self, api: MessagingApi, reply_token: str, text: str):
         """
