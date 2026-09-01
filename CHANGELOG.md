@@ -2,13 +2,21 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 12:10:00"
-project_version: "2.3.3"
+modified_date: "2026/09/01 13:30:00"
+project_version: "2.3.4"
 document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.3.4] - 2026-09-01
+### Changed
+- `MODEL_LIST` candidate order reordered: `gemini-2.5-flash` promoted to first candidate, `gemini-flash-latest` (markfail=True) demoted to third. Rationale: the first candidate is tried up to 3 times on 503 (worst backoff-latency path), so the currently-healthy model should lead; `markfail` remains the real self-healing mechanism. `tools/test_fallback.py` refactored to be order-agnostic (derives PRIMARY/BACKUP/markfail model dynamically from `MODEL_LIST`), 8/8 pass.
+### Added
+- Per-request message-id correlation for traceable logs: new `services/logctx.py` holds the current `msgid` in a `threading.local`; `LineHandler` sets it at the start of each event, and `[LineHandler]` / `[AITextService]` / `[AIImageService]` log lines now carry `msgid=<id>`. A single message's full lifecycle (receive → model retry chain → reply) is now extractable with `rg "msgid="`, removing the need to eyeball microsecond timestamps when diagnosing which reply answered which question.
+### Notes
+- Logging-only change; the reply path is unchanged (still synchronous `reply_message`, no `push_message`/free-tier 500/month quota risk). Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.3.3] - 2026-09-01
 ### Added

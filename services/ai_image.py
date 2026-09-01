@@ -1,6 +1,6 @@
 """
 AI Image Service Module
-版本: rev2.3.3
+版本: rev2.3.4
 處理 Gemini 圖片辨識功能
 
 更新紀錄:
@@ -19,6 +19,12 @@ import PIL.Image
 from google import genai
 from google.genai import types
 from config import config, MODEL_LIST
+
+# # ponytail: 直接檔案載入測試會避開 services/__init__（其匯入 apscheduler），故用防衛式匯入
+try:
+    from services.logctx import prefix
+except Exception:  # pragma: no cover
+    prefix = lambda: ""
 
 
 class AIImageService:
@@ -123,7 +129,7 @@ class AIImageService:
             if candidate.get("markfail"):
                 failed_at = self._failed_marks.get(model)
                 if failed_at is not None and now - failed_at < self.FAIL_COOLDOWN:
-                    print(f"[AIImageService] Skip {model} (markfail cooldown)")
+                    print(f"[AIImageService] {prefix()}Skip {model} (markfail cooldown)")
                     continue
 
             for attempt in range(self.RETRY_COUNT + 1):
@@ -133,11 +139,11 @@ class AIImageService:
                         contents=contents,
                     )
                     self._failed_marks.pop(model, None)
-                    print(f"[AIImageService] current model={model} -> OK")
+                    print(f"[AIImageService] {prefix()}current model={model} -> OK")
                     return response
                 except Exception as e:
                     last_error = e
-                    print(f"[AIImageService] {model} attempt {attempt + 1}/{self.RETRY_COUNT + 1} failed: {e}")
+                    print(f"[AIImageService] {prefix()}{model} attempt {attempt + 1}/{self.RETRY_COUNT + 1} failed: {e}")
                     if not self._is_retryable(e):
                         break
                     if attempt < self.RETRY_COUNT:

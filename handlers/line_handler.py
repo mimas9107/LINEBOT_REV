@@ -1,6 +1,6 @@
 """
 LINE Handler Module
-版本: rev2.3.3
+版本: rev2.3.4
 處理 LINE Webhook 事件
 
 更新紀錄:
@@ -31,6 +31,7 @@ from services.chat_history import (
     save_model_response,
     save_user_message,
 )
+from services.logctx import set_msgid, prefix
 
 # 單則歷史訊息納入 prompt 的長度上限（字元）
 MAX_HISTORY_MSG_LEN = 1000
@@ -73,6 +74,9 @@ class LineHandler:
         with ApiClient(self.configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             
+            # 以 message id 作為整條處理生命線的追蹤錨點
+            set_msgid(getattr(event.message, "id", ""))
+            
             # 取得使用者資訊
             user_id = self._get_user_id(event)
             timestamp = event.timestamp
@@ -92,7 +96,7 @@ class LineHandler:
             # 回覆訊息（如果有結果）
             if result:
                 self._reply_message(line_bot_api, event.reply_token, result)
-                print(f"{timestamp} msg from {event.source}: {getattr(event.message, 'text', '[image]')}")
+                print(f"{timestamp} msg from {event.source}: {getattr(event.message, 'text', '[image]')} -> replied [{len(result)} chars]")
             
             # 儲存訊息到 Google Sheet (非同步，不阻塞主線程)
             threading.Thread(
@@ -133,7 +137,7 @@ class LineHandler:
             回覆內容
         """
         text = event.message.text
-        print(f"[LineHandler] Received text message: {event.message.id}")
+        print(f"[LineHandler] {prefix()}Received text message: {event.message.id}")
 
         # 排程提醒：自然語言偵測
         if '提醒' in text or text.lower().startswith('remind'):
@@ -146,14 +150,14 @@ class LineHandler:
             
             # 先讀取既有 SQLite 歷史，避免把本次 prompt 重複塞進完整 prompt。
             chat_history = self._get_db_history_with_fallback(user_id)
-            print(f"[LineHandler] DB chat history count: {len(chat_history)}")
+            print(f"[LineHandler] {prefix()}DB chat history count: {len(chat_history)}")
             
             # 格式化歷史對話
             formatted_history = self._format_chat_history(chat_history, user_id)
             
             # 建立完整 prompt
             full_prompt = f"{formatted_history}User: {prompt}" if formatted_history else prompt
-            print(f"[LineHandler] Full prompt length: {len(full_prompt)}")
+            print(f"[LineHandler] {prefix()}Full prompt length: {len(full_prompt)}")
 
             # 儲存使用者訊息到 SQLite；失敗不阻斷回覆。
             self._save_db_user_message(user_id, prompt, 'text')
@@ -162,10 +166,10 @@ class LineHandler:
             try:
                 result = chat_with_ai(full_prompt)
             except Exception as e:
-                print(f"[LineHandler] AI call failed, skip history write: {e}")
+                print(f"[LineHandler] {prefix()}AI call failed, skip history write: {e}")
                 return "伺服器繁忙，請稍後再試。"
 
-            print(f"[LineHandler] AI result: {result[:100]}...")
+            print(f"[LineHandler] {prefix()}AI result: {result[:100]}...")
 
             # 儲存 Bot 回覆到 SQLite；失敗不阻斷 LINE 回覆。
             self._save_db_model_response(user_id, result, 'text')

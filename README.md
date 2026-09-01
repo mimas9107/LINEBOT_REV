@@ -1,9 +1,9 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.3.3"
+description:   "Main documentation for LINEBOT rev2.3.4"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 12:10:00"
-project_version: "2.3.3"
+modified_date: "2026/09/01 13:30:00"
+project_version: "2.3.4"
 document_version: "1.3.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.3.3
+- **版本**: 2.3.4
 - **更新日期**: 2026-09-01
-- **當前重點**: Gemini 503/429 容錯（MODEL_LIST fallback + markfail 冷卻）、對話歷史防污染、log 顯示 active model
+- **當前重點**: Gemini 503/429 容錯（MODEL_LIST fallback + markfail 冷卻）、對話歷史防污染、model 順序最佳化、msgid 關聯式可追溯 log
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 

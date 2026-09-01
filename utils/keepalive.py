@@ -1,6 +1,6 @@
 """
 Keepalive Utility Module
-版本: rev2.3.3
+版本: rev2.3.4
 處理背景保活任務，防止 Render.com 休眠
 """
 

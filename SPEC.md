@@ -2,8 +2,8 @@
 name:          "SPEC.md"
 description:   "Project specifications and requirements"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 12:10:00"
-project_version: "2.3.3"
+modified_date: "2026/09/01 13:30:00"
+project_version: "2.3.4"
 document_version: "1.3.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---

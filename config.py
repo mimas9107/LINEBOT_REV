@@ -1,6 +1,6 @@
 """
 LINEBOT Configuration Module
-版本: rev2.3.3
+版本: rev2.3.4
 統一管理所有環境變數與設定
 
 更新紀錄:
@@ -103,9 +103,10 @@ class Config:
 config = Config()
 
 # Gemini 候選模型 fallback 清單：依序嘗試；markfail=True 的模型失敗後於冷卻期內跳過。
+# # ponytail: 靜態順序調整 → 把當前 503 頻繁的 gemini-flash-latest 往後挪，讓首選不再每次都先吃 503/重試；markfail 仍是真正的自癒機制。
 MODEL_LIST = [
-    {"model": "gemini-flash-latest", "markfail": True},
     {"model": "gemini-2.5-flash", "markfail": False},
     {"model": "gemini-1.5-flash", "markfail": False},
+    {"model": "gemini-flash-latest", "markfail": True},
     {"model": "gemini-1.5-pro", "markfail": False},
 ]

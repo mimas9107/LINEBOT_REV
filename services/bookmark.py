@@ -1,6 +1,6 @@
 """
 Bookmark Service Module
-版本: rev2.3.3
+版本: rev2.3.4
 處理書籤功能與 Google Apps Script 互動
 
 更新紀錄:

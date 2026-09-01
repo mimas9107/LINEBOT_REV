@@ -1,6 +1,6 @@
 """
 Services Package
-版本: rev2.3.3
+版本: rev2.3.4
 提供各項服務功能
 
 更新紀錄:
