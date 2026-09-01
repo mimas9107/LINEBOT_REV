@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev2.3.2
+版本: rev2.3.3
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev2.3.3: 歷史訊息單則長度截斷（MAX_HISTORY_MSG_LEN=1000），避免長回覆線性膨脹 prompt
 - rev2.3.1: AI/圖片分析失敗時跳過 SQLite 與 Sheet 寫入，僅回覆友善提示（防歷史污染）
 - rev2.2: AI 對話與圖片分析寫入 SQLite，保留 Google Sheet 非同步記錄與 message_id 圖片路徑
 - rev2: 配合 AI 模組更新
@@ -30,6 +31,9 @@ from services.chat_history import (
     save_model_response,
     save_user_message,
 )
+
+# 單則歷史訊息納入 prompt 的長度上限（字元）
+MAX_HISTORY_MSG_LEN = 1000
 
 
 class LineHandler:
@@ -199,10 +203,14 @@ class LineHandler:
         formatted = ""
         for entry in history:
             role = entry.get('role')
+            text = entry.get('messageText', '')
+            # # ponytail: 單則歷史過長時截斷，避免長 AI 回覆讓 prompt 累積過大推高逾時
+            if len(text) > MAX_HISTORY_MSG_LEN:
+                text = text[:MAX_HISTORY_MSG_LEN] + "…"
             if role == 'user' or entry.get('userId') == current_user_id:
-                formatted += f"User: {entry.get('messageText', '')}\n"
+                formatted += f"User: {text}\n"
             else:
-                formatted += f"Assistant: {entry.get('messageText', '')}\n"
+                formatted += f"Assistant: {text}\n"
         
         print(f"[LineHandler] Formatted history: {formatted}")
         return formatted

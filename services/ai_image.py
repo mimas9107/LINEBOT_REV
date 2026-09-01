@@ -1,9 +1,10 @@
 """
 AI Image Service Module
-版本: rev2.3.2
+版本: rev2.3.3
 處理 Gemini 圖片辨識功能
 
 更新紀錄:
+- rev2.3.3: 圖片路徑加入 MODEL_LIST fallback + 503/429 退避重試 + markfail 冷卻（比照 ai_text）
 - rev2.3.1: 分析失敗改為拋出例外，不再回傳錯誤字串（防歷史污染）
 - rev2: 改用 google-genai SDK (新版統一 SDK)
       - 使用 genai.Client() 統一管理
@@ -12,18 +13,26 @@ AI Image Service Module
 """
 
 import base64
+import time
 import requests
 import PIL.Image
 from google import genai
 from google.genai import types
-from config import config
+from config import config, MODEL_LIST
 
 
 class AIImageService:
     """Gemini 圖片辨識服務 (使用新版 google-genai SDK)"""
-    
+
+    # 容錯設定（與 AITextService 一致）
+    RETRY_COUNT = 2
+    BACKOFF_BASE = 1.5
+    FAIL_COOLDOWN = 600
+    RETRYABLE_CODES = (503, 429)
+
     def __init__(self):
         self._client = None
+        self._failed_marks = {}  # model -> 失敗時間（time.monotonic）
     
     def _get_client(self) -> genai.Client:
         """取得或建立 Gemini Client"""
@@ -48,9 +57,9 @@ class AIImageService:
             # 方法 1：使用 PIL.Image 直接傳入 (SDK 會自動處理)
             image = PIL.Image.open(image_path)
             
-            response = client.models.generate_content(
-                model=config.GEMINI_MODEL,
-                contents=[prompt, image]
+            response = self._generate(
+                client=client,
+                contents=[prompt, image],
             )
             
             return f"你上傳了一張圖,\nAI 回答:\n{response.text}"
@@ -87,9 +96,9 @@ class AIImageService:
                 mime_type=mime_type
             )
             
-            response = client.models.generate_content(
-                model=config.GEMINI_MODEL,
-                contents=[prompt, image_part]
+            response = self._generate(
+                client=client,
+                contents=[prompt, image_part],
             )
             
             return f"你上傳了一張圖,\nAI 回答:\n{response.text}"
@@ -97,6 +106,52 @@ class AIImageService:
         except Exception as e:
             print(f"[AIImageService] Error with bytes method: {e}")
             raise
+
+    def _generate(self, client, contents):
+        """
+        依 config.MODEL_LIST 依序嘗試候選模型（比照 AITextService._generate）。
+
+        - 503/429：每模型重試 RETRY_COUNT 次，間隔 BACKOFF_BASE * attempt 秒
+        - 其他例外：不重試，直接換下一個候選模型
+        - markfail=True 的模型失敗後標記，FAIL_COOLDOWN 秒內的請求直接跳過
+        - 全部候選失敗時拋出 RuntimeError
+        """
+        last_error = None
+        now = time.monotonic()
+        for candidate in MODEL_LIST:
+            model = candidate["model"]
+            if candidate.get("markfail"):
+                failed_at = self._failed_marks.get(model)
+                if failed_at is not None and now - failed_at < self.FAIL_COOLDOWN:
+                    print(f"[AIImageService] Skip {model} (markfail cooldown)")
+                    continue
+
+            for attempt in range(self.RETRY_COUNT + 1):
+                try:
+                    response = client.models.generate_content(
+                        model=model,
+                        contents=contents,
+                    )
+                    self._failed_marks.pop(model, None)
+                    print(f"[AIImageService] current model={model} -> OK")
+                    return response
+                except Exception as e:
+                    last_error = e
+                    print(f"[AIImageService] {model} attempt {attempt + 1}/{self.RETRY_COUNT + 1} failed: {e}")
+                    if not self._is_retryable(e):
+                        break
+                    if attempt < self.RETRY_COUNT:
+                        time.sleep(self.BACKOFF_BASE * (attempt + 1))
+
+            if candidate.get("markfail"):
+                self._failed_marks[model] = time.monotonic()
+
+        raise RuntimeError(f"圖片分析服務暫時不可用: {last_error}") from last_error
+
+    @staticmethod
+    def _is_retryable(error: Exception) -> bool:
+        """僅 503 UNAVAILABLE / 429 RATE_LIMIT 視為可重試。"""
+        return getattr(error, "code", None) in AIImageService.RETRYABLE_CODES
     
     def _get_mime_type(self, image_path: str) -> str:
         """

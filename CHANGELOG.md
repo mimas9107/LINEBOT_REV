@@ -2,13 +2,24 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 10:49:03"
-project_version: "2.3.2"
+modified_date: "2026/09/01 12:10:00"
+project_version: "2.3.3"
 document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.3.3] - 2026-09-01
+### Added
+- Versioned `Procfile` (`web: gunicorn app:app --timeout 300`) so the gunicorn timeout fix is no longer dashboard-only and survives redeploys / setting resets.
+- Image analysis resilience: `AIImageService` now iterates the `MODEL_LIST` fallback chain with 503/429 exponential-backoff retry and `markfail` cooldown, reaching parity with the text path (`services/ai_image.py`).
+- History prompt guard: `LineHandler._format_chat_history` truncates any single history message over `MAX_HISTORY_MSG_LEN` (1000 chars), preventing long AI replies from inflating the prompt linearly and pushing up timeout risk.
+- `tools/test_fallback.py` extended with 2 image-path cases (fallback on 503, all-fail raises) — now 8 scenarios, 8/8 pass.
+
+### Notes
+- Single sync worker (default) trade-off now explicit: with `--timeout 300`, one stalled request can occupy the only worker for up to 5 minutes, during which `/health` and `/about` are also unresponsive. Not changed here — keepalive/reminder lazy-start are single-process designed; revisit if WORKER TIMEOUT persists or concurrency is needed.
+- Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.3.2] - 2026-09-01
 ### Changed

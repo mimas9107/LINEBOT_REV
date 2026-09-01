@@ -1,4 +1,4 @@
-"""驗證 AITextService 的 MODEL_LIST fallback / 重試 / markfail 冷卻邏輯（模擬 503/429）。
+"""驗證 AITextService / AIImageService 的 MODEL_LIST fallback / 重試 / markfail 冷卻邏輯（模擬 503/429）。
 
 執行：python3 tools/test_fallback.py
 """
@@ -142,6 +142,61 @@ def t6():
 
 
 results.append(run_case("non-retryable skips retry", t6))
+
+# 7. 圖片路徑 _generate 同樣走 MODEL_LIST fallback（比照文字）
+def t7():
+    _spec = importlib.util.spec_from_file_location(
+        "ai_image", os.path.join(ROOT, "services", "ai_image.py")
+    )
+    ai_image = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(ai_image)
+    ai_image.time = SimpleNamespace(monotonic=time.monotonic, sleep=lambda *_: None)
+    AIImageService = ai_image.AIImageService
+
+    svc = AIImageService()
+    calls = []
+
+    def fake_generate(model, contents=None):
+        calls.append(model)
+        if model == "gemini-flash-latest":
+            raise Fake503()
+        return SimpleNamespace(text="ok")
+
+    # 只測 _generate 的 fallback 迴圈（輸入方法已由 analyze_image 封裝）
+    client = SimpleNamespace(models=SimpleNamespace(generate_content=fake_generate))
+    resp = svc._generate(client=client, contents=["?", "img"])
+    assert resp.text == "ok"
+    assert calls == ["gemini-flash-latest"] * 3 + ["gemini-2.5-flash"], calls
+    assert "gemini-flash-latest" in svc._failed_marks
+
+
+results.append(run_case("image _generate fallback on 503", t7))
+
+# 8. 圖片路徑全部失敗 -> RuntimeError
+def t8():
+    _spec = importlib.util.spec_from_file_location(
+        "ai_image", os.path.join(ROOT, "services", "ai_image.py")
+    )
+    ai_image = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(ai_image)
+    ai_image.time = SimpleNamespace(monotonic=time.monotonic, sleep=lambda *_: None)
+    AIImageService = ai_image.AIImageService
+
+    svc = AIImageService()
+    behavior = {c["model"]: Fake503() for c in ai_image.MODEL_LIST}
+    client = SimpleNamespace(models=SimpleNamespace(
+        generate_content=lambda model, contents=None: (_ for _ in ()).throw(behavior[model])
+    ))
+    try:
+        svc._generate(client=client, contents=["?", "img"])
+        raise AssertionError("should raise RuntimeError")
+    except RuntimeError:
+        pass
+    assert list(svc._failed_marks) == ["gemini-flash-latest"], svc._failed_marks
+
+
+results.append(run_case("image all-fail raises RuntimeError", t8))
+
 
 print(f"\n{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
