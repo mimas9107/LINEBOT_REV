@@ -14,7 +14,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.3.2
+- **版本**: 2.3.3
 - **更新日期**: 2026-09-01
 - **當前重點**: Gemini 503/429 容錯（MODEL_LIST fallback + markfail 冷卻）、對話歷史防污染、log 顯示 active model
 
