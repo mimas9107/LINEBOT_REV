@@ -1,0 +1,252 @@
+2026-08-31T01:14:08.44297951Z 127.0.0.1 - - [31/Aug/2026:01:14:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:14:26.402962259Z 127.0.0.1 - - [31/Aug/2026:01:14:26 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:15:38.679052229Z 127.0.0.1 - - [31/Aug/2026:01:15:38 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:15:50.059609353Z 127.0.0.1 - - [31/Aug/2026:01:15:50 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:20:23.319461623Z [Keepalive] Executing: _ping_external
+2026-08-31T01:20:23.320081587Z [Keepalive] Pinging external API
+2026-08-31T01:20:23.320097537Z [Keepalive] External response: Taipei: 🌦️  +27°C
+2026-08-31T01:20:23.320100597Z 127.0.0.1 - - [31/Aug/2026:01:20:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T01:20:23.333344156Z 127.0.0.1 - - [31/Aug/2026:01:20:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:20:24.045462931Z 127.0.0.1 - - [31/Aug/2026:01:20:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:20:31.20570213Z 127.0.0.1 - - [31/Aug/2026:01:20:31 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:20:39.664518512Z 127.0.0.1 - - [31/Aug/2026:01:20:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:21:06.714964135Z 127.0.0.1 - - [31/Aug/2026:01:21:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:24:55.781708561Z 127.0.0.1 - - [31/Aug/2026:01:24:55 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:25:36.81162316Z 127.0.0.1 - - [31/Aug/2026:01:25:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:26:36.538571621Z 127.0.0.1 - - [31/Aug/2026:01:26:36 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:28:08.61788519Z 127.0.0.1 - - [31/Aug/2026:01:28:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:30:23.320068679Z 127.0.0.1 - - [31/Aug/2026:01:30:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T01:30:23.340982695Z 127.0.0.1 - - [31/Aug/2026:01:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:30:24.084845971Z 127.0.0.1 - - [31/Aug/2026:01:30:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:30:49.721729125Z 127.0.0.1 - - [31/Aug/2026:01:30:49 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:31:14.019875294Z [Keepalive] Executing: _ping_self
+2026-08-31T01:31:14.019903875Z [Keepalive] Pinging self /about
+2026-08-31T01:31:14.019909095Z 127.0.0.1 - - [31/Aug/2026:01:31:14 +0000] "GET /about HTTP/1.1" 200 88 "-" "python-requests/2.34.2"
+2026-08-31T01:32:41.599165688Z [Keepalive] Self ping status: 200
+2026-08-31T01:32:41.599192438Z 127.0.0.1 - - [31/Aug/2026:01:32:41 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:34:01.02674875Z 127.0.0.1 - - [31/Aug/2026:01:34:01 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:35:10.744641944Z 127.0.0.1 - - [31/Aug/2026:01:35:10 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:35:36.198772723Z 127.0.0.1 - - [31/Aug/2026:01:35:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:38:45.913378967Z 127.0.0.1 - - [31/Aug/2026:01:38:45 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:40:23.257821048Z 127.0.0.1 - - [31/Aug/2026:01:40:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T01:40:23.342159196Z 127.0.0.1 - - [31/Aug/2026:01:40:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:40:24.134476536Z 127.0.0.1 - - [31/Aug/2026:01:40:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:40:41.674277438Z 127.0.0.1 - - [31/Aug/2026:01:40:41 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:42:08.278375426Z 127.0.0.1 - - [31/Aug/2026:01:42:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:43:06.559399001Z 127.0.0.1 - - [31/Aug/2026:01:43:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:44:49.847757531Z [Keepalive] Executing: _log_to_sheet
+2026-08-31T01:44:49.847786711Z [Keepalive] Logging to Google Sheet
+2026-08-31T01:44:49.847791542Z [BookmarkService] Keepalive logged. Status: 200
+2026-08-31T01:44:49.847796282Z 127.0.0.1 - - [31/Aug/2026:01:44:49 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:45:39.449155738Z 127.0.0.1 - - [31/Aug/2026:01:45:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:49:06.215418566Z 127.0.0.1 - - [31/Aug/2026:01:49:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:50:23.255854103Z 127.0.0.1 - - [31/Aug/2026:01:50:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T01:50:23.343413991Z 127.0.0.1 - - [31/Aug/2026:01:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:50:23.675270637Z 127.0.0.1 - - [31/Aug/2026:01:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:50:40.066626563Z 127.0.0.1 - - [31/Aug/2026:01:50:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:50:54.559365499Z 127.0.0.1 - - [31/Aug/2026:01:50:54 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:52:10.876805181Z 127.0.0.1 - - [31/Aug/2026:01:52:10 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T01:55:36.258415415Z 127.0.0.1 - - [31/Aug/2026:01:55:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T01:56:07.868602498Z 127.0.0.1 - - [31/Aug/2026:01:56:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T01:56:59.256571316Z 127.0.0.1 - - [31/Aug/2026:01:56:59 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T01:57:16.851194867Z [Keepalive] Executing: _ping_self
+2026-08-31T01:57:16.851225768Z [Keepalive] Pinging self /about
+2026-08-31T01:57:16.851231198Z 127.0.0.1 - - [31/Aug/2026:01:57:16 +0000] "GET /about HTTP/1.1" 200 88 "-" "python-requests/2.34.2"
+2026-08-31T02:00:23.25731017Z [Keepalive] Self ping status: 200
+2026-08-31T02:00:23.257401222Z 127.0.0.1 - - [31/Aug/2026:02:00:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:00:23.346648728Z 127.0.0.1 - - [31/Aug/2026:02:00:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:00:23.525309013Z 127.0.0.1 - - [31/Aug/2026:02:00:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:00:28.530900271Z 127.0.0.1 - - [31/Aug/2026:02:00:28 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:00:51.921912262Z 127.0.0.1 - - [31/Aug/2026:02:00:51 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:01:16.564903264Z 127.0.0.1 - - [31/Aug/2026:02:01:16 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:03:03.87676458Z 127.0.0.1 - - [31/Aug/2026:02:03:03 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:05:37.075618606Z 127.0.0.1 - - [31/Aug/2026:02:05:37 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:07:06.423424878Z 127.0.0.1 - - [31/Aug/2026:02:07:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:09:07.818948557Z 127.0.0.1 - - [31/Aug/2026:02:09:07 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:10:21.281795643Z [Keepalive] Executing: _ping_external
+2026-08-31T02:10:21.282462417Z [Keepalive] Pinging external API
+2026-08-31T02:10:21.282475807Z [Keepalive] External response: Taipei: 🌦️  +29°C
+2026-08-31T02:10:21.282492128Z 127.0.0.1 - - [31/Aug/2026:02:10:21 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:10:23.272877642Z 127.0.0.1 - - [31/Aug/2026:02:10:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:10:23.357443257Z 127.0.0.1 - - [31/Aug/2026:02:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:10:23.545872295Z 127.0.0.1 - - [31/Aug/2026:02:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:10:42.507628137Z 127.0.0.1 - - [31/Aug/2026:02:10:42 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:14:07.382553364Z 127.0.0.1 - - [31/Aug/2026:02:14:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:15:12.683700187Z 127.0.0.1 - - [31/Aug/2026:02:15:12 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:15:40.248585925Z 127.0.0.1 - - [31/Aug/2026:02:15:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:19:25.665581947Z 127.0.0.1 - - [31/Aug/2026:02:19:25 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:20:23.255704261Z 127.0.0.1 - - [31/Aug/2026:02:20:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:20:23.350037711Z 127.0.0.1 - - [31/Aug/2026:02:20:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:20:24.079931931Z 127.0.0.1 - - [31/Aug/2026:02:20:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:20:39.985437781Z 127.0.0.1 - - [31/Aug/2026:02:20:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:21:05.562187983Z 127.0.0.1 - - [31/Aug/2026:02:21:05 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:21:17.484951911Z 127.0.0.1 - - [31/Aug/2026:02:21:17 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:23:18.043648921Z [Keepalive] Executing: _ping_self
+2026-08-31T02:23:18.043673832Z [Keepalive] Pinging self /about
+2026-08-31T02:23:18.043679562Z 127.0.0.1 - - [31/Aug/2026:02:23:18 +0000] "GET /about HTTP/1.1" 200 88 "-" "python-requests/2.34.2"
+2026-08-31T02:25:36.97210409Z [Keepalive] Self ping status: 200
+2026-08-31T02:25:36.972690293Z 127.0.0.1 - - [31/Aug/2026:02:25:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:27:22.596495564Z 127.0.0.1 - - [31/Aug/2026:02:27:22 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:28:08.325277893Z 127.0.0.1 - - [31/Aug/2026:02:28:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:28:29.646243414Z 127.0.0.1 - - [31/Aug/2026:02:28:29 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:30:23.258755923Z 127.0.0.1 - - [31/Aug/2026:02:30:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:30:23.335593773Z 127.0.0.1 - - [31/Aug/2026:02:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:30:23.540063107Z 127.0.0.1 - - [31/Aug/2026:02:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:30:50.930650429Z 127.0.0.1 - - [31/Aug/2026:02:30:50 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:33:27.928204172Z 127.0.0.1 - - [31/Aug/2026:02:33:27 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:35:10.24118392Z 127.0.0.1 - - [31/Aug/2026:02:35:10 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:35:36.392074774Z 127.0.0.1 - - [31/Aug/2026:02:35:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:37:34.128759206Z [Keepalive] Executing: _ping_external
+2026-08-31T02:37:34.128783377Z [Keepalive] Pinging external API
+2026-08-31T02:37:34.128789487Z [Keepalive] External ping error: HTTPSConnectionPool(host='wttr.in', port=443): Max retries exceeded with url: /Taipei?format=3 (Caused by ConnectTimeoutError(<HTTPSConnection(host='wttr.in', port=443) at 0x72c2a78fbb10>, 'Connection to wttr.in timed out. (connect timeout=30)'))
+2026-08-31T02:37:34.128794727Z 127.0.0.1 - - [31/Aug/2026:02:37:34 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:39:32.686190204Z 127.0.0.1 - - [31/Aug/2026:02:39:32 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:40:23.349634258Z 127.0.0.1 - - [31/Aug/2026:02:40:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:40:23.42245864Z 127.0.0.1 - - [31/Aug/2026:02:40:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:40:24.133976493Z 127.0.0.1 - - [31/Aug/2026:02:40:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:40:40.472051901Z 127.0.0.1 - - [31/Aug/2026:02:40:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:42:07.797386047Z 127.0.0.1 - - [31/Aug/2026:02:42:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:45:36.147477784Z 127.0.0.1 - - [31/Aug/2026:02:45:36 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:45:40.929113447Z 127.0.0.1 - - [31/Aug/2026:02:45:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:46:39.88614296Z 127.0.0.1 - - [31/Aug/2026:02:46:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:49:06.07826824Z 127.0.0.1 - - [31/Aug/2026:02:49:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:50:23.33643507Z [Keepalive] Executing: _log_to_sheet
+2026-08-31T02:50:23.33645766Z [Keepalive] Logging to Google Sheet
+2026-08-31T02:50:23.33646284Z [BookmarkService] Keepalive logged. Status: 200
+2026-08-31T02:50:23.336468861Z 127.0.0.1 - - [31/Aug/2026:02:50:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T02:50:23.356925535Z 127.0.0.1 - - [31/Aug/2026:02:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:50:23.53199814Z 127.0.0.1 - - [31/Aug/2026:02:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:50:43.052703254Z 127.0.0.1 - - [31/Aug/2026:02:50:43 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:51:42.062711199Z 127.0.0.1 - - [31/Aug/2026:02:51:42 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T02:55:36.680099262Z 127.0.0.1 - - [31/Aug/2026:02:55:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T02:55:45.022056029Z 127.0.0.1 - - [31/Aug/2026:02:55:45 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T02:56:08.185641371Z 127.0.0.1 - - [31/Aug/2026:02:56:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T02:57:46.883749469Z 127.0.0.1 - - [31/Aug/2026:02:57:46 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:00:23.287663901Z 127.0.0.1 - - [31/Aug/2026:03:00:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:00:23.390789642Z 127.0.0.1 - - [31/Aug/2026:03:00:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:00:24.221749379Z 127.0.0.1 - - [31/Aug/2026:03:00:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:00:28.949276133Z 127.0.0.1 - - [31/Aug/2026:03:00:28 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:00:51.519286452Z 127.0.0.1 - - [31/Aug/2026:03:00:51 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:03:53.193163762Z [Keepalive] Executing: _ping_external
+2026-08-31T03:03:53.193189422Z [Keepalive] Pinging external API
+2026-08-31T03:03:53.193195333Z [Keepalive] External response: Taipei: 🌦️  +29°C
+2026-08-31T03:03:53.193202333Z 127.0.0.1 - - [31/Aug/2026:03:03:53 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:04:50.726175353Z 127.0.0.1 - - [31/Aug/2026:03:04:50 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:05:37.491594282Z 127.0.0.1 - - [31/Aug/2026:03:05:37 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:07:06.317131902Z 127.0.0.1 - - [31/Aug/2026:03:07:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:09:58.096056837Z 127.0.0.1 - - [31/Aug/2026:03:09:58 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:10:23.286873358Z 127.0.0.1 - - [31/Aug/2026:03:10:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:10:23.375391422Z 127.0.0.1 - - [31/Aug/2026:03:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:10:23.814114488Z 127.0.0.1 - - [31/Aug/2026:03:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:10:41.826948885Z 127.0.0.1 - - [31/Aug/2026:03:10:41 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:13:54.276275132Z 127.0.0.1 - - [31/Aug/2026:03:13:54 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:14:07.315882537Z 127.0.0.1 - - [31/Aug/2026:03:14:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:15:39.719456888Z 127.0.0.1 - - [31/Aug/2026:03:15:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:16:03.12599274Z [Keepalive] Executing: _ping_external
+2026-08-31T03:16:03.126021771Z [Keepalive] Pinging external API
+2026-08-31T03:16:03.126027581Z [Keepalive] External response: Taipei: 🌦️  +29°C
+2026-08-31T03:16:03.126035231Z 127.0.0.1 - - [31/Aug/2026:03:16:03 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:20:23.265484313Z 127.0.0.1 - - [31/Aug/2026:03:20:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:20:23.353825953Z 127.0.0.1 - - [31/Aug/2026:03:20:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:20:24.674712984Z 127.0.0.1 - - [31/Aug/2026:03:20:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:20:42.14990544Z 127.0.0.1 - - [31/Aug/2026:03:20:42 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:21:06.395319223Z 127.0.0.1 - - [31/Aug/2026:03:21:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:22:07.115588952Z 127.0.0.1 - - [31/Aug/2026:03:22:07 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:22:59.216973959Z 127.0.0.1 - - [31/Aug/2026:03:22:59 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:25:36.788223731Z 127.0.0.1 - - [31/Aug/2026:03:25:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:28:07.549699685Z 127.0.0.1 - - [31/Aug/2026:03:28:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:28:13.106538199Z 127.0.0.1 - - [31/Aug/2026:03:28:13 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:30:23.25354053Z [Keepalive] Executing: _ping_external
+2026-08-31T03:30:23.25356804Z [Keepalive] Pinging external API
+2026-08-31T03:30:23.253585641Z [Keepalive] External response: Taipei: 🌦️  +31°C
+2026-08-31T03:30:23.253591141Z 127.0.0.1 - - [31/Aug/2026:03:30:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:30:23.334025539Z 127.0.0.1 - - [31/Aug/2026:03:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:30:23.568279351Z 127.0.0.1 - - [31/Aug/2026:03:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:30:48.6607123Z 127.0.0.1 - - [31/Aug/2026:03:30:48 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:32:03.944205121Z 127.0.0.1 - - [31/Aug/2026:03:32:03 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:34:17.687402017Z 127.0.0.1 - - [31/Aug/2026:03:34:17 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:35:10.384056407Z 127.0.0.1 - - [31/Aug/2026:03:35:10 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:35:36.473131417Z 127.0.0.1 - - [31/Aug/2026:03:35:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:40:20.481940712Z 127.0.0.1 - - [31/Aug/2026:03:40:20 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:40:23.337149142Z 127.0.0.1 - - [31/Aug/2026:03:40:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:40:23.421280051Z 127.0.0.1 - - [31/Aug/2026:03:40:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:40:24.047274367Z 127.0.0.1 - - [31/Aug/2026:03:40:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:40:40.287594863Z 127.0.0.1 - - [31/Aug/2026:03:40:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:41:08.4989864Z 127.0.0.1 - - [31/Aug/2026:03:41:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:42:07.96657311Z [Keepalive] Executing: _log_to_sheet
+2026-08-31T03:42:07.966613531Z [Keepalive] Logging to Google Sheet
+2026-08-31T03:42:07.966616862Z [BookmarkService] Keepalive logged. Status: 200
+2026-08-31T03:42:07.966620511Z 127.0.0.1 - - [31/Aug/2026:03:42:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:45:41.102658308Z 127.0.0.1 - - [31/Aug/2026:03:45:41 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:46:23.969358701Z 127.0.0.1 - - [31/Aug/2026:03:46:23 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:49:06.637159566Z 127.0.0.1 - - [31/Aug/2026:03:49:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:50:12.746950796Z 127.0.0.1 - - [31/Aug/2026:03:50:12 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:50:23.273094684Z 127.0.0.1 - - [31/Aug/2026:03:50:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T03:50:23.49511991Z 127.0.0.1 - - [31/Aug/2026:03:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T03:50:23.549875497Z 127.0.0.1 - - [31/Aug/2026:03:50:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:50:40.846665058Z 127.0.0.1 - - [31/Aug/2026:03:50:40 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:52:30.285500548Z 127.0.0.1 - - [31/Aug/2026:03:52:30 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:55:36.703896362Z [Keepalive] Executing: _log_to_sheet
+2026-08-31T03:55:36.703923963Z [Keepalive] Logging to Google Sheet
+2026-08-31T03:55:36.703929233Z [BookmarkService] Keepalive logged. Status: 200
+2026-08-31T03:55:36.703936303Z 127.0.0.1 - - [31/Aug/2026:03:55:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T03:56:07.400084979Z 127.0.0.1 - - [31/Aug/2026:03:56:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T03:58:35.407747044Z 127.0.0.1 - - [31/Aug/2026:03:58:35 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T03:59:16.832482253Z 127.0.0.1 - - [31/Aug/2026:03:59:16 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T04:00:23.289366282Z 127.0.0.1 - - [31/Aug/2026:04:00:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T04:00:23.382654157Z 127.0.0.1 - - [31/Aug/2026:04:00:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T04:00:23.542069596Z 127.0.0.1 - - [31/Aug/2026:04:00:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T04:00:28.874211163Z 127.0.0.1 - - [31/Aug/2026:04:00:28 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T04:00:53.885430769Z 127.0.0.1 - - [31/Aug/2026:04:00:53 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T04:04:40.467503814Z 127.0.0.1 - - [31/Aug/2026:04:04:40 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T04:05:36.915304488Z 127.0.0.1 - - [31/Aug/2026:04:05:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T04:07:06.716501617Z 127.0.0.1 - - [31/Aug/2026:04:07:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T04:08:23.509653764Z [Keepalive] Executing: _ping_external
+2026-08-31T04:08:23.509677785Z [Keepalive] Pinging external API
+2026-08-31T04:08:23.509691635Z [Keepalive] External response: Taipei: 🌦️  +31°C
+2026-08-31T04:08:23.509694865Z 127.0.0.1 - - [31/Aug/2026:04:08:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T04:10:23.329314042Z 127.0.0.1 - - [31/Aug/2026:04:10:23 +0000] "GET /health HTTP/1.1" 200 246 "-" "Cloudflare-Service-Monitor/1.0"
+2026-08-31T04:10:23.350859523Z 127.0.0.1 - - [31/Aug/2026:04:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T04:10:23.696938043Z 127.0.0.1 - - [31/Aug/2026:04:10:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T04:10:41.34656172Z 127.0.0.1 - - [31/Aug/2026:04:10:41 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T04:10:44.966058685Z 127.0.0.1 - - [31/Aug/2026:04:10:44 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T04:14:08.723405699Z 127.0.0.1 - - [31/Aug/2026:04:14:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-08-31T04:15:39.950534208Z 127.0.0.1 - - [31/Aug/2026:04:15:39 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-08-31T04:16:49.979721239Z 127.0.0.1 - - [31/Aug/2026:04:16:49 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T04:17:01.575352056Z [LineHandler] Received text message: 629679972835131949
+2026-08-31T04:17:01.575377226Z [LineHandler] DB chat history count: 5
+2026-08-31T04:17:01.575382726Z [LineHandler] Formatted history: User: hello
+2026-08-31T04:17:01.575387586Z User: hello
+2026-08-31T04:17:01.575393046Z Assistant: AI 處理發生錯誤: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-08-31T04:17:01.575397546Z User: 你好
+2026-08-31T04:17:01.575402447Z Assistant: AI 處理發生錯誤: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-08-31T04:17:01.575406587Z 
+2026-08-31T04:17:01.575410987Z [LineHandler] Full prompt length: 487
+2026-08-31T04:17:01.575415357Z [ChatHistory] Saved user message: 35
+2026-08-31T04:17:01.575420887Z [LineHandler] AI result: 測試成功！系統目前已恢復正常連線。
+2026-08-31T04:17:01.575425137Z 
+2026-08-31T04:17:01.575429747Z 請問有什麼我可以協助您的嗎？...
+2026-08-31T04:17:01.575434157Z [ChatHistory] Saved model response: 36
+2026-08-31T04:17:01.575439258Z 1788149815046 msg from type='user' user_id='U[redacted]': ai: test
+2026-08-31T04:17:01.575443698Z Test
+2026-08-31T04:17:01.575448338Z Test
+2026-08-31T04:17:01.575453878Z 127.0.0.1 - - [31/Aug/2026:04:17:01 +0000] "POST /callback HTTP/1.1" 200 2 "-" "LineBotWebhook/2.0"
+2026-08-31T04:17:28.057310277Z [BookmarkService] Message saved. Status: 200
+2026-08-31T04:17:28.057355348Z [BookmarkService] Message saved. Status: 200
+2026-08-31T04:17:28.057365548Z 127.0.0.1 - - [31/Aug/2026:04:17:28 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-08-31T04:18:00.701780099Z [LineHandler] Received text message: 629680061805232507
+2026-08-31T04:18:00.70181735Z [LineHandler] DB chat history count: 5
+2026-08-31T04:18:00.70182436Z [LineHandler] Formatted history: Assistant: AI 處理發生錯誤: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-08-31T04:18:00.701845201Z User: 你好
+2026-08-31T04:18:00.701849231Z Assistant: AI 處理發生錯誤: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-08-31T04:18:00.701852071Z User: test
+2026-08-31T04:18:00.701854651Z Test
+2026-08-31T04:18:00.701857261Z Test
+2026-08-31T04:18:00.701860191Z Assistant: 測試成功！系統目前已恢復正常連線。
+2026-08-31T04:18:00.701862681Z 
+2026-08-31T04:18:00.701865091Z 請問有什麼我可以協助您的嗎？
+2026-08-31T04:18:00.701867411Z 
+2026-08-31T04:18:00.701869701Z [LineHandler] Full prompt length: 530
+2026-08-31T04:18:00.701875282Z [ChatHistory] Saved user message: 37
+2026-08-31T05:11:27.701924748Z 127.0.0.1 - - [31/Aug/2026:05:11:27 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-08-31T05:11:58.500081608Z 127.0.0.1 - - [31/Aug/2026:05:11:58 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"

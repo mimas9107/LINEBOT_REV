@@ -1,0 +1,56 @@
+2026-09-01T02:06:34.358731041Z     )
+2026-09-01T02:06:34.358733041Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+2026-09-01T02:06:34.358734971Z     response = self._send_handling_redirects(
+2026-09-01T02:06:34.358736911Z         request,
+2026-09-01T02:06:34.358738861Z         follow_redirects=follow_redirects,
+2026-09-01T02:06:34.358740761Z         history=history,
+2026-09-01T02:06:34.358742691Z     )
+2026-09-01T02:06:34.358744631Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+2026-09-01T02:06:34.358746581Z     response = self._send_single_request(request)
+2026-09-01T02:06:34.358748491Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+2026-09-01T02:06:34.358750421Z     response = transport.handle_request(request)
+2026-09-01T02:06:34.358752301Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+2026-09-01T02:06:34.358754191Z     resp = self._pool.handle_request(req)
+2026-09-01T02:06:34.358756631Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+2026-09-01T02:06:34.358758561Z     raise exc from None
+2026-09-01T02:06:34.358760481Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+2026-09-01T02:06:34.358762552Z     response = connection.handle_request(
+2026-09-01T02:06:34.358764472Z         pool_request.request
+2026-09-01T02:06:34.358766401Z     )
+2026-09-01T02:06:34.358768312Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+2026-09-01T02:06:34.358774172Z     return self._connection.handle_request(request)
+2026-09-01T02:06:34.358776112Z            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+2026-09-01T02:06:34.358778062Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+2026-09-01T02:06:34.358779992Z     raise exc
+2026-09-01T02:06:34.358781902Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+2026-09-01T02:06:34.358785212Z     ) = self._receive_response_headers(**kwargs)
+2026-09-01T02:06:34.358788232Z         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+2026-09-01T02:06:34.358791262Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+2026-09-01T02:06:34.358794422Z     event = self._receive_event(timeout=timeout)
+2026-09-01T02:06:34.358797742Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+2026-09-01T02:06:34.358800712Z     data = self._network_stream.read(
+2026-09-01T02:06:34.358803442Z         self.READ_NUM_BYTES, timeout=timeout
+2026-09-01T02:06:34.358806492Z     )
+2026-09-01T02:06:34.358809742Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 128, in read
+2026-09-01T02:06:34.358812962Z     return self._sock.recv(max_bytes)
+2026-09-01T02:06:34.358814873Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^
+2026-09-01T02:06:34.358816882Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/ssl.py", line 1285, in recv
+2026-09-01T02:06:34.358818773Z     return self.read(buflen)
+2026-09-01T02:06:34.358820663Z            ~~~~~~~~~^^^^^^^^
+2026-09-01T02:06:34.358822543Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/ssl.py", line 1140, in read
+2026-09-01T02:06:34.358824793Z     return self._sslobj.read(len)
+2026-09-01T02:06:34.358826743Z            ~~~~~~~~~~~~~~~~~^^^^^
+2026-09-01T02:06:34.358828643Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/workers/base.py", line 199, in handle_abort
+2026-09-01T02:06:34.358830553Z     sys.exit(1)
+2026-09-01T02:06:34.358832463Z     ~~~~~~~~^^^
+2026-09-01T02:06:34.358834363Z SystemExit: 1
+2026-09-01T02:06:34.358856774Z [2026-09-01 02:06:34 +0000] [70] [INFO] Worker exiting (pid: 70)
+2026-09-01T02:06:35.436413028Z [2026-09-01 02:06:35 +0000] [58] [ERROR] Worker (pid:70) was sent SIGKILL! Perhaps out of memory?
+2026-09-01T02:06:35.527880345Z [2026-09-01 02:06:35 +0000] [75] [INFO] Booting worker with pid: 75
+2026-09-01T02:06:35.52855176Z [2026-09-01 02:06:35 +0000] [58] [INFO] Control socket listening at /opt/render/.gunicorn/gunicorn.ctl
+2026-09-01T02:07:06.764977651Z [Database] Initialized: data/chat_history.db
+2026-09-01T02:07:06.765005352Z [Keepalive] Executing: _log_to_sheet
+2026-09-01T02:07:06.765010912Z [Keepalive] Logging to Google Sheet
+2026-09-01T02:07:06.765016322Z [Keepalive] Started
+2026-09-01T02:07:06.765021642Z [Reminder] Scheduler started
+2026-09-01T02:07:06.765026932Z 127.0.0.1 - - [01/Sep/2026:02:07:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"

@@ -1,0 +1,247 @@
+026-09-01T02:21:06.609865715Z 127.0.0.1 - - [01/Sep/2026:02:21:06 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-09-01T02:25:36.703008065Z 127.0.0.1 - - [01/Sep/2026:02:25:36 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-09-01T02:26:03.386590183Z ==> Deploying...
+2026-09-01T02:26:03.595196791Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-09-01T02:26:24.953082201Z 127.0.0.1 - - [01/Sep/2026:02:26:24 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-09-01T02:26:39.722656217Z [2026-09-01 02:26:39 +0000] [58] [INFO] Listening at: http://0.0.0.0:10000 (58)
+2026-09-01T02:26:39.722666597Z [2026-09-01 02:26:39 +0000] [58] [INFO] Using worker: sync
+2026-09-01T02:26:39.727845219Z [2026-09-01 02:26:39 +0000] [59] [INFO] Booting worker with pid: 59
+2026-09-01T02:26:39.829670559Z [2026-09-01 02:26:39 +0000] [58] [INFO] Control socket listening at /opt/render/.gunicorn/gunicorn.ctl
+2026-09-01T02:26:40.399157723Z [Database] Initialized: data/chat_history.db
+2026-09-01T02:26:40.399192633Z [Keepalive] Executing: _ping_external
+2026-09-01T02:26:40.399198043Z [Keepalive] Pinging external API
+2026-09-01T02:26:40.399202783Z [Keepalive] Started
+2026-09-01T02:26:40.399206754Z [Reminder] Scheduler started
+2026-09-01T02:26:40.399211744Z 127.0.0.1 - - [01/Sep/2026:02:26:40 +0000] "HEAD / HTTP/1.1" 200 0 "-" "Go-http-client/1.1"
+2026-09-01T02:26:43.730849749Z [2026-09-01 02:26:43 +0000] [58] [INFO] Handling signal: term
+2026-09-01T02:26:43.731898681Z [2026-09-01 02:26:43 +0000] [75] [INFO] Worker exiting (pid: 75)
+2026-09-01T02:26:44.51046973Z ==> Your service is live 🎉
+2026-09-01T02:26:44.746162726Z ==> 
+2026-09-01T02:26:44.75575934Z ==> ///////////////////////////////////////////////////////////
+2026-09-01T02:26:44.768468014Z ==> 
+2026-09-01T02:26:44.779555494Z ==> Available at your primary URL https://linebot-rev.onrender.com
+2026-09-01T02:26:44.784817068Z ==> 
+2026-09-01T02:26:44.791927329Z ==> ///////////////////////////////////////////////////////////
+2026-09-01T02:26:44.956782923Z [Keepalive] External response: Taipei: ☁️  +29°C
+2026-09-01T02:26:44.956806323Z 127.0.0.1 - - [01/Sep/2026:02:26:44 +0000] "GET / HTTP/1.1" 200 42 "-" "Go-http-client/2.0"
+2026-09-01T02:26:45.078219977Z 127.0.0.1 - - [01/Sep/2026:02:26:45 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-09-01T02:26:47.941653663Z [Database] Initialized: data/chat_history.db
+2026-09-01T02:26:47.941653683Z [2026-09-01 02:26:47 +0000] [58] [INFO] Shutting down: Master
+2026-09-01T02:28:09.355904694Z 127.0.0.1 - - [01/Sep/2026:02:28:09 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-09-01T02:30:23.376652635Z 127.0.0.1 - - [01/Sep/2026:02:30:23 +0000] "GET /health HTTP/1.1" 200 228 "-" "Cloudflare-Service-Monitor/1.0"
+2026-09-01T02:30:23.399846699Z 127.0.0.1 - - [01/Sep/2026:02:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-09-01T02:30:23.59937012Z 127.0.0.1 - - [01/Sep/2026:02:30:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-09-01T02:30:48.386468949Z 127.0.0.1 - - [01/Sep/2026:02:30:48 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-09-01T02:31:06.632808733Z Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-01T02:31:49.141421521Z ==> Detected service running on port 10000
+2026-09-01T02:31:49.50867209Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-09-01T02:36:05.993609384Z [2026-09-01 02:36:05 +0000] [58] [CRITICAL] WORKER TIMEOUT (pid:59)
+2026-09-01T02:36:06.004773132Z [2026-09-01 02:36:05 +0000] [59] [ERROR] Error handling request POST /callback
+2026-09-01T02:36:06.004796622Z Traceback (most recent call last):
+2026-09-01T02:36:06.004825243Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/workers/sync.py", line 141, in handle
+2026-09-01T02:36:06.004831423Z     self.handle_request(listener, req, client, addr)
+2026-09-01T02:36:06.004836203Z     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004841023Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/workers/sync.py", line 184, in handle_request
+2026-09-01T02:36:06.004845503Z     respiter = self.wsgi(environ, resp.start_response)
+2026-09-01T02:36:06.004850803Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 1498, in __call__
+2026-09-01T02:36:06.004855603Z     return self.wsgi_app(environ, start_response)
+2026-09-01T02:36:06.004860144Z            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004864704Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 1473, in wsgi_app
+2026-09-01T02:36:06.004869294Z     response = self.full_dispatch_request()
+2026-09-01T02:36:06.004873984Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 880, in full_dispatch_request
+2026-09-01T02:36:06.004893784Z     rv = self.dispatch_request()
+2026-09-01T02:36:06.004897224Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 865, in dispatch_request
+2026-09-01T02:36:06.004899964Z     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+2026-09-01T02:36:06.004903064Z            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+2026-09-01T02:36:06.004906264Z   File "/opt/render/project/src/app.py", line 75, in callback
+2026-09-01T02:36:06.004908894Z     line_handler.handle(body, signature)
+2026-09-01T02:36:06.004911965Z     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004914734Z   File "/opt/render/project/src/handlers/line_handler.py", line 60, in handle
+2026-09-01T02:36:06.004917334Z     self.webhook_handler.handle(body, signature)
+2026-09-01T02:36:06.004919915Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004922645Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/linebot/v3/webhook.py", line 242, in handle
+2026-09-01T02:36:06.004925425Z     self.__invoke_func(func, event, payload)
+2026-09-01T02:36:06.004928345Z     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004931365Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/linebot/v3/webhook.py", line 254, in __invoke_func
+2026-09-01T02:36:06.004934055Z     func(event)
+2026-09-01T02:36:06.004936535Z     ~~~~^^^^^^^
+2026-09-01T02:36:06.004939945Z   File "/opt/render/project/src/handlers/line_handler.py", line 50, in handle_message
+2026-09-01T02:36:06.004942475Z     self._handle_message_event(event)
+2026-09-01T02:36:06.004945045Z     ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+2026-09-01T02:36:06.004947665Z   File "/opt/render/project/src/handlers/line_handler.py", line 82, in _handle_message_event
+2026-09-01T02:36:06.004950705Z     result = self._handle_text_message(event, user_id, timestamp)
+2026-09-01T02:36:06.004953765Z   File "/opt/render/project/src/handlers/line_handler.py", line 159, in _handle_text_message
+2026-09-01T02:36:06.004956645Z     result = chat_with_ai(full_prompt)
+2026-09-01T02:36:06.004959605Z   File "/opt/render/project/src/services/ai_text.py", line 210, in chat_with_ai
+2026-09-01T02:36:06.004962606Z     return ai_text_service.chat(prompt, history)
+2026-09-01T02:36:06.004965395Z            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.004968746Z   File "/opt/render/project/src/services/ai_text.py", line 60, in chat
+2026-09-01T02:36:06.004974386Z     response = self._generate(
+2026-09-01T02:36:06.004978256Z         contents=prompt,
+2026-09-01T02:36:06.004981256Z     ...<5 lines>...
+2026-09-01T02:36:06.004984116Z         )
+2026-09-01T02:36:06.004987196Z     )
+2026-09-01T02:36:06.004990266Z   File "/opt/render/project/src/services/ai_text.py", line 92, in _generate
+2026-09-01T02:36:06.004993366Z     response = self._get_client().models.generate_content(
+2026-09-01T02:36:06.004996406Z         model=model,
+2026-09-01T02:36:06.004999376Z         contents=contents,
+2026-09-01T02:36:06.005002356Z         config=gen_config,
+2026-09-01T02:36:06.005005346Z     )
+2026-09-01T02:36:06.005008406Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/google/genai/models.py", line 6270, in generate_content
+2026-09-01T02:36:06.005011467Z     response = self._generate_content(
+2026-09-01T02:36:06.005014927Z         model=model, contents=contents, config=parsed_config_to_call
+2026-09-01T02:36:06.005017907Z     )
+2026-09-01T02:36:06.005021017Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/google/genai/models.py", line 4707, in _generate_content
+2026-09-01T02:36:06.005029517Z     response = self._api_client.request(
+2026-09-01T02:36:06.005032767Z         'post', path, request_dict, http_options
+2026-09-01T02:36:06.005035667Z     )
+2026-09-01T02:36:06.005038647Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/google/genai/_api_client.py", line 1750, in request
+2026-09-01T02:36:06.005041697Z     response = self._request(http_request, http_options, stream=False)
+2026-09-01T02:36:06.005044697Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/google/genai/_api_client.py", line 1537, in _request
+2026-09-01T02:36:06.005047757Z     return self._retry(self._request_once, http_request, stream)  # type: ignore[no-any-return]
+2026-09-01T02:36:06.005050587Z            ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01T02:36:06.005055867Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/tenacity/__init__.py", line 470, in __call__
+2026-09-01T02:36:06.005058857Z     do = self.iter(retry_state=retry_state)
+2026-09-01T02:36:06.005078298Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/tenacity/__init__.py", line 371, in iter
+2026-09-01T02:36:06.005081648Z     result = action(retry_state)
+2026-09-01T02:36:06.005084558Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/tenacity/__init__.py", line 393, in <lambda>
+2026-09-01T02:36:06.005087398Z     self._add_action_func(lambda rs: rs.outcome.result())
+2026-09-01T02:36:06.005090028Z                                      ~~~~~~~~~~~~~~~~~^^
+2026-09-01T02:36:06.005092728Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/concurrent/futures/_base.py", line 449, in result
+2026-09-01T02:36:06.005095478Z     return self.__get_result()
+2026-09-01T02:36:06.005097978Z            ~~~~~~~~~~~~~~~~~^^
+2026-09-01T02:36:06.005100548Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+2026-09-01T02:36:06.005103158Z     raise self._exception
+2026-09-01T02:36:06.005105958Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/tenacity/__init__.py", line 473, in __call__
+2026-09-01T02:36:06.005108568Z     result = fn(*args, **kwargs)
+2026-09-01T02:36:06.005111128Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/google/genai/_api_client.py", line 1513, in _request_once
+2026-09-01T02:36:06.005113578Z     response = self._httpx_client.send(httpx_request, stream=stream)  # type: ignore[union-attr, arg-type]
+2026-09-01T02:36:06.005116138Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+2026-09-01T02:36:06.005118709Z     response = self._send_handling_auth(
+2026-09-01T02:36:06.005121189Z         request,
+2026-09-01T02:36:06.005123719Z     ...<2 lines>...
+2026-09-01T02:36:06.005126309Z         history=[],
+2026-09-01T02:36:06.005128779Z     )
+2026-09-01T02:36:06.005131519Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+2026-09-01T02:36:06.005134139Z     response = self._send_handling_redirects(
+2026-09-01T02:36:06.005136729Z         request,
+2026-09-01T02:36:06.005139459Z         follow_redirects=follow_redirects,
+2026-09-01T02:36:06.005142099Z         history=history,
+2026-09-01T02:36:06.005144579Z     )
+2026-09-01T02:36:06.005147099Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+2026-09-01T02:36:06.005149709Z     response = self._send_single_request(request)
+2026-09-01T02:36:06.005152339Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+2026-09-01T02:36:06.005159949Z     response = transport.handle_request(request)
+2026-09-01T02:36:06.005162969Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+2026-09-01T02:36:06.005165639Z     resp = self._pool.handle_request(req)
+2026-09-01T02:36:06.005169039Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+2026-09-01T02:36:06.00517155Z     raise exc from None
+2026-09-01T02:36:06.00517433Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+2026-09-01T02:36:06.00517704Z     response = connection.handle_request(
+2026-09-01T02:36:06.00517958Z         pool_request.request
+2026-09-01T02:36:06.00518214Z     )
+2026-09-01T02:36:06.00518497Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+2026-09-01T02:36:06.00518706Z [LineHandler] Received text message: 629814274029781460
+2026-09-01T02:36:06.00518775Z     return self._connection.handle_request(request)
+2026-09-01T02:36:06.00519121Z            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+2026-09-01T02:36:06.00519422Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+2026-09-01T02:36:06.0051971Z     raise exc
+2026-09-01T02:36:06.00520532Z [LineHandler] DB chat history count: 0
+2026-09-01T02:36:06.00520869Z [LineHandler] Full prompt length: 4
+2026-09-01T02:36:06.00521141Z [ChatHistory] Saved user message: 1
+2026-09-01T02:36:06.00521466Z 127.0.0.1 - - [01/Sep/2026:02:36:06 +0000] "POST /callback HTTP/1.1" 500 0 "-" "-"
+2026-09-01T02:36:06.005264991Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+2026-09-01T02:36:06.005268961Z     ) = self._receive_response_headers(**kwargs)
+2026-09-01T02:36:06.005271641Z         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+2026-09-01T02:36:06.005276052Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+2026-09-01T02:36:06.005278942Z     event = self._receive_event(timeout=timeout)
+2026-09-01T02:36:06.005281922Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+2026-09-01T02:36:06.005284722Z     data = self._network_stream.read(
+2026-09-01T02:36:06.005287522Z         self.READ_NUM_BYTES, timeout=timeout
+2026-09-01T02:36:06.005290032Z     )
+2026-09-01T02:36:06.005292492Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 128, in read
+2026-09-01T02:36:06.005294852Z     return self._sock.recv(max_bytes)
+2026-09-01T02:36:06.005297332Z            ~~~~~~~~~~~~~~~^^^^^^^^^^^
+2026-09-01T02:36:06.005299832Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/ssl.py", line 1285, in recv
+2026-09-01T02:36:06.005304162Z     return self.read(buflen)
+2026-09-01T02:36:06.005307062Z            ~~~~~~~~~^^^^^^^^
+2026-09-01T02:36:06.005310032Z   File "/opt/render/project/python/Python-3.13.4/lib/python3.13/ssl.py", line 1140, in read
+2026-09-01T02:36:06.005313222Z     return self._sslobj.read(len)
+2026-09-01T02:36:06.005316512Z            ~~~~~~~~~~~~~~~~~^^^^^
+2026-09-01T02:36:06.005319502Z   File "/opt/render/project/src/.venv/lib/python3.13/site-packages/gunicorn/workers/base.py", line 199, in handle_abort
+2026-09-01T02:36:06.005355243Z     sys.exit(1)
+2026-09-01T02:36:06.005366153Z     ~~~~~~~~^^^
+2026-09-01T02:36:06.005369103Z SystemExit: 1
+2026-09-01T02:36:06.005383294Z [2026-09-01 02:36:06 +0000] [59] [INFO] Worker exiting (pid: 59)
+2026-09-01T02:36:07.029190181Z [2026-09-01 02:36:07 +0000] [58] [ERROR] Worker (pid:59) was sent SIGKILL! Perhaps out of memory?
+2026-09-01T02:36:07.118764043Z [2026-09-01 02:36:07 +0000] [66] [INFO] Booting worker with pid: 66
+2026-09-01T02:36:07.120871614Z [2026-09-01 02:36:07 +0000] [58] [INFO] Control socket listening at /opt/render/.gunicorn/gunicorn.ctl
+2026-09-01T02:36:07.222616103Z [Database] Initialized: data/chat_history.db
+2026-09-01T02:36:07.222635984Z [Keepalive] Executing: _ping_self
+2026-09-01T02:36:07.222641264Z [Keepalive] Pinging self /about
+2026-09-01T02:36:07.222645904Z [Keepalive] Started
+2026-09-01T02:36:07.222649664Z [Reminder] Scheduler started
+2026-09-01T02:36:07.222654634Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-09-01T02:36:07.224658003Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-09-01T02:36:07.225826026Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-09-01T02:36:07.321734652Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"
+2026-09-01T02:36:07.323011757Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+2026-09-01T02:36:07.324076367Z 127.0.0.1 - - [01/Sep/2026:02:36:07 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-09-01T02:36:08.510550065Z [LineHandler] Received text message: 629814756509221496
+2026-09-01T02:36:08.510573036Z 1788230152518 msg from type='user' user_id='U[redacted]': 1分鐘後提醒我喝水
+2026-09-01T02:36:08.510577896Z 127.0.0.1 - - [01/Sep/2026:02:36:08 +0000] "POST /callback HTTP/1.1" 200 2 "-" "LineBotWebhook/2.0"
+2026-09-01T02:36:08.511832691Z 127.0.0.1 - - [01/Sep/2026:02:36:08 +0000] "GET /about HTTP/1.1" 200 88 "-" "python-requests/2.34.2"
+2026-09-01T02:38:09.425633886Z Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+2026-09-01T02:38:37.193251204Z [Keepalive] Self ping status: 200
+2026-09-01T02:38:37.193279184Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:38:37.193287404Z [LineHandler] Received text message: 629814984226112072
+2026-09-01T02:38:37.193292875Z [LineHandler] DB chat history count: 1
+2026-09-01T02:38:37.193298565Z [LineHandler] Formatted history: User: test
+2026-09-01T02:38:37.193303915Z 
+2026-09-01T02:38:37.193309595Z [LineHandler] Full prompt length: 21
+2026-09-01T02:38:37.193315235Z [ChatHistory] Saved user message: 2
+2026-09-01T02:38:37.193322895Z [AITextService] gemini-flash-latest attempt 1/3 failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-09-01T02:38:37.193330275Z [AITextService] gemini-flash-latest attempt 2/3 failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-09-01T02:38:37.193350846Z [AITextService] gemini-flash-latest attempt 3/3 failed: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-09-01T02:38:37.193356566Z [LineHandler] AI result: Test received! How can I help you today?...
+2026-09-01T02:38:37.193360376Z [ChatHistory] Saved model response: 3
+2026-09-01T02:38:37.193365536Z 1788230288114 msg from type='user' user_id='U[redacted]': ai:Test
+2026-09-01T02:38:37.193370296Z 127.0.0.1 - - [01/Sep/2026:02:38:37 +0000] "POST /callback HTTP/1.1" 200 2 "-" "LineBotWebhook/2.0"
+2026-09-01T02:39:05.695497428Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:39:05.695521599Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:39:05.695527899Z [LineHandler] Received text message: 629815076383096886
+2026-09-01T02:39:05.695532239Z [LineHandler] DB chat history count: 3
+2026-09-01T02:39:05.695536159Z [LineHandler] Formatted history: User: test
+2026-09-01T02:39:05.695540029Z User: Test
+2026-09-01T02:39:05.695544019Z Assistant: Test received! How can I help you today?
+2026-09-01T02:39:05.695547759Z 
+2026-09-01T02:39:05.69555178Z [LineHandler] Full prompt length: 85
+2026-09-01T02:39:05.6955559Z [ChatHistory] Saved user message: 4
+2026-09-01T02:39:05.6955601Z [AITextService] Skip gemini-flash-latest (markfail cooldown)
+2026-09-01T02:39:05.6955651Z [LineHandler] AI result: Hello there! How can I help you today?...
+2026-09-01T02:39:05.69556924Z [ChatHistory] Saved model response: 5
+2026-09-01T02:39:05.69557461Z 1788230343092 msg from type='user' user_id='U[redacted]': ai: hello 
+2026-09-01T02:39:05.69557986Z 127.0.0.1 - - [01/Sep/2026:02:39:05 +0000] "POST /callback HTTP/1.1" 200 2 "-" "LineBotWebhook/2.0"
+2026-09-01T02:39:06.989324897Z 127.0.0.1 - - [01/Sep/2026:02:39:06 +0000] "HEAD /about HTTP/1.1" 200 0 "https://linebot-rev.onrender.com/about" "Mozilla/5.0+(compatible; UptimeRobot/2.0; http://www.uptimerobot.com/)"
+2026-09-01T02:40:04.516505466Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:40:04.516534967Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:40:04.516541537Z [LineHandler] Received text message: 629815175889027281
+2026-09-01T02:40:04.516546527Z [LineHandler] DB chat history count: 5
+2026-09-01T02:40:04.516549567Z [LineHandler] Formatted history: User: test
+2026-09-01T02:40:04.516552727Z User: Test
+2026-09-01T02:40:04.516556207Z Assistant: Test received! How can I help you today?
+2026-09-01T02:40:04.516559378Z User: hello
+2026-09-01T02:40:04.516562778Z Assistant: Hello there! How can I help you today?
+2026-09-01T02:40:04.516565698Z 
+2026-09-01T02:40:04.516568798Z [LineHandler] Full prompt length: 144
+2026-09-01T02:40:04.516571838Z [ChatHistory] Saved user message: 6
+2026-09-01T02:40:04.516574868Z [AITextService] Skip gemini-flash-latest (markfail cooldown)
+2026-09-01T02:40:04.516581888Z [LineHandler] AI result: 你好！有什么可以帮助你的吗？ (Hello! How can I help you?)...
+2026-09-01T02:40:04.516585248Z [ChatHistory] Saved model response: 7
+2026-09-01T02:40:04.516588808Z 1788230402340 msg from type='user' user_id='U[redacted]': ai:你好
+2026-09-01T02:40:04.516593278Z 127.0.0.1 - - [01/Sep/2026:02:40:04 +0000] "POST /callback HTTP/1.1" 200 2 "-" "LineBotWebhook/2.0"
+2026-09-01T02:40:23.36667833Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:40:23.366762252Z [BookmarkService] Message saved. Status: 200
+2026-09-01T02:40:23.366770072Z 127.0.0.1 - - [01/Sep/2026:02:40:23 +0000] "GET /health HTTP/1.1" 200 245 "-" "Cloudflare-Service-Monitor/1.0"
+2026-09-01T02:40:23.392165079Z 127.0.0.1 - - [01/Sep/2026:02:40:23 +0000] "GET /about HTTP/1.1" 200 88 "-" "-"
+2026-09-01T02:40:24.039109629Z 127.0.0.1 - - [01/Sep/2026:02:40:24 +0000] "GET /about HTTP/1.1" 200 88 "-" "node-fetch"

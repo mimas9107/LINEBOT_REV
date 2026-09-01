@@ -53,3 +53,7 @@ data/*.db-*
 
 # Logs
 *.log
+# 例外：納入追蹤 dev/ 下已識別化的開發文件與 log（父目錄需一併排除）
+!dev/
+!dev/**/
+!dev/**/*.log
