@@ -2,13 +2,22 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 09:46:56"
-project_version: "2.3.1"
-document_version: "1.3.0"
+modified_date: "2026/09/01 10:49:03"
+project_version: "2.3.2"
+document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.3.2] - 2026-09-01
+### Changed
+- `max_output_tokens` reduced 8192 -> 4096 (both `chat()` and `_chat_with_history`) to cut Gemini latency and reduce gunicorn worker timeout pressure.
+- `AITextService._generate` now logs the active model on successful response: `[AITextService] current model=<model> -> OK`, alongside existing per-attempt failure/skip logs, so Render logs show which candidate actually served a reply.
+- Runtime resilience verified live on Render (livelog3): `gemini-flash-latest` hit 503 x3, was markfailed, then fell back to the next `MODEL_LIST` candidate and replied successfully across consecutive `ai:` messages; markfail cooldown (600 s) skipped the failed model on subsequent requests.
+- Deployment: Render Start Command raised gunicorn timeout to 300 s (`gunicorn app:app --timeout 300`) to stop workers from being SIGKILLed while waiting on slow Gemini responses (observed 30 s default timeout killing the worker mid-request).
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.3.1] - 2026-09-01
 ### Fixed

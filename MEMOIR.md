@@ -2,9 +2,9 @@
 name:          "MEMOIR.md"
 description:   "Project architectural memory and decisions"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 09:46:56"
-project_version: "2.3.1"
-document_version: "1.2.0"
+modified_date: "2026/09/01 10:49:03"
+project_version: "2.3.2"
+document_version: "1.3.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 

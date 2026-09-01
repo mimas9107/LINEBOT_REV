@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.3.1
+版本: rev2.3.2
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.3.2: max_output_tokens 4096、log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST 候選模型 fallback 清單（503/429 容錯）
 - rev2.2.1: keepalive 只在直接執行時啟動，配合 patch release 說明同步
 - rev2.3.0: 新增 REMINDER_CHECK_INTERVAL、MAX_PENDING_REMINDERS 設定

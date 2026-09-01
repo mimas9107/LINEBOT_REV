@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.3.1
+版本: rev2.3.2
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.3.2: max_output_tokens 4096、成功時 log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST fallback（503/429 退避重試 + markfail 冷卻）；失敗改為拋出例外，不再回傳錯誤字串
 - rev2: 改用 google-genai SDK (新版統一 SDK)
       - 使用 genai.Client() 取代 genai.configure()
@@ -95,6 +96,7 @@ class AITextService:
                         config=gen_config,
                     )
                     self._failed_marks.pop(model, None)
+                    print(f"[AITextService] current model={model} -> OK")
                     return response
                 except Exception as e:
                     last_error = e
