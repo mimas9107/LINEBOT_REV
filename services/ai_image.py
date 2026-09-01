@@ -1,9 +1,10 @@
 """
 AI Image Service Module
-版本: rev2
+版本: rev2.3.1
 處理 Gemini 圖片辨識功能
 
 更新紀錄:
+- rev2.3.1: 分析失敗改為拋出例外，不再回傳錯誤字串（防歷史污染）
 - rev2: 改用 google-genai SDK (新版統一 SDK)
       - 使用 genai.Client() 統一管理
       - 使用 types.Part.from_bytes() 處理圖片
@@ -95,7 +96,7 @@ class AIImageService:
             
         except Exception as e:
             print(f"[AIImageService] Error with bytes method: {e}")
-            return f"圖片分析發生錯誤: {str(e)}"
+            raise
     
     def _get_mime_type(self, image_path: str) -> str:
         """

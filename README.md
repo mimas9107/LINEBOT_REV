@@ -1,11 +1,11 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.3.0"
+description:   "Main documentation for LINEBOT rev2.3.1"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/03 10:21:24"
-project_version: "2.3.0"
-document_version: "1.1.1"
-agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
+modified_date: "2026/09/01 09:46:56"
+project_version: "2.3.1"
+document_version: "1.2.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # LINEBOT
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 
 ## 版本資訊
 
-- **版本**: 2.3.0
-- **更新日期**: 2026-07-03
-- **當前重點**: 排程提醒系統 (APScheduler)、reminders table、LINE Push 到期通知
+- **版本**: 2.3.1
+- **更新日期**: 2026-09-01
+- **當前重點**: Gemini 503/429 容錯（MODEL_LIST fallback + markfail 冷卻）、對話歷史防污染
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 
@@ -180,6 +180,7 @@ gunicorn app:app
 4. **Database API**: Render 必須設定 `API_SECRET_KEY` 才能使用 `/api/db/*`
 5. **Database 上傳**: `/api/db/restore` 與 `/api/db/validate` 目前固定停用
 6. **棄用警告**: `google-generativeai` 將於 2025/11/30 停止更新
+7. **503 容錯**: 文字對話依 `config.MODEL_LIST` 依序 fallback；markfail 模型失敗後冷卻 600 秒。AI 失敗時不寫入對話歷史
 
 ## 與 rev1 差異
 

@@ -2,10 +2,10 @@
 name:          "SPEC.md"
 description:   "Project specifications and requirements"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/03 10:21:24"
-project_version: "2.3.0"
-document_version: "1.1.1"
-agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
+modified_date: "2026/09/01 09:46:56"
+project_version: "2.3.1"
+document_version: "1.2.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Specifications
@@ -20,6 +20,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 - Disabled database upload/restore endpoints for Render deployment safety.
 - Keepalive starts on the first incoming request, not on worker import.
 - Keep-alive mechanism to prevent service sleep.
+- Gemini text fallback via `MODEL_LIST`: 503/429 retry with exponential backoff and markfail cooldown; failed AI calls are never persisted to chat history.
 
 ## Tech Stack
 - Python 3.x

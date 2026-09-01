@@ -1,6 +1,6 @@
 """
 Database Service Module
-版本: rev2.2
+版本: rev2.3.1
 SQLite 資料庫連線與操作
 
 更新紀錄:

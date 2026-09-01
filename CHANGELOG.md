@@ -2,13 +2,24 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/03 12:11:00"
-project_version: "2.3.0"
-document_version: "1.2.0"
-agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
+modified_date: "2026/09/01 09:46:56"
+project_version: "2.3.1"
+document_version: "1.3.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.3.1] - 2026-09-01
+### Fixed
+- AI text failures no longer swallow exceptions into error strings (`AITextService.chat` / `generate_simple` now raise), preventing `503 UNAVAILABLE` messages from being saved as model responses.
+- `LineHandler` skips SQLite/Google Sheet writes when AI text or image analysis fails, replying a friendly message instead (chat-history anti-pollution).
+- Image analysis (`AIImageService`) now raises on failure instead of returning error strings.
+
+### Added
+- `MODEL_LIST` fallback chain in `config.py`: `gemini-flash-latest` (markfail) -> `gemini-2.5-flash` -> `gemini-1.5-flash` -> `gemini-1.5-pro`.
+- 503/429 exponential-backoff retry (2 retries, `1.5s * attempt`), markfail cooldown (600 s); non-retryable errors skip to the next candidate.
+- `tools/test_fallback.py` self-check (6 scenarios) covering fallback, retry, cooldown, and all-fail behavior.
 
 ## [2.3.0] - 2026-07-03
 ### Added

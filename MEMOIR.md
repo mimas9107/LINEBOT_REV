@@ -2,10 +2,10 @@
 name:          "MEMOIR.md"
 description:   "Project architectural memory and decisions"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/07/03 10:21:24"
-project_version: "2.3.0"
-document_version: "1.1.1"
-agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
+modified_date: "2026/09/01 09:46:56"
+project_version: "2.3.1"
+document_version: "1.2.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Memoir
@@ -23,4 +23,5 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
 - **Config Completeness**: `config.py` loads every supported runtime setting from environment variables and validates integer overrides for chat-history length and keepalive interval.
 - **Keepalive Boot Safety**: `keepalive` now starts on the first incoming request; importing `app` under Gunicorn no longer starts the background thread during worker boot, while preserving runtime heartbeats after traffic begins.
 - **Reminder System**: APScheduler `BackgroundScheduler` scans `reminders` table every `REMINDER_CHECK_INTERVAL` seconds. Due reminders are delivered via LINE `push_message` (not reply, because `reply_token` expires in 60 s). Each user is capped at `MAX_PENDING_REMINDERS = 20` pending reminders; sent/cancelled rows older than 7 days are auto-purged each cycle.
+- **503 Resilience & History Sanitization**: `AITextService` fails loud (raises) and walks `config.MODEL_LIST` candidates with per-model 503/429 backoff retries (2 retries, `1.5s * attempt`); `markfail` models are skipped for 600 s after failure. Handlers persist only successful responses to SQLite/Sheets and reply a friendly message on failure, so error text never pollutes chat history.
 - **Deployment**: Complete deployment guide available in `DEPLOYMENT.md` covering Google Sheets/GAS setup, LINE Developer console, and Render.com.

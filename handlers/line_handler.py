@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev2.2
+版本: rev2.3.1
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev2.3.1: AI/圖片分析失敗時跳過 SQLite 與 Sheet 寫入，僅回覆友善提示（防歷史污染）
 - rev2.2: AI 對話與圖片分析寫入 SQLite，保留 Google Sheet 非同步記錄與 message_id 圖片路徑
 - rev2: 配合 AI 模組更新
 - rev2.1.1: save_message 改為非同步、新增 bot 回覆儲存、圖片路徑改用 message_id
@@ -152,9 +153,14 @@ class LineHandler:
 
             # 儲存使用者訊息到 SQLite；失敗不阻斷回覆。
             self._save_db_user_message(user_id, prompt, 'text')
-            
-            # 呼叫 AI
-            result = chat_with_ai(full_prompt)
+
+            # 呼叫 AI；失敗時不得將錯誤訊息寫入任何歷史紀錄。
+            try:
+                result = chat_with_ai(full_prompt)
+            except Exception as e:
+                print(f"[LineHandler] AI call failed, skip history write: {e}")
+                return "伺服器繁忙，請稍後再試。"
+
             print(f"[LineHandler] AI result: {result[:100]}...")
 
             # 儲存 Bot 回覆到 SQLite；失敗不阻斷 LINE 回覆。
@@ -227,10 +233,11 @@ class LineHandler:
         print(f"[LineHandler] Image saved to: {image_path}")
         
         try:
-            # 分析圖片
+            # 分析圖片；失敗時不得將錯誤訊息寫入歷史紀錄。
             result = analyze_image(image_path)
-            self._save_db_model_response(user_id, result, 'text')
-            return result
+        except Exception as e:
+            print(f"[LineHandler] Image analysis failed, skip history write: {e}")
+            return "圖片分析失敗，請稍後再試。"
         finally:
             # 清理暫存圖片
             try:
@@ -238,6 +245,10 @@ class LineHandler:
                 print(f"[LineHandler] Cleaned up temp image: {image_path}")
             except Exception as e:
                 print(f"[LineHandler] Warning: Failed to cleanup temp image: {e}")
+
+        # 僅在分析成功時寫入 SQLite
+        self._save_db_model_response(user_id, result, 'text')
+        return result
     
     def _download_image(self, message_id: str) -> str:
         """

@@ -1,0 +1,147 @@
+"""驗證 AITextService 的 MODEL_LIST fallback / 重試 / markfail 冷卻邏輯（模擬 503/429）。
+
+執行：python3 tools/test_fallback.py
+"""
+import importlib.util
+import os
+import sys
+import time
+from types import SimpleNamespace
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+
+# 直接載入 ai_text 模組，避開 services/__init__ 對 apscheduler 等環境相依的匯入
+_spec = importlib.util.spec_from_file_location(
+    "ai_text", os.path.join(ROOT, "services", "ai_text.py")
+)
+ai_text = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(ai_text)
+AITextService = ai_text.AITextService
+
+# 不真正等待退避
+ai_text.time = SimpleNamespace(monotonic=time.monotonic, sleep=lambda *_: None)
+
+
+class Fake503(Exception):
+    code = 503
+
+
+class Fake429(Exception):
+    code = 429
+
+
+class Fake400(Exception):
+    code = 400
+
+
+def make_service(behavior):
+    """behavior: model -> Exception（拋出）或 (text,)（成功回應）"""
+    svc = AITextService()
+    calls = []
+
+    def fake_generate(model, contents=None, config=None):
+        calls.append(model)
+        outcome = behavior[model]
+        if isinstance(outcome, Exception):
+            raise outcome
+        return SimpleNamespace(text=outcome[0])
+
+    svc._get_client = lambda: SimpleNamespace(
+        models=SimpleNamespace(generate_content=fake_generate)
+    )
+    return svc, calls
+
+
+def run_case(name, fn):
+    try:
+        fn()
+        print(f"PASS  {name}")
+        return True
+    except AssertionError as e:
+        print(f"FAIL  {name}: {e}")
+        return False
+
+
+results = []
+
+# 1. 主力模型 503 -> fallback 到下一個候選（先重試 2 次）
+def t1():
+    svc, calls = make_service({
+        "gemini-flash-latest": Fake503(),
+        "gemini-2.5-flash": ("hello",),
+    })
+    assert svc.chat("hi") == "hello"
+    assert calls[-1] == "gemini-2.5-flash", calls
+    assert calls.count("gemini-flash-latest") == 3, calls
+
+
+results.append(run_case("fallback on 503", t1))
+
+# 2. 503 先重試 2 次（共 3 次嘗試）才降級
+def t2():
+    svc, calls = make_service({
+        "gemini-flash-latest": Fake503(),
+        "gemini-2.5-flash": ("hello",),
+    })
+    svc.chat("hi")
+    assert calls == ["gemini-flash-latest"] * 3 + ["gemini-2.5-flash"], calls
+
+
+results.append(run_case("retry twice before fallback", t2))
+
+# 3. markfail=True 失敗後標記，冷卻期內後續請求直接跳過
+def t3():
+    svc, calls = make_service({
+        "gemini-flash-latest": Fake503(),
+        "gemini-2.5-flash": ("hello",),
+    })
+    svc.chat("hi")
+    assert "gemini-flash-latest" in svc._failed_marks
+    calls.clear()
+    svc.chat("hi")
+    assert calls == ["gemini-2.5-flash"], calls
+
+
+results.append(run_case("markfail cooldown skip", t3))
+
+# 4. 全鏈失敗 -> RuntimeError；markfail=False 者不被標記
+def t4():
+    behavior = {c["model"]: Fake503() for c in ai_text.MODEL_LIST}
+    svc, _ = make_service(behavior)
+    try:
+        svc.chat("hi")
+        raise AssertionError("should raise RuntimeError")
+    except RuntimeError:
+        pass
+    assert list(svc._failed_marks) == ["gemini-flash-latest"], svc._failed_marks
+
+
+results.append(run_case("all-fail raises RuntimeError; only markfail=True marked", t4))
+
+# 5. 429 同樣可重試
+def t5():
+    svc, calls = make_service({
+        "gemini-flash-latest": Fake429(),
+        "gemini-2.5-flash": ("hello",),
+    })
+    assert svc.chat("hi") == "hello"
+    assert calls == ["gemini-flash-latest"] * 3 + ["gemini-2.5-flash"], calls
+
+
+results.append(run_case("429 is retryable", t5))
+
+# 6. 不可重試錯誤（如 400）不重試，直接換候選
+def t6():
+    svc, calls = make_service({
+        "gemini-flash-latest": Fake400(),
+        "gemini-2.5-flash": ("hello",),
+    })
+    assert svc.chat("hi") == "hello"
+    assert calls == ["gemini-flash-latest", "gemini-2.5-flash"], calls
+
+
+results.append(run_case("non-retryable skips retry", t6))
+
+print(f"\n{sum(results)}/{len(results)} passed")
+sys.exit(0 if all(results) else 1)
