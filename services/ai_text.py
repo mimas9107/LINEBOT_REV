@@ -63,7 +63,7 @@ class AITextService:
                 temperature=1.0,
                 top_p=0.95,
                 top_k=40,
-                max_output_tokens=8192,
+                max_output_tokens=4096,
             )
         )
         return response.text
@@ -137,7 +137,7 @@ class AITextService:
                 temperature=1.0,
                 top_p=0.95,
                 top_k=40,
-                max_output_tokens=8192,
+                max_output_tokens=4096,
             )
         )
         
