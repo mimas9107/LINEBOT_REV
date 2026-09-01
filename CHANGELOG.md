@@ -17,6 +17,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 - Per-request message-id correlation for traceable logs: new `services/logctx.py` holds the current `msgid` in a `threading.local`; `LineHandler` sets it at the start of each event, and `[LineHandler]` / `[AITextService]` / `[AIImageService]` log lines now carry `msgid=<id>`. A single message's full lifecycle (receive → model retry chain → reply) is now extractable with `rg "msgid="`, removing the need to eyeball microsecond timestamps when diagnosing which reply answered which question.
 ### Notes
 - Logging-only change; the reply path is unchanged (still synchronous `reply_message`, no `push_message`/free-tier 500/month quota risk). Patch release on `main`, following the even-MAJOR versioning policy.
+- Render Start Command is now version-controlled: `Procfile` is the single source of truth (`web: gunicorn app:app --timeout 300 --worker 1`), documented in `DEPLOYMENT.md`. `--worker 1` is intentional (single-process keepalive/reminder design); Render dashboard's Start Command should mirror the `Procfile` exactly.
 
 ## [2.3.3] - 2026-09-01
 ### Added

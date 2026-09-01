@@ -1,16 +1,16 @@
 ---
 name:          "DEPLOYMENT.md"
-description:   "Complete deployment guide for LINEBOT rev2.2"
+description:   "Complete deployment guide for LINEBOT rev2.3.4"
 created_date:  "2026/07/02"
-modified_date: "2026/07/03 10:21:24"
-project_version: "2.2.0"
-document_version: "1.1.0"
-agent_sign: ['gemini cli/current_agent', 'codex/current_agent']
+modified_date: "2026/09/01 14:00:00"
+project_version: "2.3.4"
+document_version: "1.2.0"
+agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
-# LINEBOT rev2.2 完整部署指南
+# LINEBOT rev2.3.4 完整部署指南
 
-> 本文檔說明如何從零開始部署 LINEBOT rev2.2，包含 Google Sheets/GAS、SQLite 對話歷史與 Render.com 部署。
+> 本文檔說明如何從零開始部署 LINEBOT rev2.3.4，包含 Google Sheets/GAS、SQLite 對話歷史與 Render.com 部署。
 
 ---
 
@@ -275,7 +275,7 @@ python app.py
 ```bash
 git init
 git add .
-git commit -m "Initial LINEBOT rev2.2 deployment"
+git commit -m "Initial LINEBOT rev2.3.4 deployment"
 git remote add origin <your-github-repo-url>
 git push -u origin main
 ```
@@ -295,8 +295,10 @@ git push -u origin main
 | Root Directory | 留空（如果在子目錄則填 `LINEBOT_REV`） |
 | Runtime | Python 3 |
 | Build Command | `pip install -r requirements.txt` |
-| Start Command | `gunicorn app:app` |
+| Start Command | `gunicorn app:app --timeout 300 --worker 1` |
 | Instance Type | Free（免費方案）或 Starter |
+
+> **Start Command 與 Procfile**：`Procfile`（`web: gunicorn app:app --timeout 300 --worker 1`）是版本受控的單一事實來源，Render 儀表板的 **Start Command** 應與其完全一致（目前兩處皆為 `gunicorn app:app --timeout 300 --worker 1`）。`--worker 1` 等於 gunicorn 預設（single worker），是刻意設定：keepalive/提醒排程皆為單 process 設計。請注意儀表板 Start Command 會覆蓋 `Procfile`；若需變更啟動參數，請同時更新兩處。
 
 ### 步驟 5.3：設定環境變數
 
