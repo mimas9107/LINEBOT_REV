@@ -29,6 +29,9 @@ class AITextService:
     FAIL_COOLDOWN = 600   # markfail=True 的模型失敗後的冷卻秒數
     RETRYABLE_CODES = (503, 429)
 
+    # 所有候選模型統一使用的系統指令：確保每個 fallback 模型都用繁體中文回應。
+    SYSTEM_INSTRUCTION = "你是 LINE 的 AI 助理。一律使用繁體中文（台灣繁體字）回應使用者。"
+
     def __init__(self):
         self._client = None
         self._failed_marks = {}  # model -> 失敗時間（time.monotonic）
@@ -61,6 +64,7 @@ class AITextService:
         response = self._generate(
             contents=prompt,
             gen_config=types.GenerateContentConfig(
+                system_instruction=self.SYSTEM_INSTRUCTION,
                 temperature=1.0,
                 top_p=0.95,
                 top_k=40,
@@ -136,6 +140,7 @@ class AITextService:
             model=config.GEMINI_MODEL,
             history=chat_history,
             config=types.GenerateContentConfig(
+                system_instruction=self.SYSTEM_INSTRUCTION,
                 temperature=1.0,
                 top_p=0.95,
                 top_k=40,
