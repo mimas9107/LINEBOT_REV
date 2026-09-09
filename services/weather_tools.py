@@ -1,6 +1,6 @@
 """
 Weather Tools Module
-版本: rev2.4.3
+版本: rev2.4.4
 4 支 stateless handler，提供天氣查詢功能給 Gemini Function Calling
 """
 
@@ -169,7 +169,10 @@ def _get_tdx_token() -> Optional[str]:
 
 
 def get_rain_probability(location: str, start_date: str = None, end_date: str = None):
-    """查詢指定縣市的12小時降雨機率預報（最多7日）。
+    """查詢指定縣市所有鄉鎮的12小時降雨機率預報（最多7日）。
+
+    CWA v1 datastore 對 F-D0047 系列不支援 locationName/elementName 篩選，
+    因此以 dataset_id 圈定縣市後抓取全資料集，再在本端解析各鄉鎮。
 
     Args:
         location: 縣市名稱（支援正體、別名、簡稱，如「宜蘭」「宜蘭縣」「臺北市」）
@@ -185,34 +188,43 @@ def get_rain_probability(location: str, start_date: str = None, end_date: str = 
     try:
         resp = requests.get(
             f"{CWA_API_URL}/{dataset_id}",
-            params={"Authorization": api_key, "format": "JSON", "locationName": resolved_name, "elementName": "12小時降雨機率"},
+            params={"Authorization": api_key, "format": "JSON"},
             timeout=DEFAULT_TIMEOUT,
         )
         if resp.status_code == 401:
-            return {"error": "CWA API Key invalid"}
+            return {"error": f"CWA API Key invalid（dataset {dataset_id}）"}
         resp.raise_for_status()
         data = resp.json()
         locations = data.get("records", {}).get("Locations", [])
         if not locations:
-            return {"error": f"Location not found: {resolved_name}"}
-        weather_elements = locations[0].get("Location", [{}])[0].get("WeatherElement", [])
-        pop_elements = [el for el in weather_elements if el.get("ElementName") == "12小時降雨機率"]
-        if not pop_elements:
-            return {"error": "No rain probability data"}
-        results = []
+            return {"error": f"Location not found: {resolved_name} ({dataset_id})"}
         from datetime import datetime
-        for entry in pop_elements[0].get("Time", []):
-            time_str = entry.get("StartTime") or entry.get("DataTime")
-            dt = datetime.fromisoformat(time_str)
-            date_str = dt.strftime("%Y-%m-%d")
-            if start_date and date_str < start_date:
-                continue
-            if end_date and date_str > end_date:
-                continue
-            val_dict = entry.get("ElementValue", [{}])[0]
-            val = list(val_dict.values())[0] if val_dict else "0"
-            results.append({"date": date_str, "time": dt.strftime("%H:%M"), "pop": val})
-        return {"location": resolved_name, "data": results}
+        townships = {}
+        for loc in locations:
+            for l in loc.get("Location", []):
+                tname = l.get("LocationName", "")
+                pop_els = [el for el in l.get("WeatherElement", []) if el.get("ElementName") == "12小時降雨機率"]
+                if not pop_els:
+                    continue
+                entries = []
+                for entry in pop_els[0].get("Time", []):
+                    time_str = entry.get("StartTime") or entry.get("DataTime")
+                    if not time_str:
+                        continue
+                    dt = datetime.fromisoformat(time_str)
+                    date_str = dt.strftime("%Y-%m-%d")
+                    if start_date and date_str < start_date:
+                        continue
+                    if end_date and date_str > end_date:
+                        continue
+                    val_dict = entry.get("ElementValue", [{}])[0]
+                    val = list(val_dict.values())[0] if val_dict else "0"
+                    entries.append({"date": date_str, "time": dt.strftime("%H:%M"), "pop": val})
+                if entries:
+                    townships[tname] = entries
+        if not townships:
+            return {"error": "No rain probability data"}
+        return {"location": resolved_name, "dataset_id": dataset_id, "townships": townships}
     except Exception as e:
         return {"error": str(e)}
 

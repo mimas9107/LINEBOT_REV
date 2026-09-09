@@ -1,6 +1,6 @@
 """
 Weather Plugin
-版本: rev2.4.3
+版本: rev2.4.4
 天氣查詢功能模組，提供 Gemini Function Calling 使用
 """
 
@@ -17,7 +17,7 @@ TOOLS = [
     {
         "schema": {
             "name": "get_rain_probability",
-            "description": "查詢台灣任一縣市的12小時降雨機率預報（最多7日）。支援正體全名、別名、簡稱，如「宜蘭」「宜蘭縣」「臺北市」「台北」。",
+            "description": "查詢台灣任一縣市所有鄉鎮的12小時降雨機率預報（最多7日）。回傳每個鄉鎮的機率分時段資料。支援正體全名、別名、簡稱，如「宜蘭」「宜蘭縣」「臺北市」「台北」「台中」。「宜蘭縣」包含宜蘭市、羅東鎮、蘇澳鎮、頭城鎮、礁溪鄉等鄉鎮結果。",
             "parameters": {
                 "type": "object",
                 "properties": {

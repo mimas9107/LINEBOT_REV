@@ -3,12 +3,22 @@ name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/09/10 00:35:00"
-project_version: "2.4.3"
+project_version: "2.4.4"
 document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.4] - 2026-09-10
+### Fixed
+- History replies had no plugin tools: `_chat_with_history` used `client.chats.create()/send_message()` without `tools=`, so any follow-up turn (2nd message onward) could never call weather tools and the model answered from context ("無法取得…"). `chat()` is now unified into a single contents-based path (`_convert_history_to_contents` + prompt + `_generate` with tools + `_auto_handle_tool_calls`), which also gives history turns the `MODEL_LIST` fallback that the chats API path lacked.
+- `get_rain_probability` now parses the whole county: CWA v1 datastore ignores `locationName`/`elementName` filters for F-D0047 series (verified against live API), so the tool now returns every township's 12hr PoP series (`{location, dataset_id, townships}`) instead of silently using the first township. This is why earlier replies could be misinformed or empty-looking.
+### Changed
+- `_auto_handle_tool_calls` now logs each round, received function call names/args, and handler results (or errors) — previously the tool loop was silent, making it impossible to tell from logs whether a plugin actually ran and what it returned.
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
+- Live-API verification confirmed the handler returns real data locally; the Render-side "無法取得" is now diagnosable via the added tool logs (likely a Render-only CWA key/network issue).
 
 ## [2.4.3] - 2026-09-10
 ### Fixed

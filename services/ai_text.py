@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.4.3
+版本: rev2.4.4
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.4.4: 統一 chat() 路徑（歷史對話也掛 tools + MODEL_LIST fallback）、tool loop 增加完整 log（收到的 call/args 與 handler 結果）
 - rev2.4.2: 修正追問 turn 鏈接：維護 contents，依序 append 模型 function_call turn 與 function_response turn（缺 model turn 會被 API 400 拒收）
 - rev2.4.1: 修正 tools 傳入格式：schema dict 轉 types.Tool/FunctionDeclaration（直接傳 dict 會被 Pydantic 拒收）
 - rev2.4.0: 接入插件系統（TOOLS/DISPATCH），新增 _auto_handle_tool_calls 迴圈（rounds/calls/seconds 三上限）
@@ -16,6 +17,7 @@ AI Text Service Module
 - rev2.1.1: 修正歷史對話角色判斷邏輯，userId="bot" 識別為 model 角色
 """
 
+import json
 import time
 
 from google import genai
@@ -80,7 +82,7 @@ class AITextService:
     
     def chat(self, prompt: str, history: list[dict] = None) -> str:
         """
-        發送訊息給 Gemini 並取得回應
+        發送訊息給 Gemini 並取得回應（含歷史對話與插件工具呼叫）
 
         失敗時拋出例外（不再回傳錯誤字串）；呼叫端不得將例外訊息寫入對話歷史。
 
@@ -91,15 +93,10 @@ class AITextService:
         Returns:
             AI 回應的文字
         """
-        client = self._get_client()
-
-        # 如果有歷史對話，使用 chats API
-        if history:
-            return self._chat_with_history(client, prompt, history)
-
-        contents = [
+        contents = self._convert_history_to_contents(history)
+        contents.append(
             types.Content(role="user", parts=[types.Part.from_text(text=prompt)])
-        ]
+        )
         response = self._generate(
             contents=contents,
             gen_config=types.GenerateContentConfig(
@@ -140,6 +137,8 @@ class AITextService:
             if time.monotonic() - start_time > self.MAX_REQUEST_SECONDS:
                 break
 
+            print(f"[AITextService] {prefix()}tool round {rounds}: {len(calls)} call(s)")
+
             try:
                 model_turn = response.candidates[0].content
             except (AttributeError, IndexError):
@@ -151,6 +150,7 @@ class AITextService:
                 name = call.name
                 args = dict(call.args) if call.args else {}
                 if name not in DISPATCH:
+                    print(f"[AITextService] {prefix()}unknown tool: {name}")
                     function_responses.append(types.Part.from_function_response(
                         name=name,
                         response={"error": f"Unknown tool: {name}"}
@@ -159,11 +159,16 @@ class AITextService:
                 handler = DISPATCH[name]
                 try:
                     result = handler(**args)
+                    preview = json.dumps(result, ensure_ascii=False)
+                    if len(preview) > 400:
+                        preview = preview[:400] + "...(truncated)"
+                    print(f"[AITextService] {prefix()}tool {name}{args} -> {preview}")
                     function_responses.append(types.Part.from_function_response(
                         name=name,
                         response={"result": result}
                     ))
                 except Exception as e:
+                    print(f"[AITextService] {prefix()}tool {name}{args} ERROR: {e}")
                     function_responses.append(types.Part.from_function_response(
                         name=name,
                         response={"error": str(e)}
@@ -238,39 +243,7 @@ class AITextService:
     def _is_retryable(error: Exception) -> bool:
         """僅 503 UNAVAILABLE / 429 RATE_LIMIT 視為可重試。"""
         return getattr(error, "code", None) in AITextService.RETRYABLE_CODES
-    
-    def _chat_with_history(self, client: genai.Client, prompt: str, history: list[dict]) -> str:
-        """
-        帶有歷史對話的聊天
-        
-        Args:
-            client: Gemini Client
-            prompt: 當前使用者訊息
-            history: 歷史對話記錄
-        
-        Returns:
-            AI 回應
-        """
-        # 將歷史對話轉換為 SDK 格式
-        chat_history = self._convert_history_to_contents(history)
-        
-        # 建立 chat session
-        chat = client.chats.create(
-            model=config.GEMINI_MODEL,
-            history=chat_history,
-            config=types.GenerateContentConfig(
-                system_instruction=self.SYSTEM_INSTRUCTION,
-                temperature=1.0,
-                top_p=0.95,
-                top_k=40,
-                max_output_tokens=4096,
-            )
-        )
-        
-        # 發送訊息
-        response = chat.send_message(prompt)
-        return response.text
-    
+
     def _convert_history_to_contents(self, history: list[dict]) -> list[types.Content]:
         """
         將自訂歷史格式轉換為 SDK Content 格式
