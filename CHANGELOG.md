@@ -3,12 +3,24 @@ name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/09/10 00:35:00"
-project_version: "2.4.4"
+project_version: "2.4.5"
 document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.5] - 2026-09-10
+### Fixed
+- CWA/TDX calls failed on Render with `SSLCertVerificationError: Missing Subject Key Identifier` (the local cert store works, Render's does not). `weather_tools.py` now routes every external GET/POST through `_http_get`/`_http_post`, which attempt full SSL verification first and only fall back to `verify=False` when the environment's cert store rejects the chain, so local setups keep verification and Render can fetch data.
+- API keys were leaked: the URL in `requests` exception messages (with the raw `Authorization=CWB-...` query param) was passed verbatim into the tool log *and into the Gemini model context*. Errors are now sanitized by `_sanitize_error()` in `weather_tools.py` and a matching regex in `ai_text.py`, redacting the `Authorization` value before it hits logs or the model.
+### Changed
+- Same-name TLS-safety helpers applied to TDX token fetch (`_http_post`) and CCTV fetch (`_http_get`), inherited by all count-level weather/cctv tools.
+### Verified
+- Live API: 宜蘭 → 12 townships, 新北市 → 29 townships (`F-D0047-071`), both returning full 12hr PoP series; sanitizer confirmed to strip `Authorization` from exception text.
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
+- The Render-side failure was confirmed via the rev2.4.4 tool logs (`tool get_rain_probability{...} -> {"error": "...SSLError..."}`) — the added observability turned an unverifiable "無法取得" into an exact, fixable diagnosis.
 
 ## [2.4.4] - 2026-09-10
 ### Fixed

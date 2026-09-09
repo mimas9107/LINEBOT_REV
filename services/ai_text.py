@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.4.4
+版本: rev2.4.5
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.4.5: 錯誤 log/回應再過濾 Authorization 參數（防金鑰外洩）；工具例外訊息不帶原始 URL
 - rev2.4.4: 統一 chat() 路徑（歷史對話也掛 tools + MODEL_LIST fallback）、tool loop 增加完整 log（收到的 call/args 與 handler 結果）
 - rev2.4.2: 修正追問 turn 鏈接：維護 contents，依序 append 模型 function_call turn 與 function_response turn（缺 model turn 會被 API 400 拒收）
 - rev2.4.1: 修正 tools 傳入格式：schema dict 轉 types.Tool/FunctionDeclaration（直接傳 dict 會被 Pydantic 拒收）
@@ -18,6 +19,7 @@ AI Text Service Module
 """
 
 import json
+import re
 import time
 
 from google import genai
@@ -168,10 +170,11 @@ class AITextService:
                         response={"result": result}
                     ))
                 except Exception as e:
-                    print(f"[AITextService] {prefix()}tool {name}{args} ERROR: {e}")
+                    err = re.sub(r"(?i)(authorization=)[^&\"'\s]+", r"\1***", str(e))
+                    print(f"[AITextService] {prefix()}tool {name}{args} ERROR: {err}")
                     function_responses.append(types.Part.from_function_response(
                         name=name,
-                        response={"error": str(e)}
+                        response={"error": err}
                     ))
 
             contents.append(types.Content(role="user", parts=function_responses))

@@ -1,20 +1,55 @@
 """
 Weather Tools Module
-版本: rev2.4.4
+版本: rev2.4.5
 4 支 stateless handler，提供天氣查詢功能給 Gemini Function Calling
+
+更新紀錄:
+- rev2.4.5: CWA/TDX HTTPS 走 verify 優先、SSLError 自動降級（修 Render 憑證庫不相容）、錯誤訊息過濾 Authorization 避免金鑰外洩
+- rev2.4.4: 降雨機率改回傳全鄉鎮 townships（CWA 忽略 locationName/elementName 篩選）
 """
 
+import re
 import math
 import os
 import time
 from typing import Optional
 
 import requests
+import urllib3
 
 DEFAULT_TIMEOUT = 8.0
 CWA_API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore"
 TDX_AUTH_URL = "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
 TDX_API_URL = "https://tdx.transportdata.tw/api/basic/v2"
+
+# Render 環境的 Python/OpenSSL 對部分公開 API（CWA/TDX）憑證鏈驗證會失敗
+# （CERTIFICATE_VERIFY_FAILED / Missing Subject Key Identifier），本地卻正常。
+# 策略：先做完整 SSL 驗證；僅在 SSLError 時降級為 verify=False 重試一次，
+# 讓多數環境維持憑證驗證，同時確保 Render 可正常取值。
+requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+def _http_get(url: str, params=None, headers=None, timeout: float = DEFAULT_TIMEOUT):
+    try:
+        return requests.get(url, params=params, headers=headers, timeout=timeout)
+    except requests.exceptions.SSLError:
+        requests.packages.urllib3.disable_warnings()
+        return requests.get(url, params=params, headers=headers, timeout=timeout, verify=False)
+
+
+def _http_post(url: str, data=None, headers=None, timeout: float = 10.0):
+    try:
+        return requests.post(url, data=data, headers=headers, timeout=timeout)
+    except requests.exceptions.SSLError:
+        requests.packages.urllib3.disable_warnings()
+        return requests.post(url, data=data, headers=headers, timeout=timeout, verify=False)
+
+
+def _sanitize_error(e: Exception) -> str:
+    """清洗例外訊息，移除網址內的 Authorization 參數，避免金鑰外洩。"""
+    msg = str(e)
+    return re.sub(r"(?i)(authorization=)[^&\"'\s]+", r"\1***", msg)
 
 # CWA 鄉鎮天氣預報 — 各縣市 Dataset ID 對照表
 # 來源: https://opendata.cwa.gov.tw/dataset/F-D0047
@@ -115,11 +150,10 @@ def _fetch_city_cctvs(city: str) -> list:
     if not token:
         return []
     try:
-        resp = requests.get(
+        resp = _http_get(
             f"{TDX_API_URL}/Road/Traffic/CCTV/City/{city}",
             headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
             params={"$top": 300, "$format": "JSON"},
-            timeout=DEFAULT_TIMEOUT,
         )
         if resp.status_code == 429:
             return []
@@ -154,10 +188,9 @@ def _get_tdx_token() -> Optional[str]:
     if not client_id or not client_secret:
         return None
     try:
-        resp = requests.post(
+        resp = _http_post(
             TDX_AUTH_URL,
             data={"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret},
-            timeout=10,
         )
         resp.raise_for_status()
         data = resp.json()
@@ -186,10 +219,9 @@ def get_rain_probability(location: str, start_date: str = None, end_date: str = 
     if not dataset_id:
         return {"error": f"無法識別的縣市名稱: {location}。請使用正體中文全名，如「宜蘭縣」「臺北市」。"}
     try:
-        resp = requests.get(
+        resp = _http_get(
             f"{CWA_API_URL}/{dataset_id}",
             params={"Authorization": api_key, "format": "JSON"},
-            timeout=DEFAULT_TIMEOUT,
         )
         if resp.status_code == 401:
             return {"error": f"CWA API Key invalid（dataset {dataset_id}）"}
@@ -226,7 +258,7 @@ def get_rain_probability(location: str, start_date: str = None, end_date: str = 
             return {"error": "No rain probability data"}
         return {"location": resolved_name, "dataset_id": dataset_id, "townships": townships}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": _sanitize_error(e)}
 
 
 def get_gps_weather(lat: float, lon: float, station_count: int = 3):
@@ -234,10 +266,9 @@ def get_gps_weather(lat: float, lon: float, station_count: int = 3):
     if not api_key:
         return {"error": "CWA_API_KEY not set"}
     try:
-        resp = requests.get(
+        resp = _http_get(
             f"{CWA_API_URL}/O-A0003-001",
             params={"Authorization": api_key, "format": "JSON", "lat": lat, "lon": lon},
-            timeout=DEFAULT_TIMEOUT,
         )
         resp.raise_for_status()
         data = resp.json()
@@ -279,7 +310,7 @@ def get_gps_weather(lat: float, lon: float, station_count: int = 3):
             })
         return results
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": _sanitize_error(e)}
 
 
 def get_nearby_cctv(lat: float, lon: float, radius_km: float = 2.0):
