@@ -1,6 +1,6 @@
 """
 Weather Tools Module
-版本: rev2.4.2
+版本: rev2.4.3
 4 支 stateless handler，提供天氣查詢功能給 Gemini Function Calling
 """
 
@@ -15,6 +15,58 @@ DEFAULT_TIMEOUT = 8.0
 CWA_API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore"
 TDX_AUTH_URL = "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
 TDX_API_URL = "https://tdx.transportdata.tw/api/basic/v2"
+
+# CWA 鄉鎮天氣預報 — 各縣市 Dataset ID 對照表
+# 來源: https://opendata.cwa.gov.tw/dataset/F-D0047
+CITY_DATASET_MAP = {
+    "宜蘭縣": "F-D0047-003", "桃園市": "F-D0047-007", "新竹縣": "F-D0047-011",
+    "苗栗縣": "F-D0047-015", "彰化縣": "F-D0047-019", "南投縣": "F-D0047-023",
+    "雲林縣": "F-D0047-027", "嘉義縣": "F-D0047-031", "屏東縣": "F-D0047-035",
+    "臺東縣": "F-D0047-039", "花蓮縣": "F-D0047-043", "澎湖縣": "F-D0047-047",
+    "基隆市": "F-D0047-051", "新竹市": "F-D0047-055", "嘉義市": "F-D0047-059",
+    "臺北市": "F-D0047-063", "高雄市": "F-D0047-067", "新北市": "F-D0047-071",
+    "臺中市": "F-D0047-075", "臺南市": "F-D0047-079", "連江縣": "F-D0047-083",
+    "金門縣": "F-D0047-087",
+}
+
+# 常見別名 → 正式縣市名（正體字「臺」）
+_CITY_ALIASES = {
+    "宜蘭": "宜蘭縣", "桃園": "桃園市", "新竹": "新竹縣",
+    "苗栗": "苗栗縣", "彰化": "彰化縣", "南投": "南投縣",
+    "雲林": "雲林縣", "嘉義": "嘉義縣", "屏東": "屏東縣",
+    "臺東": "臺東縣", "台東": "臺東縣",
+    "花蓮": "花蓮縣", "澎湖": "澎湖縣", "基隆": "基隆市",
+    "新竹市": "新竹市", "嘉義市": "嘉義市",
+    "臺北": "臺北市", "台北": "臺北市", "北市": "臺北市",
+    "高雄": "高雄市", "高市": "高雄市",
+    "新北": "新北市", "新北市": "新北市",
+    "臺中": "臺中市", "台中": "臺中市", "中市": "臺中市",
+    "臺南": "臺南市", "台南": "臺南市", "南市": "臺南市",
+    "連江": "連江縣", "金門": "金門縣",
+}
+
+
+def _resolve_dataset_id(location: str) -> tuple[str, str]:
+    """從 location 字串解析出 (正式縣市名, dataset_id)。
+
+    支援完整名稱（宜蘭縣）、別名（宜蘭）、
+    以及去除「縣」「市」後綴的模糊匹配。
+    回傳 (resolved_name, dataset_id) 或 ("", "")。
+    """
+    # 1. 完全匹配
+    if location in CITY_DATASET_MAP:
+        return location, CITY_DATASET_MAP[location]
+    # 2. 別名匹配
+    if location in _CITY_ALIASES:
+        full = _CITY_ALIASES[location]
+        return full, CITY_DATASET_MAP[full]
+    # 3. 去掉「縣」「市」後綴再匹配
+    for suffix in ("縣", "市"):
+        stripped = location.rstrip(suffix)
+        if stripped in _CITY_ALIASES:
+            full = _CITY_ALIASES[stripped]
+            return full, CITY_DATASET_MAP[full]
+    return "", ""
 
 # 縣市對應表（用於從 GPS 推測縣市）
 CITY_COORDS = {
@@ -116,14 +168,24 @@ def _get_tdx_token() -> Optional[str]:
         return None
 
 
-def get_rain_probability(location: str, dataset_id: str = "F-D0047-091", start_date: str = None, end_date: str = None):
+def get_rain_probability(location: str, start_date: str = None, end_date: str = None):
+    """查詢指定縣市的12小時降雨機率預報（最多7日）。
+
+    Args:
+        location: 縣市名稱（支援正體、別名、簡稱，如「宜蘭」「宜蘭縣」「臺北市」）
+        start_date: 起始日期 YYYY-MM-DD（選填）
+        end_date: 結束日期 YYYY-MM-DD（選填）
+    """
     api_key = os.getenv("CWA_API_KEY", "")
     if not api_key:
         return {"error": "CWA_API_KEY not set"}
+    resolved_name, dataset_id = _resolve_dataset_id(location)
+    if not dataset_id:
+        return {"error": f"無法識別的縣市名稱: {location}。請使用正體中文全名，如「宜蘭縣」「臺北市」。"}
     try:
         resp = requests.get(
             f"{CWA_API_URL}/{dataset_id}",
-            params={"Authorization": api_key, "format": "JSON", "locationName": location, "elementName": "12小時降雨機率"},
+            params={"Authorization": api_key, "format": "JSON", "locationName": resolved_name, "elementName": "12小時降雨機率"},
             timeout=DEFAULT_TIMEOUT,
         )
         if resp.status_code == 401:
@@ -132,7 +194,7 @@ def get_rain_probability(location: str, dataset_id: str = "F-D0047-091", start_d
         data = resp.json()
         locations = data.get("records", {}).get("Locations", [])
         if not locations:
-            return {"error": f"Location not found: {location}"}
+            return {"error": f"Location not found: {resolved_name}"}
         weather_elements = locations[0].get("Location", [{}])[0].get("WeatherElement", [])
         pop_elements = [el for el in weather_elements if el.get("ElementName") == "12小時降雨機率"]
         if not pop_elements:
@@ -150,7 +212,7 @@ def get_rain_probability(location: str, dataset_id: str = "F-D0047-091", start_d
             val_dict = entry.get("ElementValue", [{}])[0]
             val = list(val_dict.values())[0] if val_dict else "0"
             results.append({"date": date_str, "time": dt.strftime("%H:%M"), "pop": val})
-        return results
+        return {"location": resolved_name, "data": results}
     except Exception as e:
         return {"error": str(e)}
 

@@ -1,6 +1,6 @@
 """
 Weather Plugin
-版本: rev2.4.2
+版本: rev2.4.3
 天氣查詢功能模組，提供 Gemini Function Calling 使用
 """
 
@@ -17,12 +17,11 @@ TOOLS = [
     {
         "schema": {
             "name": "get_rain_probability",
-            "description": "獲取指定縣市的 12 小時降雨機率預報",
+            "description": "查詢台灣任一縣市的12小時降雨機率預報（最多7日）。支援正體全名、別名、簡稱，如「宜蘭」「宜蘭縣」「臺北市」「台北」。",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "location": {"type": "string", "description": "縣市名稱（正體字，如：臺南市）"},
-                    "dataset_id": {"type": "string", "description": "CWA 資料集 ID（選填，預設 F-D0047-091）"},
+                    "location": {"type": "string", "description": "縣市名稱，如「宜蘭縣」「臺北市」「高雄」「台中」"},
                     "start_date": {"type": "string", "description": "起始日期 YYYY-MM-DD（選填）"},
                     "end_date": {"type": "string", "description": "結束日期 YYYY-MM-DD（選填）"},
                 },

@@ -3,12 +3,18 @@ name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/09/10 00:35:00"
-project_version: "2.4.2"
+project_version: "2.4.3"
 document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.3] - 2026-09-10
+### Fixed
+- `get_rain_probability` hardcoded a wrong default dataset id (`F-D0047-091`, absent from CWA city mapping) and relied on the LLM passing the correct per-city dataset id it had no way to know. Now the tool auto-resolves the dataset id from the city name via the full 22-county `CITY_DATASET_MAP` (e.g. 宜蘭/宜蘭縣 → `F-D0047-003`, 台北/臺北市 → `F-D0047-063`); accepts full names, aliases and short forms. `dataset_id` parameter removed from the tool schema; return value now includes the resolved `location`.
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.4.2] - 2026-09-10
 ### Fixed

@@ -1,6 +1,6 @@
 """
 LINEBOT Configuration Module
-版本: rev2.4.2
+版本: rev2.4.3
 統一管理所有環境變數與設定
 
 更新紀錄:
