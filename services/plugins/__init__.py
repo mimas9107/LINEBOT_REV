@@ -1,6 +1,6 @@
 """
 Plugin System Infrastructure
-版本: rev2.4.0
+版本: rev2.4.1
 掃描 services/plugins/ 目錄下的插件模組，依 ENABLED_PLUGINS 白名單載入
 """
 

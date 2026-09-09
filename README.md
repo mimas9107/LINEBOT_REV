@@ -1,10 +1,10 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.4.0"
+description:   "Main documentation for LINEBOT rev2.4.1"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:15:00"
-project_version: "2.4.0"
-document_version: "1.3.1"
+modified_date: "2026/09/10 00:25:00"
+project_version: "2.4.1"
+document_version: "1.3.2"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.4.0
+- **版本**: 2.4.1
 - **更新日期**: 2026-09-10
-- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）、Gemini Function Calling 三上限保護
+- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）、Gemini Function Calling 三上限保護；修正 tools 須為 SDK Tool 物件（dict 直傳會被 Pydantic 拒收）
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 

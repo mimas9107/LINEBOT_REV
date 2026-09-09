@@ -1,6 +1,6 @@
 """
 AI Image Service Module
-版本: rev2.4.0
+版本: rev2.4.1
 處理 Gemini 圖片辨識功能
 
 更新紀錄:

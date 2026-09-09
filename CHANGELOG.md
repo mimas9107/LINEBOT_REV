@@ -2,13 +2,19 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:15:00"
-project_version: "2.4.0"
-document_version: "1.4.1"
+modified_date: "2026/09/10 00:25:00"
+project_version: "2.4.1"
+document_version: "1.4.2"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.1] - 2026-09-10
+### Fixed
+- `GenerateContentConfig(tools=...)` validation error (`Extra inputs are not permitted` on name/description/parameters): plugin schemas are plain dicts, but the google-genai SDK requires `types.Tool(function_declarations=[types.FunctionDeclaration(...)])` objects. New `AITextService._build_gemini_tools()` converts schemas at call time (both initial and follow-up requests); returns `None` when no plugins are enabled. This was the cause of every `ai:` message replying busy after the 2.4.0 deploy.
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.4.0] - 2026-09-10
 ### Added

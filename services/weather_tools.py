@@ -1,6 +1,6 @@
 """
 Weather Tools Module
-版本: rev2.4.0
+版本: rev2.4.1
 4 支 stateless handler，提供天氣查詢功能給 Gemini Function Calling
 """
 

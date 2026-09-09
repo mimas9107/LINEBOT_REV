@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.4.0
+版本: rev2.4.1
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.4.1: 修正 tools 傳入格式：schema dict 轉 types.Tool/FunctionDeclaration（直接傳 dict 會被 Pydantic 拒收）
 - rev2.4.0: 接入插件系統（TOOLS/DISPATCH），新增 _auto_handle_tool_calls 迴圈（rounds/calls/seconds 三上限）
 - rev2.3.2: max_output_tokens 4096、成功時 log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST fallback（503/429 退避重試 + markfail 冷卻）；失敗改為拋出例外，不再回傳錯誤字串
@@ -45,6 +46,27 @@ class AITextService:
     MAX_TOOL_CALLS = 6
     MAX_REQUEST_SECONDS = 25
 
+    @staticmethod
+    def _build_gemini_tools():
+        """
+        將插件 schema（plain dict）轉為 google-genai SDK 的 Tool 物件。
+
+        GenerateContentConfig(tools=...) 只接受 types.Tool
+       （內含 function_declarations），直接傳 dict 會被 Pydantic 拒收。
+        無插件時回傳 None，保持與舊行為一致。
+        """
+        if not TOOLS:
+            return None
+        declarations = [
+            types.FunctionDeclaration(
+                name=schema["name"],
+                description=schema.get("description", ""),
+                parameters=schema.get("parameters"),
+            )
+            for schema in TOOLS
+        ]
+        return [types.Tool(function_declarations=declarations)]
+
     def __init__(self):
         self._client = None
         self._failed_marks = {}  # model -> 失敗時間（time.monotonic）
@@ -82,7 +104,7 @@ class AITextService:
                 top_p=0.95,
                 top_k=40,
                 max_output_tokens=4096,
-                tools=TOOLS,
+                tools=self._build_gemini_tools(),
             )
         )
         return self._auto_handle_tool_calls(response)
@@ -133,7 +155,7 @@ class AITextService:
                 contents=[types.Content(role="user", parts=function_responses)],
                 gen_config=types.GenerateContentConfig(
                     system_instruction=self.SYSTEM_INSTRUCTION,
-                    tools=TOOLS,
+                    tools=self._build_gemini_tools(),
                 )
             )
 

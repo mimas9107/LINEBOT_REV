@@ -1,9 +1,10 @@
 """
 LINEBOT Application
-版本: rev2.4.0
+版本: rev2.4.1
 Flask 應用程式入口點
 
 更新紀錄:
+- rev2.4.1: 版本字串同步（tools 格式修正）
 - rev2.4.0: 版本字串同步（插件化架構與天氣功能上線）
 - rev2.3.3: 版本化 Procfile（--timeout 300）、圖片路徑新增 MODEL_LIST 容錯
 - rev2.3.2: Gemini 回應加速（max_output_tokens 4096）、log 顯示 active model、gunicorn timeout 300s
@@ -41,13 +42,13 @@ _keepalive_lock = threading.Lock()
 @app.route('/')
 def home():
     """首頁"""
-    return 'Hello, World! LINEBOT rev2.4.0 is running.'
+    return 'Hello, World! LINEBOT rev2.4.1 is running.'
 
 
 @app.route('/about')
 def about():
     """關於頁面（也用於 keepalive ping）"""
-    return '<h1>LINEBOT rev2.4.0 - Python Flask LINE Bot (google-genai SDK + SQLite + Reminder)</h1>'
+    return '<h1>LINEBOT rev2.4.1 - Python Flask LINE Bot (google-genai SDK + SQLite + Reminder)</h1>'
 
 
 @app.route('/health')
@@ -55,7 +56,7 @@ def health():
     """健康檢查端點"""
     return {
         'status': 'healthy',
-        'version': 'rev2.4.0',
+        'version': 'rev2.4.1',
         'database': db_service.get_db_stats()
     }
 
