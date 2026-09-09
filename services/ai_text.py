@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.4.1
+版本: rev2.4.2
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.4.2: 修正追問 turn 鏈接：維護 contents，依序 append 模型 function_call turn 與 function_response turn（缺 model turn 會被 API 400 拒收）
 - rev2.4.1: 修正 tools 傳入格式：schema dict 轉 types.Tool/FunctionDeclaration（直接傳 dict 會被 Pydantic 拒收）
 - rev2.4.0: 接入插件系統（TOOLS/DISPATCH），新增 _auto_handle_tool_calls 迴圈（rounds/calls/seconds 三上限）
 - rev2.3.2: max_output_tokens 4096、成功時 log 顯示 active model
@@ -96,8 +97,11 @@ class AITextService:
         if history:
             return self._chat_with_history(client, prompt, history)
 
+        contents = [
+            types.Content(role="user", parts=[types.Part.from_text(text=prompt)])
+        ]
         response = self._generate(
-            contents=prompt,
+            contents=contents,
             gen_config=types.GenerateContentConfig(
                 system_instruction=self.SYSTEM_INSTRUCTION,
                 temperature=1.0,
@@ -107,9 +111,17 @@ class AITextService:
                 tools=self._build_gemini_tools(),
             )
         )
-        return self._auto_handle_tool_calls(response)
+        return self._auto_handle_tool_calls(contents, response)
 
-    def _auto_handle_tool_calls(self, response) -> str:
+    def _auto_handle_tool_calls(self, contents, response) -> str:
+        """
+        Args:
+            contents: 已送出的對話 turns（會原地 append，不可丟棄）；
+                API 要求 function_response 緊跟在 function_call 之後，
+                因此每一輪必須先 append 模型的 function_call turn，
+                再 append function_response turn。
+            response: 最新一輪的模型回應。
+        """
         rounds = 0
         total_calls = 0
         start_time = time.monotonic()
@@ -127,6 +139,12 @@ class AITextService:
                 break
             if time.monotonic() - start_time > self.MAX_REQUEST_SECONDS:
                 break
+
+            try:
+                model_turn = response.candidates[0].content
+            except (AttributeError, IndexError):
+                break
+            contents.append(model_turn)
 
             function_responses = []
             for call in calls:
@@ -151,8 +169,9 @@ class AITextService:
                         response={"error": str(e)}
                     ))
 
+            contents.append(types.Content(role="user", parts=function_responses))
             response = self._generate(
-                contents=[types.Content(role="user", parts=function_responses)],
+                contents=contents,
                 gen_config=types.GenerateContentConfig(
                     system_instruction=self.SYSTEM_INSTRUCTION,
                     tools=self._build_gemini_tools(),

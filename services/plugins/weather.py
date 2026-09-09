@@ -1,6 +1,6 @@
 """
 Weather Plugin
-版本: rev2.4.1
+版本: rev2.4.2
 天氣查詢功能模組，提供 Gemini Function Calling 使用
 """
 

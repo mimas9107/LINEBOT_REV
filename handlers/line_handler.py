@@ -1,6 +1,6 @@
 """
 LINE Handler Module
-版本: rev2.4.1
+版本: rev2.4.2
 處理 LINE Webhook 事件
 
 更新紀錄:

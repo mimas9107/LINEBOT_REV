@@ -1,6 +1,6 @@
 """
 Chat History Service Module
-版本: rev2.4.1
+版本: rev2.4.2
 對話歷史記錄功能 (使用 SQLite)
 
 更新紀錄:

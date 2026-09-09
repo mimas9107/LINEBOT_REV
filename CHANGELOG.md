@@ -2,13 +2,19 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:25:00"
-project_version: "2.4.1"
-document_version: "1.4.2"
+modified_date: "2026/09/10 00:35:00"
+project_version: "2.4.2"
+document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.2] - 2026-09-10
+### Fixed
+- Tool follow-up 400 INVALID_ARGUMENT (`function response turn comes immediately after a function call turn`): `_auto_handle_tool_calls` now keeps the `contents` chain across rounds — appends the model's function_call turn first, then the function_response turn — instead of sending function responses as an isolated turn. This was the cause of weather queries (e.g. `get_rain_probability`) failing after the tool executed.
+### Notes
+- Patch release on `main`, following the even-MAJOR versioning policy.
 
 ## [2.4.1] - 2026-09-10
 ### Fixed
