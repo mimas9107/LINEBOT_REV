@@ -2,13 +2,25 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 13:30:00"
-project_version: "2.3.4"
-document_version: "1.4.0"
+modified_date: "2026/09/10 00:15:00"
+project_version: "2.4.0"
+document_version: "1.4.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.4.0] - 2026-09-10
+### Added
+- Plugin architecture for Gemini Function Calling: new `services/plugins/` package scans plugin modules against the `ENABLED_PLUGINS` whitelist (`config.enabled_plugins_list`, comma-separated; empty means no plugins). Failed imports and missing `REQUIRED_ENV` skip the plugin with a warning instead of crashing the app. Registry integrity: duplicate tool names raise `RuntimeError` at startup; non-callable handlers are skipped.
+- Weather plugin (`services/plugins/weather.py`, `REQUIRED_ENV = CWA_API_KEY / TDX_CLIENT_ID / TDX_CLIENT_SECRET`) exposing 4 tools: `get_rain_probability` (CWA 12hr PoP, returns only date/time/pop), `get_gps_weather` (nearest stations, returns only station/distance/temp/humidity/weather/rain), `get_nearby_cctv` (TDX City query + local Haversine filter, returns only cctv_id/road_name/lat/lon/distance/available/image_url), `plan_route_weather` (embedded routes + per-waypoint weather/CCTV summary with coverage rate).
+- `AITextService._auto_handle_tool_calls`: tool-call loop with three independent caps (`MAX_TOOL_ROUNDS=3`, `MAX_TOOL_CALLS=6`, `MAX_REQUEST_SECONDS=25`); intermediate function_call/response parts stay in memory context and only the final text is persisted by the existing `chat_history` flow.
+### Changed
+- `config.py`: new `ENABLED_PLUGINS` setting loaded from environment.
+- `.env.example`: documents `ENABLED_PLUGINS=weather` plus CWA/TDX credentials.
+### Notes
+- Minor release on `main` (new feature, backwards compatible), following the even-MAJOR versioning policy.
+- All 4 weather functions verified locally against live CWA/TDX APIs before release. Render Dashboard must set `ENABLED_PLUGINS=weather`, `CWA_API_KEY`, `TDX_CLIENT_ID`, `TDX_CLIENT_SECRET` for the weather tools to load.
 
 ## [2.3.4] - 2026-09-01
 ### Changed

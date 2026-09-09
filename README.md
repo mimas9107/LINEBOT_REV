@@ -1,10 +1,10 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.3.4"
+description:   "Main documentation for LINEBOT rev2.4.0"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/01 13:30:00"
-project_version: "2.3.4"
-document_version: "1.3.0"
+modified_date: "2026/09/10 00:15:00"
+project_version: "2.4.0"
+document_version: "1.3.1"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.3.4
-- **更新日期**: 2026-09-01
-- **當前重點**: Gemini 503/429 容錯（MODEL_LIST fallback + markfail 冷卻）、對話歷史防污染、model 順序最佳化、msgid 關聯式可追溯 log
+- **版本**: 2.4.0
+- **更新日期**: 2026-09-10
+- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）、Gemini Function Calling 三上限保護
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 
@@ -40,6 +40,10 @@ linebot-rev2/
 │   ├── ai_image.py           # Gemini 圖片辨識 (使用 google-genai)
 │   ├── bookmark.py           # Google Sheet 書籤與備援歷史紀錄服務
 │   ├── database.py           # SQLite 連線、初始化與統計
+│   ├── weather_tools.py      # 天氣查詢 handler（CWA/TDX，供插件呼叫）
+│   ├── plugins/              # Gemini Function Calling 插件
+│   │   ├── __init__.py       # 插件掃描、白名單、Registry 完整性檢查
+│   │   └── weather.py        # 天氣插件（4 支 tool schema + handler）
 │   └── chat_history.py       # SQLite 對話歷史服務
 │
 ├── utils/                    # 工具模組

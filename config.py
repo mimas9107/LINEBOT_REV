@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.3.4
+版本: rev2.4.0
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.4.0: 新增 ENABLED_PLUGINS 插件白名單與 enabled_plugins_list 解析
 - rev2.3.2: max_output_tokens 4096、log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST 候選模型 fallback 清單（503/429 容錯）
 - rev2.2.1: keepalive 只在直接執行時啟動，配合 patch release 說明同步
@@ -56,6 +57,9 @@ class Config:
     # 排程提醒設定
     REMINDER_CHECK_INTERVAL: int = 30  # 秒
     MAX_PENDING_REMINDERS: int = 20  # 每人最多待處理提醒數
+
+    # 插件系統
+    ENABLED_PLUGINS: str = ""  # 逗號分隔的插件名稱，空值不啟用任何插件
     
     def __post_init__(self):
         """從環境變數載入設定"""
@@ -74,6 +78,14 @@ class Config:
         self.SELF_URL = os.getenv("SELF_URL", self.SELF_URL)
         self.REMINDER_CHECK_INTERVAL = self._get_int_env("REMINDER_CHECK_INTERVAL", self.REMINDER_CHECK_INTERVAL)
         self.MAX_PENDING_REMINDERS = self._get_int_env("MAX_PENDING_REMINDERS", self.MAX_PENDING_REMINDERS)
+        self.ENABLED_PLUGINS = os.getenv("ENABLED_PLUGINS", self.ENABLED_PLUGINS)
+
+    @property
+    def enabled_plugins_list(self) -> list[str]:
+        """解析 ENABLED_PLUGINS 為 list[str]（逗號分隔、strip、過濾空值）"""
+        if not self.ENABLED_PLUGINS:
+            return []
+        return [p.strip() for p in self.ENABLED_PLUGINS.split(",") if p.strip()]
 
     @staticmethod
     def _get_int_env(name: str, default: int) -> int:

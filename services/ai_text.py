@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.3.4
+版本: rev2.4.0
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.4.0: 接入插件系統（TOOLS/DISPATCH），新增 _auto_handle_tool_calls 迴圈（rounds/calls/seconds 三上限）
 - rev2.3.2: max_output_tokens 4096、成功時 log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST fallback（503/429 退避重試 + markfail 冷卻）；失敗改為拋出例外，不再回傳錯誤字串
 - rev2: 改用 google-genai SDK (新版統一 SDK)
@@ -18,6 +19,7 @@ import time
 from google import genai
 from google.genai import types
 from config import config, MODEL_LIST
+from services.plugins import TOOLS, DISPATCH
 
 # # ponytail: 直接檔案載入測試會避開 services/__init__（其匯入 apscheduler），故用防衛式匯入
 try:
@@ -37,6 +39,11 @@ class AITextService:
 
     # 所有候選模型統一使用的系統指令：確保每個 fallback 模型都用繁體中文回應。
     SYSTEM_INSTRUCTION = "你是 LINE 的 AI 助理。一律使用繁體中文（台灣繁體字）回應使用者。"
+
+    # Tool calling 上限
+    MAX_TOOL_ROUNDS = 3
+    MAX_TOOL_CALLS = 6
+    MAX_REQUEST_SECONDS = 25
 
     def __init__(self):
         self._client = None
@@ -75,9 +82,74 @@ class AITextService:
                 top_p=0.95,
                 top_k=40,
                 max_output_tokens=4096,
+                tools=TOOLS,
             )
         )
-        return response.text
+        return self._auto_handle_tool_calls(response)
+
+    def _auto_handle_tool_calls(self, response) -> str:
+        rounds = 0
+        total_calls = 0
+        start_time = time.monotonic()
+
+        while True:
+            calls = self._parse_function_calls(response)
+            if not calls:
+                return response.text
+
+            rounds += 1
+            if rounds > self.MAX_TOOL_ROUNDS:
+                break
+            total_calls += len(calls)
+            if total_calls > self.MAX_TOOL_CALLS:
+                break
+            if time.monotonic() - start_time > self.MAX_REQUEST_SECONDS:
+                break
+
+            function_responses = []
+            for call in calls:
+                name = call.name
+                args = dict(call.args) if call.args else {}
+                if name not in DISPATCH:
+                    function_responses.append(types.Part.from_function_response(
+                        name=name,
+                        response={"error": f"Unknown tool: {name}"}
+                    ))
+                    continue
+                handler = DISPATCH[name]
+                try:
+                    result = handler(**args)
+                    function_responses.append(types.Part.from_function_response(
+                        name=name,
+                        response={"result": result}
+                    ))
+                except Exception as e:
+                    function_responses.append(types.Part.from_function_response(
+                        name=name,
+                        response={"error": str(e)}
+                    ))
+
+            response = self._generate(
+                contents=[types.Content(role="user", parts=function_responses)],
+                gen_config=types.GenerateContentConfig(
+                    system_instruction=self.SYSTEM_INSTRUCTION,
+                    tools=TOOLS,
+                )
+            )
+
+        return "工具呼叫超過上限，請簡化問題或稍後再試。"
+
+    @staticmethod
+    def _parse_function_calls(response) -> list:
+        calls = []
+        try:
+            parts = response.candidates[0].content.parts
+            for part in parts:
+                if hasattr(part, "function_call") and part.function_call:
+                    calls.append(part.function_call)
+        except (AttributeError, IndexError):
+            pass
+        return calls
 
     def _generate(self, contents, gen_config):
         """

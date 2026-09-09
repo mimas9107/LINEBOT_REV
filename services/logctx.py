@@ -1,6 +1,6 @@
 """
 Log Context Module
-版本: rev2.3.4
+版本: rev2.4.0
 提供「目前正在處理的 LINE message id」的執行緒區域變數（threading.local）。
 
 用途: 讓 handler 在處理每則 event 時設定 msgid，services 層（ai_text/ai_image）
