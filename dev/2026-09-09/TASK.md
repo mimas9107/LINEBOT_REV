@@ -1,6 +1,13 @@
 # 任務清單：LINEBOT_REV 插件化架構與天氣功能
 
 > 依據 `PLAN.md` 拆解為可執行的原子任務，每項可獨立驗證
+>
+> ## 狀態：CLOSE
+>
+> - 結案日期：2026-09-19
+> - 交付版本：rev2.4.0 → rev2.4.5（commit a5e3370）
+> - 結案補齊：commit 0c7eb3b（全量勾選本清單、補 `.env.example` CWA/TDX 範例、追蹤分析報告）
+> - 6.1/6.3 實測與 5.2 Render 設定依 commit message live 驗證紀錄勾選，非 repo 內可複驗
 
 ---
 
