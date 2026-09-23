@@ -1,9 +1,10 @@
 """
 Chat History Service Module
-版本: rev2.5.0
+版本: rev2.6.0
 對話歷史記錄功能 (使用 SQLite)
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.2: 從 feature2 導入 SQLite 對話歷史核心
 """
 

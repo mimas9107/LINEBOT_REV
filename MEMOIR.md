@@ -2,9 +2,9 @@
 name:          "MEMOIR.md"
 description:   "Project architectural memory and decisions"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/23 00:00:00"
-project_version: "2.5.0"
-document_version: "1.3.1"
+modified_date: "2026/09/23 10:00:00"
+project_version: "2.6.0"
+document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
@@ -29,4 +29,5 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 - **Async Tool Handlers (D2)**: the tool loop runs inside a single `asyncio.run()` per request; handlers declared as coroutines are `await`ed via `inspect.iscoroutinefunction`. Today's HackMD handlers are synchronous; async support is reserved for future plugins. The `asyncio.run()` wrapper was chosen over restructuring the whole sync service.
 - **SPEC Decoupling (D6)**: `SPEC.md` records only mechanisms and policy (whitelist loading, duplicate-name startup error, `REQUIRED_ENV`, tool-loop caps, risk-policy check, async support) — never the per-plugin tool inventory. Tool listings and permissions live in the plugin modules and `README.md`; future plugins (e.g. TRA) no longer touch SPEC.
 - **HackMD Plugin**: inlined synchronous client (`services/hackmd_tools.py`) using the existing `requests` dependency (D1) — no new git dependency, no `httpx`. 60s module-level cache for the note list (invalidated by write operations), 8s HTTP timeout, content truncated at 2000 chars, `_sanitize_error` reuse for token safety. Verified against the actual HackMD API field names (`createdAt` camelCase, not `created_at`).
+- **TRA Plugin (D1–D6, rev2.6.0)**: `services/plugins/tra.py` injects the sibling `trachecker` project via `sys.path` (`Path(__file__).resolve().parents[3] / "trachecker"`) and re-exports 5 of its 6 `agent_tools` tools (dropped the `resolve_tra_station` primitive — the other 5 handlers resolve station names internally and return candidate hints on failure, so Gemini can self-correct next round). All 5 are READ_ONLY. Handler adapter `lambda _n=_name, **_kw: dispatch(_n, _kw)` matches the tool-loop `handler(**args)` contract. Reuses the weather plugin's `TDX_CLIENT_ID`/`TDX_CLIENT_SECRET` (no new env vars). Relies on the sibling-repo directory layout; if absent, the loader import fails and the plugin is skipped without crashing (importer catches `Exception`). Fare is a TDX v2 estimate (official fare wins) and itinerary has no-direct-train limits (e.g. 六家→臺北 must be split) — both surfaced via tool descriptions/hints, not re-phrased in the plugin layer.
 - **Deployment**: Complete deployment guide available in `DEPLOYMENT.md` covering Google Sheets/GAS setup, LINE Developer console, and Render.com.

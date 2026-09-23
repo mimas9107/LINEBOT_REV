@@ -1,10 +1,10 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.5.0"
+description:   "Main documentation for LINEBOT rev2.6.0"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/23 00:00:00"
-project_version: "2.5.0"
-document_version: "1.3.3"
+modified_date: "2026/09/23 10:00:00"
+project_version: "2.6.0"
+document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.5.0
+- **版本**: 2.6.0
 - **更新日期**: 2026-09-23
-- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）+ HackMD 筆記（list/read/search/create/update/delete）+ per-tool 風險分級授權（READ_ONLY 人人可用；WRITE/DESTRUCTIVE 需個人身份列入 `HACKMD_ALLOWED_USER_IDS`，群組/聊天室一律唯讀）
+- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）+ HackMD 筆記（list/read/search/create/update/delete）+ 臺鐵查詢（時刻表/即時看板/票價/行程規劃，經 sys.path 注入 trachecker）+ per-tool 風險分級授權（READ_ONLY 人人可用；WRITE/DESTRUCTIVE 需個人身份列入 `HACKMD_ALLOWED_USER_IDS`，群組/聊天室一律唯讀）
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 
@@ -45,7 +45,8 @@ linebot-rev2/
 │   ├── plugins/              # Gemini Function Calling 插件
 │   │   ├── __init__.py       # 插件掃描、白名單、Registry/POLICY 檢查
 │   │   ├── weather.py        # 天氣插件（4 支 tool schema + handler）
-│   │   └── hackmd.py         # HackMD 插件（6 支 tool schema + handler）
+│   │   ├── hackmd.py         # HackMD 插件（6 支 tool schema + handler）
+│   │   └── tra.py            # 臺鐵插件（5 支 tool schema + handler，sys.path 注入 trachecker）
 │   └── chat_history.py       # SQLite 對話歷史服務
 │
 ├── utils/                    # 工具模組
@@ -138,9 +139,10 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 - 每 13 分鐘隨機執行保活任務
 
 ### 7. 插件系統與工具權限（`services/plugins/`）
-- `ENABLED_PLUGINS=weather,hackmd`（逗號分隔）
+- `ENABLED_PLUGINS=weather,hackmd,tra`（逗號分隔）
 - 每支 tool 於插件檔宣告 `policy.risk`：`READ_ONLY`（人人可用）／`WRITE`／`DESTRUCTIVE`
 - **WRITE/DESTRUCTIVE 執行前授權檢查**：僅個人身份（user）且在 `HACKMD_ALLOWED_USER_IDS` 白名單內才可執行；群組／聊天室身份一律唯讀
+- **tra 插件**：經 `sys.path` 注入前驅專案 `trachecker`（需與本專案同父目錄），5 支查詢工具全 READ_ONLY；票價為 TDX v2 估算、實際以官方為準；itinerary 無直達車（如六家→臺北）需拆段查詢
 - 啟用插件工具清單（詳見 `services/plugins/*.py`）：
 
 | 工具 | 來源插件 | 權限 | 用途 |
@@ -155,6 +157,11 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 | `hackmd_create_note` | hackmd | WRITE | 建立筆記 |
 | `hackmd_update_note` | hackmd | WRITE | 更新筆記 |
 | `hackmd_delete_note` | hackmd | DESTRUCTIVE | 刪除筆記（不可復原） |
+| `search_tra_od_timetable` | tra | READ_ONLY | OD 每日時刻表 |
+| `get_tra_station_live_board` | tra | READ_ONLY | 車站即時到離站看板 |
+| `get_tra_train_live_board` | tra | READ_ONLY | 列車即時動態 |
+| `get_tra_fare_v2_estimate` | tra | READ_ONLY | TDX v2 估算票價 |
+| `get_tra_itinerary` | tra | READ_ONLY | A→B 行程規劃（多目標排序） |
 
 ## 環境變數
 
@@ -174,7 +181,7 @@ DATABASE_PATH=data/chat_history.db
 API_SECRET_KEY=請改成高強度隨機字串
 
 # 插件系統
-ENABLED_PLUGINS=weather,hackmd
+ENABLED_PLUGINS=weather,hackmd,tra
 
 # HackMD 插件
 HACKMD_API_TOKEN=你的_HackMD_API_Token

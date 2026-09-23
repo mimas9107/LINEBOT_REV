@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.5.0
+版本: rev2.6.0
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.6.0: TRA 插件整合（tra plugin 上線，共啟用 weather/hackmd/tra）
 - rev2.5.0: 新增 HACKMD_API_TOKEN、HACKMD_ALLOWED_USER_IDS 與 allowed_user_ids_list
 - rev2.4.0: 新增 ENABLED_PLUGINS 插件白名單與 enabled_plugins_list 解析
 - rev2.3.2: max_output_tokens 4096、log 顯示 active model

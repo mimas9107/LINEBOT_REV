@@ -1,9 +1,10 @@
 """
 HackMD Tools Module
-版本: rev2.5.0
+版本: rev2.6.0
 6 支 stateless handler，提供 HackMD 筆記操作給 Gemini Function Calling
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.5.0: 新增 HackMD 插件工具層（list/read/create/update/delete/search）
 """
 

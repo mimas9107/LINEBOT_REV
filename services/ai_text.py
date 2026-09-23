@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.5.0
+版本: rev2.6.0
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.5.0: 支援 async handler（inspect.iscoroutinefunction + await，asyncio.run 包 tool loop）；授權檢查（POLICY risk + user_id/user_scope 白名單）
 - rev2.4.5: 錯誤 log/回應再過濾 Authorization 參數（防金鑰外洩）；工具例外訊息不帶原始 URL
 - rev2.4.4: 統一 chat() 路徑（歷史對話也掛 tools + MODEL_LIST fallback）、tool loop 增加完整 log（收到的 call/args 與 handler 結果）

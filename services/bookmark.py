@@ -1,9 +1,10 @@
 """
 Bookmark Service Module
-版本: rev2.5.0
+版本: rev2.6.0
 處理書籤功能與 Google Apps Script 互動
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.1.1: 移除 time.sleep(0.25)，save_message 改為非同步呼叫
 """
 

@@ -1,9 +1,10 @@
 """
 AI Image Service Module
-版本: rev2.5.0
+版本: rev2.6.0
 處理 Gemini 圖片辨識功能
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.3.3: 圖片路徑加入 MODEL_LIST fallback + 503/429 退避重試 + markfail 冷卻（比照 ai_text）
 - rev2.3.1: 分析失敗改為拋出例外，不再回傳錯誤字串（防歷史污染）
 - rev2: 改用 google-genai SDK (新版統一 SDK)

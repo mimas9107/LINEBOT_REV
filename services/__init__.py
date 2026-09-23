@@ -1,9 +1,10 @@
 """
 Services Package
-版本: rev2.5.0
+版本: rev2.6.0
 提供各項服務功能
 
 更新紀錄:
+- rev2.6.0: TRA 插件整合（services.plugins.tra，5 支臺鐵查詢工具）
 - rev2.2: 新增 SQLite database 與 chat history 服務匯出，不改動既有 Google Sheet history 入口
 - rev2: AI 模組改用 google-genai SDK
 """

@@ -1,9 +1,10 @@
 """
 Database Service Module
-版本: rev2.5.0
+版本: rev2.6.0
 SQLite 資料庫連線與操作
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.2: 從 feature2 導入 SQLite 對話資料庫核心；不包含上傳還原流程
 """
 

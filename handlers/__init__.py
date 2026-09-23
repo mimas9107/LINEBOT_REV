@@ -1,6 +1,6 @@
 """
 Handlers Package
-版本: rev2.5.0
+版本: rev2.6.0
 提供事件處理功能
 """
 

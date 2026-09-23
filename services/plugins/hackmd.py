@@ -1,6 +1,6 @@
 """
 HackMD Plugin
-版本: rev2.5.0
+版本: rev2.6.0
 HackMD 筆記操作，提供 Gemini Function Calling 使用
 """
 

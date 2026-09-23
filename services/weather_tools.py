@@ -1,9 +1,10 @@
 """
 Weather Tools Module
-版本: rev2.5.0
+版本: rev2.6.0
 4 支 stateless handler，提供天氣查詢功能給 Gemini Function Calling
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.4.5: CWA/TDX HTTPS 走 verify 優先、SSLError 自動降級（修 Render 憑證庫不相容）、錯誤訊息過濾 Authorization 避免金鑰外洩
 - rev2.4.4: 降雨機率改回傳全鄉鎮 townships（CWA 忽略 locationName/elementName 篩選）
 """

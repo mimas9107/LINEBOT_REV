@@ -1,9 +1,10 @@
 """
 LINE Handler Module
-版本: rev2.5.0
+版本: rev2.6.0
 處理 LINE Webhook 事件
 
 更新紀錄:
+- rev2.6.0: 版本字串同步（TRA 插件 rev2.6.0 上線）
 - rev2.3.3: 歷史訊息單則長度截斷（MAX_HISTORY_MSG_LEN=1000），避免長回覆線性膨脹 prompt
 - rev2.3.1: AI/圖片分析失敗時跳過 SQLite 與 Sheet 寫入，僅回覆友善提示（防歷史污染）
 - rev2.2: AI 對話與圖片分析寫入 SQLite，保留 Google Sheet 非同步記錄與 message_id 圖片路徑
