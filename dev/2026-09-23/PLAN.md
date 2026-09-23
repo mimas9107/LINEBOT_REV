@@ -28,7 +28,7 @@
 
 | # | 問題 | 提案 |
 |---|------|------|
-| D1 | trachecker 取得方式 | **sys.path 注入**：`services/plugins/tra.py` 內 `sys.path.append(Path(__file__).resolve().parents[3] / "trachecker")` 後 `from trachecker.agent_tools import TOOLS, dispatch`（沿用 TASK-008 草稿） |
+| D1 | trachecker 取得方式 | **pip git 依賴**：`requirements.txt` 以 `trachecker @ git+https://github.com/mimas9107/trachecker.git@<commit>` 安裝（公開 repo、Render pip 可安裝）；`services/plugins/tra.py` 直接 import，開發機無 pip 安裝時保留 brother-dir `sys.path` fallback（原 TASK-008 草稿修正：Render 只 clone LINEBOT_REV 單一 repo，兄弟目錄在生產機不存在） |
 | D2 | 工具註冊 | **暴露 5 支**（藏掉 `resolve_tra_station` primitive：其餘 5 支 handler 皆內部自行站名解析、失敗時回傳候選站名 hint，讓 Gemini 下一輪自救，此 primitive 只會多繞一輪省 schema tokens）；全 `READ_ONLY` policy、schema 直接沿用 trachecker 的 `{name, description, parameters}`（此格式與 loader 相容，weather 插件 schema 也有相同形狀） |
 | D3 | handler adapter | trachecker 的 `dispatch(name, arguments)` 不符 `handler(**args)` 契約 → 每支包 `lambda _n=_name, **_kw: dispatch(_n, _kw)`（TASK-008 已實證） |
 | D4 | 版本 | **rev2.6.0**（偶數 MAJOR，直接落 main，比照 rev2.5.0 特例註記）；文件組齊步 |
@@ -53,4 +53,4 @@
 - **SPEC 不動**：依 rev2.5.0 D6 機制化決策，新增 plugin 不再觸動 SPEC（機制條文已通用）；工具資產清單一律收進 README。
 - **loader 失敗模式**：`importlib.import_module` 包在 try/except（print + skip），trachecker 目錄缺失或不具 REQUIRED_ENV → 插件「靜默跳過」而非拖垮整包；部署時需以 log 確認 tra 6 工具確實載入。
 - **itinerary 限制**（前驅已證實）：無直達 OD（六家→臺北）需拆段；跨午夜不延伸；`cheapest` 未實作 → 這三項為前驅設計限制，插件層不解決，靠 description/hint 傳達。
-- **`parents[3]` 路徑依賴**：`tra.py` 在 `LINEBOT_REV/services/plugins/`，`parents[3]` = 兩專案共同父目錄；部署環境若無 `trachecker` 目錄則插件載入失敗（REQUIRED_ENV 檢查**不會**擋到 import 錯誤，需確定部署機有該目錄或改 pip 安裝）。
+- **部署取得 trachecker**：Render 只 clone LINEBOT_REV 單一 repo——兄弟目錄 sys.path 方案在生產機不成立（rev2.6.0 首版部署後 tra 插件被 loader 靜默 skip，log 僅 `[plugins] Failed to load tra: ModuleNotFoundError`）。修正為 `requirements.txt` pip git 依賴（公開 GitHub repo，Render build 時 pip 抓取），DEV 機保留 sys.path fallback。

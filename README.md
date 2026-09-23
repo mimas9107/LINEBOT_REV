@@ -46,7 +46,7 @@ linebot-rev2/
 │   │   ├── __init__.py       # 插件掃描、白名單、Registry/POLICY 檢查
 │   │   ├── weather.py        # 天氣插件（4 支 tool schema + handler）
 │   │   ├── hackmd.py         # HackMD 插件（6 支 tool schema + handler）
-│   │   └── tra.py            # 臺鐵插件（5 支 tool schema + handler，sys.path 注入 trachecker）
+│   │   └── tra.py            # 臺鐵插件（5 支 tool schema + handler，依賴 pip 安裝的 trachecker）
 │   └── chat_history.py       # SQLite 對話歷史服務
 │
 ├── utils/                    # 工具模組
@@ -142,7 +142,7 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 - `ENABLED_PLUGINS=weather,hackmd,tra`（逗號分隔）
 - 每支 tool 於插件檔宣告 `policy.risk`：`READ_ONLY`（人人可用）／`WRITE`／`DESTRUCTIVE`
 - **WRITE/DESTRUCTIVE 執行前授權檢查**：僅個人身份（user）且在 `HACKMD_ALLOWED_USER_IDS` 白名單內才可執行；群組／聊天室身份一律唯讀
-- **tra 插件**：經 `sys.path` 注入前驅專案 `trachecker`（需與本專案同父目錄），5 支查詢工具全 READ_ONLY；票價為 TDX v2 估算、實際以官方為準；itinerary 無直達車（如六家→臺北）需拆段查詢
+- **tra 插件**：依賴 pip 安裝的 `trachecker`（`requirements.txt` git 依賴，公開 GitHub repo）；5 支查詢工具全 READ_ONLY；票價為 TDX v2 估算、實際以官方為準；itinerary 無直達車（如六家→臺北）需拆段查詢
 - 啟用插件工具清單（詳見 `services/plugins/*.py`）：
 
 | 工具 | 來源插件 | 權限 | 用途 |

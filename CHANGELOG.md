@@ -12,7 +12,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## [2.6.0] - 2026-09-23
 ### Added
-- TRA（臺鐵）插件（`services/plugins/tra.py`）：5 支 Gemini Function Calling 工具（`search_tra_od_timetable` / `get_tra_station_live_board` / `get_tra_train_live_board` / `get_tra_fare_v2_estimate` / `get_tra_itinerary`），全 READ_ONLY，經 `sys.path` 注入前驅專案 `trachecker`（同父目錄）。
+- TRA（臺鐵）插件（`services/plugins/tra.py`）：5 支 Gemini Function Calling 工具（`search_tra_od_timetable` / `get_tra_station_live_board` / `get_tra_train_live_board` / `get_tra_fare_v2_estimate` / `get_tra_itinerary`），全 READ_ONLY，依賴 pip 安裝的 `trachecker`（`requirements.txt` git 依賴）。
 - 決策 D2：排除 primitive `resolve_tra_station`；其餘 5 支 handler 內部自行站名解析、失敗回傳候選站名 hint 供 Gemini 下一輪自救，減少 schema tokens 與多餘 round-trip。
 - 票價與行程限制透傳：票價為 TDX v2 估算、實際以官方為準；itinerary 無直達車（如六家→臺北）需拆段查詢。
 ### Changed

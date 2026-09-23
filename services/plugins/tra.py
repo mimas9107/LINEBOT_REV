@@ -2,18 +2,22 @@
 TRA Rail Plugin
 版本: rev2.6.0
 臺鐵（TRA Checker）查詢功能模組，提供 Gemini Function Calling 使用。
-trachecker 前驅專案位於共同父目錄，以 sys.path 注入；目錄不可用時 loader 會跳過此插件。
+trachecker 以 pip 依賴安裝（見 requirements.txt）；開發機亦可依賴共同父目錄的
+trachecker repo（sys.path fallback）。
 """
 
 import sys
 from pathlib import Path
 
-_trachecker_path = Path(__file__).resolve().parents[3] / "trachecker"
-if str(_trachecker_path) not in sys.path:
-    sys.path.append(str(_trachecker_path))
-
-from trachecker.agent_tools import TOOLS as _TRACHECKER_TOOLS
-from trachecker.agent_tools import dispatch as _tra_dispatch
+try:
+    from trachecker.agent_tools import TOOLS as _TRACHECKER_TOOLS
+    from trachecker.agent_tools import dispatch as _tra_dispatch
+except ImportError:
+    _trachecker_path = Path(__file__).resolve().parents[3] / "trachecker"
+    if str(_trachecker_path) not in sys.path:
+        sys.path.append(str(_trachecker_path))
+    from trachecker.agent_tools import TOOLS as _TRACHECKER_TOOLS
+    from trachecker.agent_tools import dispatch as _tra_dispatch
 
 REQUIRED_ENV = ["TDX_CLIENT_ID", "TDX_CLIENT_SECRET"]
 

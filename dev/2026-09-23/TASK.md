@@ -14,10 +14,15 @@
 - [ ] 版本頭 `版本: rev2.6.0`
 
 ### 1.2 smoke：registry 完整性
-- [ ] `import services.plugins` 不報錯、無 duplicate tool name
-- [ ] `ENABLED_PLUGINS=tra` + TDX env 補齊 → `TOOLS` 含 5 支、`DISPATCH` 5 鍵、`POLICY` 5 鍵皆 READ_ONLY
-- [ ] 缺 `TDX_CLIENT_SECRET` → tra 插件跳過、其餘插件不受影響
-- [ ] trachecker 目錄不存在 → plugin 靜默跳過，應用不崩潰
+- [x] `import services.plugins` 不報錯、無 duplicate tool name
+- [x] `ENABLED_PLUGINS=tra` + TDX env 補齊 → `TOOLS` 含 5 支、`DISPATCH` 5 鍵、`POLICY` 5 鍵皆 READ_ONLY
+- [x] 缺 `TDX_CLIENT_SECRET` → tra 插件跳過、其餘插件不受影響
+- [x] trachecker 目錄不存在 → plugin 靜默跳過，應用不崩潰
+- [x] **部署修正（首版部署結果）**：trachecker 改為 requirements.txt pip git 依賴 + import fallback；Render 重新部署後 tra 5 支工具出現
+  - [x] trachecker `pyproject.toml` 補 `[tool.setuptools] packages`（flat-layout 被 dev/skills/research 混淆）→ commit 1ae5daf push master
+  - [x] 本機以 `git+https://github.com/mimas9107/trachecker.git@1ae5daf` 安裝成功（Render build 同路徑）
+  - [x] trachecker 結束後 install 移除再驗證 `__main__` 自檢 + 兄弟目錄 fallback 仍 work
+  - [x] `tra.py` 改為 try import / except fallback 雙路徑
 
 ---
 
