@@ -1,9 +1,10 @@
 """
 LINEBOT Application
-版本: rev2.4.5
+版本: rev2.5.0
 Flask 應用程式入口點
 
 更新紀錄:
+- rev2.5.0: 版本字串同步（HackMD 插件 rev2.5.0 上線）
 - rev2.4.5: 版本字串同步（CWA/TDX SSL 降級 + Authorization 金鑰過濾）
 - rev2.4.4: 版本字串同步（歷史對話掛 tools + tool loop 完整 log）
 - rev2.4.3: 版本字串同步（降雨機率 Dataset ID 縣市對照）
@@ -46,13 +47,13 @@ _keepalive_lock = threading.Lock()
 @app.route('/')
 def home():
     """首頁"""
-    return 'Hello, World! LINEBOT rev2.4.5 is running.'
+    return 'Hello, World! LINEBOT rev2.5.0 is running.'
 
 
 @app.route('/about')
 def about():
     """關於頁面（也用於 keepalive ping）"""
-    return '<h1>LINEBOT rev2.4.5 - Python Flask LINE Bot (google-genai SDK + SQLite + Reminder)</h1>'
+    return '<h1>LINEBOT rev2.5.0 - Python Flask LINE Bot (google-genai SDK + SQLite + Reminder)</h1>'
 
 
 @app.route('/health')
@@ -60,7 +61,7 @@ def health():
     """健康檢查端點"""
     return {
         'status': 'healthy',
-        'version': 'rev2.4.5',
+        'version': 'rev2.5.0',
         'database': db_service.get_db_stats()
     }
 
