@@ -1,5 +1,10 @@
 # 實作計畫（草案）：LINEBOT_REV trachecker（臺鐵）插件整合
 
+> **狀態：CLOSE — 2026-09-23 結案（rev2.6.0）**
+> D1–D6 全數採納執行：trachecker 以 pip git 依賴安裝（D1 修正：Render 只 clone LINEBOT_REV，兄弟目錄 sys.path 在生產機不存在，首版部署曾靜默跳過、修正後復原）、暴露 5 支全 READ_ONLY（D2）、dispatch adapter lambda（D3）、rev2.6.0 偶數 MAJOR（D4）、話術透傳（D5）、`__main__` 自檢（D6）。
+> Render 部署後工具清單列出 tra 5 支，`get_tra_itinerary`（樹林→白沙屯）實測通過。
+> `TASK.md` 全量勾選並標記 CLOSE；trachecker 側 `pyproject.toml` 補 `[tool.setuptools] packages`（commit 1ae5daf）。
+
 > 依據 `trachecker`（TRA Checker）前驅專案 dev/2026-09-21 HANDOFF 的 next step：
 > `research/linebot-rev-integration-plan.md`（TASK-008，on-hold）已於前驅專案完成 7/7 官方票價交叉驗證後解鎖，
 > 本輪於 LINEBOT_REV 落地 `services/plugins/tra.py`。

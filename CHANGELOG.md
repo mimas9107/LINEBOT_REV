@@ -19,6 +19,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 - `.env.example` / README 工具清單新增 tra 5 支；`ENABLED_PLUGINS` 建議 `weather,hackmd,tra`（tra 與 weather 共用 `TDX_CLIENT_ID`/`TDX_CLIENT_SECRET`，不新增 config 欄位）。
 ### Notes
 - Feature release 依 even-MAJOR 政策定為 rev2.6.0。（承 rev2.5.0 Notes：rev2.5.0 為奇數特例落 main）
+- 首版部署 tra 插件被靜默跳過（Render 無兄弟目錄 `trachecker`，loader try/except 捕獲 import 錯誤）；修正為 `requirements.txt` pip git 依賴後復原，`get_tra_itinerary` 實測通過。trachecker 側修 `pyproject.toml` 使 pip build 可用（commit 1ae5daf）。
 
 ## [2.5.0] - 2026-09-23
 ### Added
