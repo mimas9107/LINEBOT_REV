@@ -1,9 +1,10 @@
 """
 AI Text Service Module
-版本: rev2.4.5
+版本: rev2.5.0
 處理 Gemini 文字對話功能
 
 更新紀錄:
+- rev2.5.0: 支援 async handler（inspect.iscoroutinefunction + await，asyncio.run 包 tool loop）；授權檢查（POLICY risk + user_id/user_scope 白名單）
 - rev2.4.5: 錯誤 log/回應再過濾 Authorization 參數（防金鑰外洩）；工具例外訊息不帶原始 URL
 - rev2.4.4: 統一 chat() 路徑（歷史對話也掛 tools + MODEL_LIST fallback）、tool loop 增加完整 log（收到的 call/args 與 handler 結果）
 - rev2.4.2: 修正追問 turn 鏈接：維護 contents，依序 append 模型 function_call turn 與 function_response turn（缺 model turn 會被 API 400 拒收）
@@ -18,6 +19,8 @@ AI Text Service Module
 - rev2.1.1: 修正歷史對話角色判斷邏輯，userId="bot" 識別為 model 角色
 """
 
+import asyncio
+import inspect
 import json
 import re
 import time
@@ -25,7 +28,7 @@ import time
 from google import genai
 from google.genai import types
 from config import config, MODEL_LIST
-from services.plugins import TOOLS, DISPATCH
+from services.plugins import TOOLS, DISPATCH, POLICY
 
 # # ponytail: 直接檔案載入測試會避開 services/__init__（其匯入 apscheduler），故用防衛式匯入
 try:
@@ -82,7 +85,7 @@ class AITextService:
             self._client = genai.Client(api_key=config.GEMINI_API_KEY)
         return self._client
     
-    def chat(self, prompt: str, history: list[dict] = None) -> str:
+    def chat(self, prompt: str, history: list[dict] = None, user_id: str = "", user_scope: str = "user") -> str:
         """
         發送訊息給 Gemini 並取得回應（含歷史對話與插件工具呼叫）
 
@@ -91,6 +94,8 @@ class AITextService:
         Args:
             prompt: 使用者輸入的訊息
             history: 歷史對話記錄 (可選)，格式為 [{"userId": "...", "messageText": "..."}]
+            user_id: 呼叫者身份 ID（LINE user/group/room ID）
+            user_scope: 身份型別 "user" / "group" / "room"（預設 "user"）
 
         Returns:
             AI 回應的文字
@@ -110,9 +115,9 @@ class AITextService:
                 tools=self._build_gemini_tools(),
             )
         )
-        return self._auto_handle_tool_calls(contents, response)
+        return asyncio.run(self._auto_handle_tool_calls(contents, response, user_id, user_scope))
 
-    def _auto_handle_tool_calls(self, contents, response) -> str:
+    async def _auto_handle_tool_calls(self, contents, response, user_id: str, user_scope: str) -> str:
         """
         Args:
             contents: 已送出的對話 turns（會原地 append，不可丟棄）；
@@ -120,6 +125,8 @@ class AITextService:
                 因此每一輪必須先 append 模型的 function_call turn，
                 再 append function_response turn。
             response: 最新一輪的模型回應。
+            user_id: 呼叫者身份 ID。
+            user_scope: 身份型別 "user" / "group" / "room"。
         """
         rounds = 0
         total_calls = 0
@@ -159,8 +166,18 @@ class AITextService:
                     ))
                     continue
                 handler = DISPATCH[name]
+                if not self._is_authorized(POLICY.get(name, "READ_ONLY"), user_id, user_scope):
+                    print(f"[AITextService] {prefix()}tool {name} DENIED (scope={user_scope}, risk={POLICY.get(name, 'READ_ONLY')})")
+                    function_responses.append(types.Part.from_function_response(
+                        name=name,
+                        response={"error": "此操作未經授權"}
+                    ))
+                    continue
                 try:
-                    result = handler(**args)
+                    if inspect.iscoroutinefunction(handler):
+                        result = await handler(**args)
+                    else:
+                        result = handler(**args)
                     preview = json.dumps(result, ensure_ascii=False)
                     if len(preview) > 400:
                         preview = preview[:400] + "...(truncated)"
@@ -187,6 +204,15 @@ class AITextService:
             )
 
         return "工具呼叫超過上限，請簡化問題或稍後再試。"
+
+    @staticmethod
+    def _is_authorized(risk: str, user_id: str, user_scope: str) -> bool:
+        """READ_ONLY 人人可用；WRITE/DESTRUCTIVE 僅個人身份且在允許清單內。"""
+        if risk == "READ_ONLY":
+            return True
+        if user_scope != "user":
+            return False
+        return user_id in config.allowed_user_ids_list
 
     @staticmethod
     def _parse_function_calls(response) -> list:
@@ -298,15 +324,17 @@ class AITextService:
 ai_text_service = AITextService()
 
 
-def chat_with_ai(prompt: str, history: list[dict] = None) -> str:
+def chat_with_ai(prompt: str, history: list[dict] = None, user_id: str = "", user_scope: str = "user") -> str:
     """
     便捷函式：發送訊息給 AI
     
     Args:
         prompt: 使用者訊息
         history: 歷史對話 (可選)
+        user_id: 呼叫者身份 ID
+        user_scope: 身份型別 "user" / "group" / "room"（預設 "user"）
     
     Returns:
         AI 回應
     """
-    return ai_text_service.chat(prompt, history)
+    return ai_text_service.chat(prompt, history, user_id, user_scope)

@@ -123,6 +123,11 @@ class LineHandler:
         elif source.type == "room":
             return source.room_id
         return "unknown"
+
+    @staticmethod
+    def _get_user_scope(event: MessageEvent) -> str:
+        """依 event.source.type 回傳身份型別（user/group/room）。"""
+        return getattr(event.source, "type", "user") or "user"
     
     def _handle_text_message(self, event: MessageEvent, user_id: str, timestamp: int) -> str:
         """
@@ -137,6 +142,7 @@ class LineHandler:
             回覆內容
         """
         text = event.message.text
+        user_scope = self._get_user_scope(event)
         print(f"[LineHandler] {prefix()}Received text message: {event.message.id}")
 
         # 排程提醒：自然語言偵測
@@ -164,7 +170,7 @@ class LineHandler:
 
             # 呼叫 AI；失敗時不得將錯誤訊息寫入任何歷史紀錄。
             try:
-                result = chat_with_ai(full_prompt)
+                result = chat_with_ai(full_prompt, user_id=user_id, user_scope=user_scope)
             except Exception as e:
                 print(f"[LineHandler] {prefix()}AI call failed, skip history write: {e}")
                 return "伺服器繁忙，請稍後再試。"

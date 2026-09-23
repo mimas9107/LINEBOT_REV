@@ -1,9 +1,10 @@
 """
 LINEBOT Configuration Module
-版本: rev2.4.5
+版本: rev2.5.0
 統一管理所有環境變數與設定
 
 更新紀錄:
+- rev2.5.0: 新增 HACKMD_API_TOKEN、HACKMD_ALLOWED_USER_IDS 與 allowed_user_ids_list
 - rev2.4.0: 新增 ENABLED_PLUGINS 插件白名單與 enabled_plugins_list 解析
 - rev2.3.2: max_output_tokens 4096、log 顯示 active model
 - rev2.3.1: 新增 MODEL_LIST 候選模型 fallback 清單（503/429 容錯）
@@ -60,6 +61,10 @@ class Config:
 
     # 插件系統
     ENABLED_PLUGINS: str = ""  # 逗號分隔的插件名稱，空值不啟用任何插件
+
+    # HackMD 插件
+    HACKMD_API_TOKEN: str = ""
+    HACKMD_ALLOWED_USER_IDS: str = ""  # 逗號分隔的 LINE user IDs；空值 = 不開放 WRITE/DESTRUCTIVE
     
     def __post_init__(self):
         """從環境變數載入設定"""
@@ -79,6 +84,8 @@ class Config:
         self.REMINDER_CHECK_INTERVAL = self._get_int_env("REMINDER_CHECK_INTERVAL", self.REMINDER_CHECK_INTERVAL)
         self.MAX_PENDING_REMINDERS = self._get_int_env("MAX_PENDING_REMINDERS", self.MAX_PENDING_REMINDERS)
         self.ENABLED_PLUGINS = os.getenv("ENABLED_PLUGINS", self.ENABLED_PLUGINS)
+        self.HACKMD_API_TOKEN = os.getenv("HACKMD_API_TOKEN", self.HACKMD_API_TOKEN)
+        self.HACKMD_ALLOWED_USER_IDS = os.getenv("HACKMD_ALLOWED_USER_IDS", self.HACKMD_ALLOWED_USER_IDS)
 
     @property
     def enabled_plugins_list(self) -> list[str]:
@@ -86,6 +93,13 @@ class Config:
         if not self.ENABLED_PLUGINS:
             return []
         return [p.strip() for p in self.ENABLED_PLUGINS.split(",") if p.strip()]
+
+    @property
+    def allowed_user_ids_list(self) -> list[str]:
+        """解析 HACKMD_ALLOWED_USER_IDS 為 list[str]（逗號分隔、strip、過濾空值）"""
+        if not self.HACKMD_ALLOWED_USER_IDS:
+            return []
+        return [u.strip() for u in self.HACKMD_ALLOWED_USER_IDS.split(",") if u.strip()]
 
     @staticmethod
     def _get_int_env(name: str, default: int) -> int:

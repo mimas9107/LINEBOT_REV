@@ -2,13 +2,25 @@
 name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:35:00"
+modified_date: "2026/09/23 00:00:00"
 project_version: "2.4.5"
 document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
 # Changelog
+
+## [2.5.0] - 2026-09-23
+### Added
+- HackMD 插件（`services/plugins/hackmd.py`）：6 支 Gemini Function Calling 工具（`hackmd_list_notes` / `hackmd_read_note` / `hackmd_search_notes` / `hackmd_create_note` / `hackmd_update_note` / `hackmd_delete_note`），內聯同步 client（`services/hackmd_tools.py`，lazy init、8s timeout、欄位篩選、content 2000 字截斷、筆記清單 60s 快取）。
+- 插件權限分級：每支 tool 可宣告 `policy.risk`（READ_ONLY / WRITE / DESTRUCTIVE，預設 READ_ONLY）；Registry 匯出 `POLICY` map。
+- Tool Call Handler 授權檢查（`services/ai_text.py`）：WRITE/DESTRUCTIVE 執行前檢查呼叫者身份——個人（user）比對 `HACKMD_ALLOWED_USER_IDS` 白名單，群組／聊天室（group/room）一律拒絕。`chat()`/`chat_with_ai()` 新增 `user_id`/`user_scope` 參數。
+- Tool Call Handler 支援 async handler（`inspect.iscoroutinefunction` + `await`，單一 `asyncio.run()` 包 whole tool loop）。
+- 環境變數：`HACKMD_API_TOKEN`、`HACKMD_ALLOWED_USER_IDS`（`config.py` + `.env.example`）。
+### Changed
+- SPEC 條文機制化（D6）：抽離 weather 工具清單，SPEC 只記機制與政策；工具資產清單移往 README。
+### Notes
+- Feature release; 預留 rev2.5.0，部署後依 even-MAJOR 政策再定位為偶數版本。
 
 ## [2.4.5] - 2026-09-10
 ### Fixed

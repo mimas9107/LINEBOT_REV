@@ -1,6 +1,6 @@
 """
 Plugin System Infrastructure
-版本: rev2.4.5
+版本: rev2.5.0
 掃描 services/plugins/ 目錄下的插件模組，依 ENABLED_PLUGINS 白名單載入
 """
 
@@ -12,6 +12,7 @@ from config import config
 
 TOOLS: list[dict] = []
 DISPATCH: dict[str, callable] = {}
+POLICY: dict[str, str] = {}
 
 
 def _load_plugins():
@@ -63,6 +64,7 @@ def _load_plugins():
                 seen_names.add(tool_name)
                 TOOLS.append(schema)
                 DISPATCH[tool_name] = handler
+                POLICY[tool_name] = tool.get("policy", {}).get("risk", "READ_ONLY")
 
 
 _load_plugins()

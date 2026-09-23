@@ -2,9 +2,9 @@
 name:          "SPEC.md"
 description:   "Project specifications and requirements"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:35:00"
+modified_date: "2026/09/23 00:00:00"
 project_version: "2.4.5"
-document_version: "1.3.1"
+document_version: "1.4.0"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
 
@@ -21,7 +21,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 - Keepalive starts on the first incoming request, not on worker import.
 - Keep-alive mechanism to prevent service sleep.
 - Gemini text fallback via `MODEL_LIST`: 503/429 retry with exponential backoff and markfail cooldown; failed AI calls are never persisted to chat history.
-- Plugin system for Gemini Function Calling: `services/plugins/` modules enabled via the `ENABLED_PLUGINS` whitelist; duplicate tool names fail startup, non-callable handlers are skipped. Weather plugin provides `get_rain_probability`, `get_gps_weather`, `get_nearby_cctv`, `plan_route_weather` with field-filtered results and tool-loop caps (3 rounds / 6 calls / 25 s).
+- Plugin system for Gemini Function Calling: `services/plugins/` modules enabled via the `ENABLED_PLUGINS` whitelist; duplicate tool names fail startup, non-callable handlers are skipped; missing `REQUIRED_ENV` skips the plugin. Each tool may declare a risk policy (`READ_ONLY` / `WRITE` / `DESTRUCTIVE`, default `READ_ONLY`); WRITE/DESTRUCTIVE tools are checked against the caller-identity allow-list before execution, and group/room identities are restricted to `READ_ONLY`. Tool results are field-filtered and the tool-loop caps apply (3 rounds / 6 calls / 25 s). SPEC records only mechanisms; per-plugin tool inventory and permissions live in the plugin modules and README.
 
 ## Tech Stack
 - Python 3.x

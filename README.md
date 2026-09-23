@@ -2,7 +2,7 @@
 name:          "README.md"
 description:   "Main documentation for LINEBOT rev2.4.5"
 created_date:  "2026/06/18 10:00:00"
-modified_date: "2026/09/10 00:35:00"
+modified_date: "2026/09/23 00:00:00"
 project_version: "2.4.5"
 document_version: "1.3.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
@@ -41,9 +41,11 @@ linebot-rev2/
 │   ├── bookmark.py           # Google Sheet 書籤與備援歷史紀錄服務
 │   ├── database.py           # SQLite 連線、初始化與統計
 │   ├── weather_tools.py      # 天氣查詢 handler（CWA/TDX，供插件呼叫）
+│   ├── hackmd_tools.py       # HackMD 筆記 handler（API v1，供插件呼叫）
 │   ├── plugins/              # Gemini Function Calling 插件
-│   │   ├── __init__.py       # 插件掃描、白名單、Registry 完整性檢查
-│   │   └── weather.py        # 天氣插件（4 支 tool schema + handler）
+│   │   ├── __init__.py       # 插件掃描、白名單、Registry/POLICY 檢查
+│   │   ├── weather.py        # 天氣插件（4 支 tool schema + handler）
+│   │   └── hackmd.py         # HackMD 插件（6 支 tool schema + handler）
 │   └── chat_history.py       # SQLite 對話歷史服務
 │
 ├── utils/                    # 工具模組
@@ -135,6 +137,25 @@ result = analyze_image("path/to/image.jpg", prompt="這張圖裡有什麼動物�
 - 防止 Render.com 免費方案休眠
 - 每 13 分鐘隨機執行保活任務
 
+### 7. 插件系統與工具權限（`services/plugins/`）
+- `ENABLED_PLUGINS=weather,hackmd`（逗號分隔）
+- 每支 tool 於插件檔宣告 `policy.risk`：`READ_ONLY`（人人可用）／`WRITE`／`DESTRUCTIVE`
+- **WRITE/DESTRUCTIVE 執行前授權檢查**：僅個人身份（user）且在 `HACKMD_ALLOWED_USER_IDS` 白名單內才可執行；群組／聊天室身份一律唯讀
+- 啟用插件工具清單（詳見 `services/plugins/*.py`）：
+
+| 工具 | 來源插件 | 權限 | 用途 |
+|------|---------|------|------|
+| `get_rain_probability` | weather | READ_ONLY | 縣市各鄉鎮 12 小時降雨機率 |
+| `get_gps_weather` | weather | READ_ONLY | GPS 座標附近測站天氣 |
+| `plan_route_weather` | weather | READ_ONLY | 路線沿途天氣與 CCTV 覆蓋 |
+| `get_nearby_cctv` | weather | READ_ONLY | 座標附近交通監視器 |
+| `hackmd_list_notes` | hackmd | READ_ONLY | 列出筆記 |
+| `hackmd_read_note` | hackmd | READ_ONLY | 讀取筆記內容 |
+| `hackmd_search_notes` | hackmd | READ_ONLY | 搜尋筆記 |
+| `hackmd_create_note` | hackmd | WRITE | 建立筆記 |
+| `hackmd_update_note` | hackmd | WRITE | 更新筆記 |
+| `hackmd_delete_note` | hackmd | DESTRUCTIVE | 刪除筆記（不可復原） |
+
 ## 環境變數
 
 在 `.env` 檔案中設定：
@@ -151,7 +172,18 @@ KEEPALIVE_INTERVAL=780
 SELF_URL=https://your-render-domain.onrender.com/about
 DATABASE_PATH=data/chat_history.db
 API_SECRET_KEY=請改成高強度隨機字串
+
+# 插件系統
+ENABLED_PLUGINS=weather,hackmd
+
+# HackMD 插件
+HACKMD_API_TOKEN=你的_HackMD_API_Token
+HACKMD_ALLOWED_USER_IDS=Uxxxx,Uyyyy  # 逗號分隔個人 LINE user IDs；空值 = 不開放任何寫入
 ```
+
+> **身份語義**：`user_scope` 依 `event.source.type` 決定——「user」為個人身份、「group」為群組、「room」為聊天室。
+> 個人身份的 WRITE/DESTRUCTIVE 才比對 `HACKMD_ALLOWED_USER_IDS`；群組／聊天室一律唯讀，
+> 即使其 group_id 被列進白名單也不開放寫入與刪除。
 
 ## 安裝與執行
 
