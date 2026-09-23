@@ -1,9 +1,9 @@
 ---
 name:          "README.md"
-description:   "Main documentation for LINEBOT rev2.4.5"
+description:   "Main documentation for LINEBOT rev2.5.0"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/09/23 00:00:00"
-project_version: "2.4.5"
+project_version: "2.5.0"
 document_version: "1.3.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
@@ -14,9 +14,9 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 
 ## 版本資訊
 
-- **版本**: 2.4.5
-- **更新日期**: 2026-09-10
-- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）、Gemini Function Calling 三上限保護；降雨機率工具內建 22 縣市 CWA Dataset ID 對照與名稱自動解析（宜蘭/台北等別名皆可），tools 須為 SDK Tool 物件
+- **版本**: 2.5.0
+- **更新日期**: 2026-09-23
+- **當前重點**: 插件化架構（ENABLED_PLUGINS 白名單）+ 天氣功能（CWA 降雨機率/GPS 天氣、TDX CCTV、路線規劃）+ HackMD 筆記（list/read/search/create/update/delete）+ per-tool 風險分級授權（READ_ONLY 人人可用；WRITE/DESTRUCTIVE 需個人身份列入 `HACKMD_ALLOWED_USER_IDS`，群組/聊天室一律唯讀）
 
 > 完整版本變更紀錄請見 [`CHANGELOG.md`](./CHANGELOG.md)。
 

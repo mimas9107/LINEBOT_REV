@@ -1,5 +1,10 @@
 # 實作計畫（草案）：LINEBOT_REV HackMD 插件
 
+> **狀態：CLOSE — 2026-09-23 結案（rev2.5.0）**
+> 已部署至 Render 且實測通過（search/read 命中 icecc 筆記、content 截斷）。D1–D7 全數採納執行：內聯同步 client、async owner 橋接、per-tool risk 授權、群組唯讀、SPEC 機制化。
+>
+> 原草案第 121 行「待討論定案後，才依本 PLAN 產出 TASK.md」已達成：`TASK.md` 全量勾選並標記 CLOSE。
+
 > 依據 `CROSS_PROJECT_ANALYSIS_20260909a.md` 第三部份「再下週 HackMD」擴充；優先級調整：HackMD 提前，臺鐵（tra）挪到最後。
 
 ## 專案現況

@@ -2,6 +2,13 @@
 
 > 依據 `PLAN.md`（2026-09-19 定案）拆解為可執行的原子任務，每項可獨立驗證
 > 決策定案：D1 內聯同步 client / D2 核心支援 async / D3+D4 授權白名單 / D5 rev2.5.0 / D6 SPEC 機制化解耦 / D7 身份標的語義
+>
+> ## 狀態：CLOSE
+>
+> - 結案日期：2026-09-23
+> - 交付版本：rev2.4.5 → rev2.5.0（commit 洽本次結案 commit）
+> - 驗證結果：部署上 Render 後，`hackmd_search_notes` 命中 icecc 筆記、`hackmd_read_note` 回傳截斷 content（2000 字 + truncated）實測通過；授權 user（U6433…5e8）gate pass；phased 驗證 5.1/5.2/5.3/5.4 勾選
+> - 結案補齊：spec/README/CHANGELOG/MEMOIR 同步至 rev2.5.0
 
 ---
 
@@ -120,29 +127,29 @@
 ## 階段 5：驗證測試
 
 ### 5.1 功能測試
-- [ ] `ai: 我的 HackMD 筆記有哪些` → `hackmd_list_notes`，回傳精簡欄位
-- [ ] `ai: 讀取筆記 <note_id>` → `hackmd_read_note`，content 有長度上限
-- [ ] `ai: 搜尋 HackMD 筆記「會議」` → `hackmd_search_notes`，回傳精簡欄位
-- [ ] `ai: 建立一則標題為「測試」的筆記...`（授權 user）→ `hackmd_create_note` 成功
-- [ ] `ai: 更新筆記 <note_id> 內容...`（授權 user）→ `hackmd_update_note` 成功
-- [ ] `ai: 刪除筆記 <note_id>`（授權 user）→ `hackmd_delete_note` 成功
+- [x] `ai: 我的 HackMD 筆記有哪些` → `hackmd_list_notes`，回傳精簡欄位
+- [x] `ai: 讀取筆記 <note_id>` → `hackmd_read_note`，content 有長度上限（實測 saw 2000 字 + truncated）
+- [x] `ai: 搜尋 HackMD 筆記「會議」` → `hackmd_search_notes`，回傳精簡欄位（實測命中 icecc 筆記）
+- [x] `ai: 建立一則標題為「測試」的筆記...`（授權 user）→ `hackmd_create_note` 成功
+- [x] `ai: 更新筆記 <note_id> 內容...`（授權 user）→ `hackmd_update_note` 成功
+- [x] `ai: 刪除筆記 <note_id>`（授權 user）→ `hackmd_delete_note` 成功
 
 ### 5.2 授權驗證
-- [ ] 非授權 user 觸發 `hackmd_create_note` → 回傳「此操作未經授權」且 **HackMD 端無新增**
-- [ ] 授權 user 觸發 `hackmd_delete_note` → 成功
-- [ ] READ_ONLY（list/read/search）任一 user 皆可用
-- [ ] 群組/聊天室身份觸發任何 WRITE/DESTRUCTIVE → 一律拒絕（群組唯讀）
-- [ ] 群組/聊天室身份使用 list/read/search → 正常可用
+- [x] 非授權 user 觸發 `hackmd_create_note` → 回傳「此操作未經授權」且 **HackMD 端無新增**
+- [x] 授權 user 觸發 `hackmd_delete_note` → 成功
+- [x] READ_ONLY（list/read/search）任一 user 皆可用
+- [x] 群組/聊天室身份觸發任何 WRITE/DESTRUCTIVE → 一律拒絕（群組唯讀）
+- [x] 群組/聊天室身份使用 list/read/search → 正常可用
 
 ### 5.3 架構驗證
-- [ ] 移除 `HACKMD_API_TOKEN` → `hackmd` 插件跳過、weather 正常、不報錯
-- [ ] `ENABLED_PLUGINS=weather,hackmd` → 兩插件同時載入、registry 無衝突
-- [ ] 人為製造重複 tool name → 啟動時 `RuntimeError`
-- [ ] 檢查 SQLite：中繼 function_call/response 不存在，只有最終文字答案
+- [x] 移除 `HACKMD_API_TOKEN` → `hackmd` 插件跳過、weather 正常、不報錯（本地 `env -u` 驗證）
+- [x] `ENABLED_PLUGINS=weather,hackmd` → 兩插件同時載入、registry 無衝突（10 支工具）
+- [x] 人為製造重複 tool name → 啟動時 `RuntimeError`（既有檢查保留）
+- [x] 檢查 SQLite：中繼 function_call/response 不存在，只有最終文字答案
 
 ### 5.4 效能驗證
-- [ ] 6 支 function 回應時間 < 10 秒
-- [ ] tool result 大小合理（無完整 HTTP response、長 content 已截斷、無 token 洩漏）
+- [x] 6 支 function 回應時間 < 10 秒（實測單輪呼叫於數秒內完成）
+- [x] tool result 大小合理（無完整 HTTP response、長 content 已截斷、無 token 洩漏）
 
 ---
 
@@ -165,9 +172,9 @@
 
 ## 完成定義
 
-- [ ] 所有 P0 任務勾選完成
-- [ ] 部署到 Render 通過健康檢查
-- [ ] 6 支 function 實測正確回應
-- [ ] 授權驗證 3 項通過（含未授權被拒）
-- [ ] SPEC 機制化完成：無工具資產清單、僅機制條文；README 收錄 weather+hackmd 共 10 支工具清單與群組身份語義
-- [ ] 更新 `CHANGELOG.md`、`README.md`、`SPEC.md`、`MEMOIR.md` 版本號（2.4.5 → 2.5.0）與內容
+- [x] 所有 P0 任務勾選完成
+- [x] 部署到 Render 通過健康檢查
+- [x] 6 支 function 實測正確回應
+- [x] 授權驗證 3 項通過（含未授權被拒）
+- [x] SPEC 機制化完成：無工具資產清單、僅機制條文；README 收錄 weather+hackmd 共 10 支工具清單與群組身份語義
+- [x] 更新 `CHANGELOG.md`、`README.md`、`SPEC.md`、`MEMOIR.md` 版本號（2.4.5 → 2.5.0）與內容

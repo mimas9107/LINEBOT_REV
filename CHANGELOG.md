@@ -3,7 +3,7 @@ name:          "CHANGELOG.md"
 description:   "Project change history"
 created_date:  "2026/06/18 10:00:00"
 modified_date: "2026/09/23 00:00:00"
-project_version: "2.4.5"
+project_version: "2.5.0"
 document_version: "1.4.3"
 agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/current_agent']
 ---
@@ -20,7 +20,7 @@ agent_sign: ['gemini cli/current_agent', 'codex/current_agent', 'opencode/curren
 ### Changed
 - SPEC 條文機制化（D6）：抽離 weather 工具清單，SPEC 只記機制與政策；工具資產清單移往 README。
 ### Notes
-- Feature release; 預留 rev2.5.0，部署後依 even-MAJOR 政策再定位為偶數版本。
+- Feature release 依 D5 定為 rev2.5.0 並直接落 main；日後再依 even-MAJOR 政策以偶數版定位。（commit 洽本次結案 commit）
 
 ## [2.4.5] - 2026-09-10
 ### Fixed
